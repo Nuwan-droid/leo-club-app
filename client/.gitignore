@@ -12,6 +12,9 @@ dist
 dist-ssr
 *.local
 
+App.css
+App.jsx
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -22,5 +25,4 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-App.css
-App.jsx
+
