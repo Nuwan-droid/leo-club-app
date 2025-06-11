@@ -1,3 +1,4 @@
+import FooterDark from "./Components/Elements/Footer"
 import Login from "./Components/Elements/Login"
 
 function App() {
@@ -6,7 +7,7 @@ function App() {
   return (
     <>
   
-      <Login/>
+      <FooterDark/>
     </>
   )
 }
