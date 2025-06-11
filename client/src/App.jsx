@@ -1,14 +1,12 @@
-import NavBar from './Components/NavBar/NavBar';
-import Footer from './Components/Footer/Footer';
-
+import Login from "./Components/Pages/Login"
 
 function App() {
   
 
   return (
     <>
-    <NavBar/>.
-      
+  
+      <Login/>
     </>
   )
 }
