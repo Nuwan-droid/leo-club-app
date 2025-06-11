@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import {Button} from "./Button";
+import Button from "./Button";
 import logo from "../../assets/react.svg";
 
-export default function NavBar() {
+
+
+export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -54,7 +56,7 @@ export default function NavBar() {
 
           {/* Mobile Menu Button */}
           <div className="md:hidden">
-            <Button
+            <button
               onClick={() => setIsOpen(!isOpen)}
               className="text-gray-700 focus:outline-none"
             >
@@ -81,7 +83,7 @@ export default function NavBar() {
                   />
                 )}
               </svg>
-            </Button>
+            </button>
           </div>
         </div>
 
