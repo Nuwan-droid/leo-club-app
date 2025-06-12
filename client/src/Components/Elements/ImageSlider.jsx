@@ -1,30 +1,62 @@
-
 import { useState, useEffect } from "react";
+import child from '../../assets/child.jpeg';
+import donate from '../../assets/donate.jpeg';
+import girl from '../../assets/girl.jpeg';
+import image1 from '../../assets/image1.jpeg';
 
 export default function ImageSlider() {
   const images = [
-    "https://source.unsplash.com/800x400/?nature",
-    "https://source.unsplash.com/800x400/?water",
-    "https://source.unsplash.com/800x400/?forest"
+    { src: child, alt: 'Child' },
+    { src: donate, alt: 'Donate' },
+    { src: girl, alt: 'Girl' },
+    { src: image1, alt: 'Image 1' }
   ];
 
   const [index, setIndex] = useState(0);
 
+  // Auto-slide every 5 seconds
   useEffect(() => {
     const timer = setInterval(() => {
       setIndex((prevIndex) => (prevIndex + 1) % images.length);
-    }, 5000); // change every 5 seconds
-
-    return () => clearInterval(timer); // clean up
+    }, 5000);
+    return () => clearInterval(timer);
   }, [images.length]);
 
+  // Manual slide control
+  const goToPrevious = () => {
+    setIndex((prevIndex) =>
+      prevIndex === 0 ? images.length - 1 : prevIndex - 1
+    );
+  };
+
+  const goToNext = () => {
+    setIndex((prevIndex) => (prevIndex + 1) % images.length);
+  };
+
   return (
-    <div className="w-full max-w-3xl mx-auto">
-      <img
-        src={images[index]}
-        alt={`Slide ${index}`}
-        className="w-full h-64 object-cover rounded-lg shadow-md transition duration-500"
-      />
+  <div className="relative w-[full-100px] h-[800px] m-2">
+  <img
+    src={images[index].src}
+    alt={images[index].alt}
+    className="w-full h-full object-cover duration-500 rounded-sm "
+  />
+
+
+      {/* Left Button */}
+      <button
+        onClick={goToPrevious}
+        className="absolute top-1/2 left-4 transform -translate-y-1/2  bg-opacity-70 hover:bg-opacity-90 text-gray-800 px-3 py-2 rounded-full shadow-md"
+      >
+        ◀
+      </button>
+
+      {/* Right Button */}
+      <button
+        onClick={goToNext}
+        className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-opacity-70 hover:bg-opacity-90 text-gray-800 px-3 py-2 rounded-full shadow-md"
+      >
+        ▶
+      </button>
     </div>
   );
 }

@@ -7,7 +7,7 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className="w-full bg-white shadow-md hover:bg-blue-50 transition duration-300">
+    <nav className="w-full bg-white shadow-md hover:bg-blue-50 transition duration-300 rounded-sm">
       <div className="w-full px-4 sm:px-6 lg:px-12 xl:px-20">
         <div className="flex items-center justify-between h-20">
           {/* Header always visible */}
