@@ -32,6 +32,14 @@
         @apply text-sm font-semibold mb-2 uppercase tracking-wider text-gray-300
      }
     } */
+/* global.css or tailwind.config.js (extend) */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
 
 
 
