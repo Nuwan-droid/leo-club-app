@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+@tailwind utilities;
+
+
 
 @layer components {
     .login{
@@ -12,22 +15,23 @@
     .social{
         @apply text-gray-400 hover:text-white
     }
-    .link{
-        @apply  text-[black] hover:text-[#0A3DAB] text-lg
-    }
+/* styles.css */
+.link {
+  @apply block w-full md:inline-block md:w-auto text-black text-lg px-3 py-2 rounded-md transition-colors duration-300 hover:bg-[#E0ECFF] hover:text-[#0A3DAB];
+}
+.shortlink{
+  @apply text-sm font-semibold mb-2  tracking-wider text-[gray] hover:text-white mb-20
 }
 
-@layer base{
+}
+/* @layer base{
     h3{
        @apply text-sm font-semibold mb-2 uppercase tracking-wider text-gray-300
     }
     h4{
         @apply text-sm font-semibold mb-2 uppercase tracking-wider text-gray-300
      }
-     a{
-        @apply text-sm   tracking-wider text-gray-400 hover:text-white
-     }
-}
+    } */
 
 
 

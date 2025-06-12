@@ -1,6 +1,7 @@
 import Footer from "./Components/Elements/Footer" 
 import Login from "./Components/Elements/Login"
 import NavBar from "./Components/Elements/NavBar"
+import Landing from "./Components/Pages/Landing"
 
 
 function App() {
@@ -8,9 +9,8 @@ function App() {
 
   return (
     <>
-      <NavBar/>
-      <Login/>
-      <Footer/>
+    <Landing/>
+     
      
     </>
   );
