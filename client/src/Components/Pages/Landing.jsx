@@ -11,10 +11,8 @@ function Landing(){
       <NavBar/>
       <ImageSlider/>
       <Awards/>
-      <EventCardslider/>
       <Content/>
-      
-     
+      <EventCardslider/>
       <Footer/>
 
       

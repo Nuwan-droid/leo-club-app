@@ -2,27 +2,28 @@
 
 @tailwind utilities;
 
-
-
 @layer components {
-    .login{
-      @apply bg-[#0A3DAB] hover:bg-[#F9C910] hover:text-black text-white px-6 py-2 rounded-md text-sm font-semibold transition
-    }
+  /* Optional enhancements */
+  /* global.css */
+  .login {
+    @apply bg-[#0A3DAB] text-white px-4 py-2 rounded hover:bg-yellow-400 transition hover:text-black;
+  }
+  .donate {
+    @apply bg-yellow-400 text-black px-4 py-2 rounded hover:bg-[#0A3DAB] transition hover:text-white;
+  }
 
-    .donate{
-      @apply bg-[#F9C910] hover:bg-[#0A3DAB] hover:text-white text-black px-6 py-2 rounded-md text-sm font-semibold transition
-    }
-    .social{
-        @apply text-gray-400 hover:text-white
-    }
-/* styles.css */
-.link {
-  @apply block w-full md:inline-block md:w-auto text-black text-lg px-3 py-2 rounded-md transition-colors duration-300 hover:bg-[#E0ECFF] hover:text-[#0A3DAB];
-}
-.shortlink{
-  @apply text-sm font-semibold mb-2  tracking-wider text-[gray] hover:text-white mb-20
-}
+  .social {
+    @apply text-gray-400 hover:text-white;
+  }
+  /* styles.css */
+  /* tailwind.config.css or global.css */
+  .link {
+    @apply text-gray-700 hover:text-blue-600 transition  ;
+  }
 
+  .shortlink {
+    @apply text-sm font-semibold mb-2  tracking-wider text-[gray] hover:text-white mb-20;
+  }
 }
 /* @layer base{
     h3{
@@ -41,10 +42,7 @@
   scrollbar-width: none;
 }
 
-
-
 :root {
-
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
@@ -59,11 +57,6 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-
-
 body {
   margin: 0;
-
-
 }
-

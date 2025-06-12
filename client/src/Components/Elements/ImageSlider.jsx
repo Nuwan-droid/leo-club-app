@@ -34,7 +34,7 @@ export default function ImageSlider() {
   };
 
   return (
-  <div className="relative w-[full-100px] h-[800px] m-2">
+  <div className="relative w-[full-100px] h-[700px] m-2">
   <img
     src={images[index].src}
     alt={images[index].alt}

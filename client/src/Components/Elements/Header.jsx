@@ -2,23 +2,28 @@ import logo from "../../assets/leo.png";
 
 export default function Header({ dark = false }) {
   return (
-    <div className="flex items-center space-x-3 min-w-0 ">
-      <img src={logo} alt="Club Logo" className={`h-25 w-25 object-contain mr-0 ${ dark ? "invert" : ""}`} />
-      <div
-        className={`w-1 h-16 rounded-sm ${
-          dark ? "bg-white" : "bg-black"
-        }`}
-      ></div>
-      <div className="flex flex-col leading-tight min-w-0">
+    <div className="flex items-center gap-2 flex-shrink-0">
+      {/* Logo */}
+      <img
+        src={logo}
+        alt="Club Logo"
+        className={`h-16 w-16 sm:h-30 sm:w-30 object-contain ${dark ? "invert" : ""}`}
+      />
+
+      {/* Divider */}
+      <div className={`w-0.5 h-10 sm:h-16 ${dark ? "bg-white" : "bg-black"}`} />
+
+      {/* Text with margin-left */}
+      <div className="flex flex-col ml-2">
         <span
-          className={`text-lg sm:text-xl md:text-2xl truncate ${
+          className={`text-base sm:text-lg md:text-xl lg:text-2xl font-semibold ${
             dark ? "text-white" : "text-black"
           }`}
         >
           <b>LEO</b> CLUB OF
         </span>
         <span
-          className={`text-lg sm:text-xl md:text-2xl truncate ${
+          className={`text-base sm:text-lg md:text-xl lg:text-2xl ${
             dark ? "text-white" : "text-black"
           }`}
         >
