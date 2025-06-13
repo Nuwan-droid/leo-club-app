@@ -106,7 +106,7 @@ function Content() {
           <img
             src={image}
             alt="Who we are"
-            className="w-full max-w-[400px] h-auto max-h-[400px] rounded-xl shadow-md transition-transform duration-500 hover:scale-105"
+            className="w-full max-w-[400px] h-auto max-h-[400px] rounded-xl shadow-md "
           />
         </div>
       </div>

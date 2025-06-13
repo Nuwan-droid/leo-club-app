@@ -7,11 +7,13 @@ import Awards from "../Elements/Stat"
 import EventCardSlider from "../Elements/EventCardSlider"
 import StatsSection from "../Elements/StatSection"
 
+
 function Landing(){
     return(<>
       <NavBar/>
       <ImageSlider/>
       <StatsSection/>
+     
       <Awards/>
       <Content/>
       <EventCardSlider/>

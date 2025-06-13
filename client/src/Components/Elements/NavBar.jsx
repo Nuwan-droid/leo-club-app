@@ -23,7 +23,7 @@ export default function Navbar() {
   }, []);
 
   return (
-    <nav className="w-full bg-white shadow-md hover:bg-blue-50 transition duration-300 rounded-sm relative">
+    <nav className="w-full bg-white shadow-md hover:bg-blue-50 transition duration-300 rounded-sm sticky top-0 ">
       <div className="w-full px-4 sm:px-6 lg:px-12 xl:px-20">
         <div className="flex items-center justify-between h-20 relative">
           {/* Header always visible */}
@@ -69,9 +69,9 @@ export default function Navbar() {
             </div>
           </div>
         </div>
-        <>
+       
           {showLogin && <Login onClose={() => setShowLogin(false)} />}
-        </>
+        
 
         {/* Mobile dropdown menu: shows if open and hamburger visible */}
         {isOpen && showHamburger && (
@@ -95,7 +95,8 @@ export default function Navbar() {
                 </Link>
               ))}
               <div className="flex flex-col items-center space-y-2 p-4">
-                <Button label="Log In" className="login w-full" />
+                <Button label="Log In" className="login w-full" onClick={() => setShowLogin(true)}/>
+                   {showLogin && <Login onClose={() => setShowLogin(false)} />}
                 <Button label="Donate" className="donate w-full" />
               </div>
             </div>

@@ -34,7 +34,7 @@ export default function ImageSlider() {
   };
 
   return (
-  <div className="relative w-[full-100px] h-[700px] m-2 transition-transform duration-500 hover:scale-102">
+  <div className=" w-[full-100px] h-[700px] m-2 transition-transform duration-500 hover:scale-102">
   <img
     src={images[index].src}
     alt={images[index].alt}

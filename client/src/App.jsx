@@ -10,7 +10,8 @@ function App() {
 
   return (
     <>
-    <NavBar/>
+    <Landing/>
+  
      
      
     </>

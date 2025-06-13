@@ -16,13 +16,12 @@ export default function Login({onClose}) {
 
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
-      (<div className="relative bg-white rounded-lg shadow-lg flex flex-col md:flex-row max-w-4xl w-full md:h-[600px] overflow-hidden">
-        
+    <div className="min-h-[700px] flex items-center justify-center ">
+      <div className="relative bg-white rounded-lg shadow-lg flex flex-col md:flex-row max-w-4xl w-full md:h-[600px] overflow-hidden">
         {/* Close Button */}
         <button
           onClick={onClose}
-           className="
+          className="
     absolute top-2 right-2
     bg-[gold] bg-opacity-50 rounded-full
     text-[blue]-400
