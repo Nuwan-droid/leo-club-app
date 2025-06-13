@@ -13,9 +13,9 @@ export default function SignIn() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4 ">
       {show && (
-        <div className="relative top-[100px] rounded-2xl shadow-2xl w-full max-w-6xl flex flex-col md:flex-row overflow-hidden">
+        <div className="relative top-[10px] rounded-2xl shadow-2xl w-full max-w-6xl flex flex-col md:flex-row overflow-hidden">
           {/* Close Button */}
           <button
             onClick={(e) => handleClose(e)}
@@ -86,7 +86,7 @@ export default function SignIn() {
               {/* Action Button: Conditional Rendering */}
               <div className="flex flex-col gap-2 mt-4 ml-4">
                 {leoStatus === "not-member" ? ((   
-                    <>  <div className="grid grid-cols-1 gap-1 mb-0 mt-100">
+                    <>  <div className="flex flex-col">
                           <p className="text-[black] text-sm "> Be a Member </p>
                           <p className="text-[black] text-sm "> Membership Fee : Rs400.00 </p>
                          </div>
