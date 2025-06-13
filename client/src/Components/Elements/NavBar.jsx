@@ -3,10 +3,12 @@ import { Link } from "react-router-dom";
 import { Menu } from "lucide-react";
 import Button from "./Button";
 import Header from "./Header";
+import Login from "./Login";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [showHamburger, setShowHamburger] = useState(false);
+  const  [showLogin, setShowLogin] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -62,11 +64,14 @@ export default function Navbar() {
             </div>
 
             <div className="flex items-center space-x-4">
-              <Button label="Log In" className="login" />
+              <Button label="Log In" className="login" onClick={() => setShowLogin(true)} />
               <Button label="Donate" className="donate" />
             </div>
           </div>
         </div>
+        <>
+          {showLogin && <Login onClose={() => setShowLogin(false)} />}
+        </>
 
         {/* Mobile dropdown menu: shows if open and hamburger visible */}
         {isOpen && showHamburger && (

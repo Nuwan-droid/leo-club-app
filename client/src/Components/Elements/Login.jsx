@@ -1,27 +1,27 @@
 import Button from "./Button";
 import Input from "./Input";
 import logo from "../../assets/lion.svg";
-import { useState } from "react";
 
 
-export default function Login() {
 
-  // Optional: a close handler
-  const [show, setShow] = useState(true);
 
-const handleClose = (e) => {
-  e.preventDefault(); // keep only if needed
-  setShow((prev) => !prev);
-};
+export default function Login({onClose}) {
+
+
+ 
+
+
+ 
+ 
 
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
-      {show&&(<div className="relative bg-white rounded-lg shadow-lg flex flex-col md:flex-row max-w-4xl w-full md:h-[600px] overflow-hidden">
+    <div className="min-h-screen flex items-center justify-center">
+      (<div className="relative bg-white rounded-lg shadow-lg flex flex-col md:flex-row max-w-4xl w-full md:h-[600px] overflow-hidden">
         
         {/* Close Button */}
         <button
-          onClick={(e)=>handleClose(e)}
+          onClick={onClose}
            className="
     absolute top-2 right-2
     bg-[gold] bg-opacity-50 rounded-full
@@ -79,7 +79,7 @@ const handleClose = (e) => {
             </p>
           </form>
         </div>
-      </div>)}
+      </div>
     </div>
   );
 }

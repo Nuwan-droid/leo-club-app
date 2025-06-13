@@ -13,7 +13,7 @@ export default function SignIn() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4 ">
+    <div className="min-h-screen flex items-center justify-center ">
       {show && (
         <div className="relative top-[10px] rounded-2xl shadow-2xl w-full max-w-6xl flex flex-col md:flex-row overflow-hidden">
           {/* Close Button */}
