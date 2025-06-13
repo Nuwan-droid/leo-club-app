@@ -3,16 +3,18 @@ import Footer from "../Elements/Footer"
 import Login from "../Elements/Login"
 import ImageSlider from "../Elements/ImageSlider"
 import Content from "../Elements/Content"
-import Awards from "../Elements/Awards"
+import Awards from "../Elements/Stat"
+import EventCardSlider from "../Elements/EventCardSlider"
+import StatsSection from "../Elements/StatSection"
 
-import EventCardslider from "../Elements/EventCardSlider"
 function Landing(){
     return(<>
       <NavBar/>
       <ImageSlider/>
+      <StatsSection/>
       <Awards/>
       <Content/>
-      <EventCardslider/>
+      <EventCardSlider/>
       <Footer/>
 
       

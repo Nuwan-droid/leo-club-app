@@ -1,48 +1,71 @@
-import { ChevronLeft, ChevronRight } from 'lucide-react';
-import EventCard from './EventCard'; // Import your EventCard component
-import { useRef } from 'react';
+import { useState } from "react";
+import EventCard from "./EventCard";
+import girlImage from "../../assets/girl.jpeg";
+import lionImage from "../../assets/lion.svg";
+
+const events = [
+  { month: "July", year: 2024, imageSrc: girlImage },
+  { month: "August", year: 2025, imageSrc: lionImage },
+  { month: "September", year: 2023, imageSrc: girlImage },
+  { month: "October", year: 2022, imageSrc: lionImage },
+  { month: "November", year: 2021, imageSrc: girlImage },
+];
 
 function EventCardSlider() {
-  const scrollRef = useRef(null);
+  const [startIndex, setStartIndex] = useState(0);
+  const visibleCount = 3;
 
-  const scroll = (direction) => {
-    if (scrollRef.current) {
-      const { scrollLeft, clientWidth } = scrollRef.current;
-      const scrollAmount = clientWidth * 0.8; // scroll 80% of visible area
-      scrollRef.current.scrollTo({
-        left: direction === 'left' ? scrollLeft - scrollAmount : scrollLeft + scrollAmount,
-        behavior: 'smooth',
-      });
-    }
+  const handlePrev = () => {
+    setStartIndex((prev) =>
+      prev === 0 ? events.length - visibleCount : prev - 1
+    );
   };
 
+  const handleNext = () => {
+    setStartIndex((prev) =>
+      prev + visibleCount >= events.length
+        ? 0
+        : Math.min(prev + 1, events.length - visibleCount)
+    );
+  };
+
+  const visibleEvents = events.slice(startIndex, startIndex + visibleCount);
+
   return (
-    <div className="relative m-8">
-      {/* Left Button */}
-      <button
-        onClick={() => scroll('left')}
-        className="absolute left-0 top-1/2 -translate-y-1/2 z-10 p-2 bg-white shadow rounded-full hover:bg-gray-100"
-      >
-        <ChevronLeft className="w-6 h-6 text-gray-700" />
-      </button>
+    <div className="flex flex-col items-center mt-10 mb-10 px-4">
+      <div className="flex items-center space-x-4 w-full max-w-screen-lg overflow-x-auto sm:overflow-visible no-scrollbar">
+        {/* Prev Button (hidden on mobile) */}
+        {events.length > visibleCount && (
+          <button
+            onClick={handlePrev}
+            className="hidden sm:inline-block bg-gray-300 hover:bg-gray-400 text-black rounded-full px-4 py-2"
+          >
+            ←
+          </button>
+        )}
 
-      {/* Scrollable Card Container */}
-      <div
-        ref={scrollRef}
-        className="flex gap-4 overflow-x-auto scrollbar-hide scroll-smooth px-8"
-      >
-        <EventCard />
-        
-        
+        {/* Cards */}
+        <div className="flex space-x-4">
+          {visibleEvents.map((event, index) => (
+            <EventCard
+              key={index}
+              month={event.month}
+              year={event.year}
+              imageSrc={event.imageSrc}
+            />
+          ))}
+        </div>
+
+        {/* Next Button (hidden on mobile) */}
+        {events.length > visibleCount && (
+          <button
+            onClick={handleNext}
+            className="hidden sm:inline-block bg-gray-300 hover:bg-gray-400 text-black rounded-full px-4 py-2"
+          >
+            →
+          </button>
+        )}
       </div>
-
-      {/* Right Button */}
-      <button
-        onClick={() => scroll('right')}
-        className="absolute right-0 top-1/2 -translate-y-1/2 z-10 p-2 bg-white shadow rounded-full hover:bg-gray-100"
-      >
-        <ChevronRight className="w-6 h-6 text-gray-700" />
-      </button>
     </div>
   );
 }

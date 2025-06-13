@@ -1,33 +1,45 @@
-import { Download } from 'lucide-react';
+import PropTypes from "prop-types";
+import Button from "./Button";
 
-function EventCard() {
-  const event = {
-    title: 'Annual Tech Expo 2025',
-    date: 'June 10, 2025',
-    imageUrl: '/images/tech-expo.jpg', // Replace with your image path
-    fileUrl: '/downloads/event-brochure.pdf', // Replace with your file path
-  };
-
+export default function EventCard({ imageSrc, month, year, className = "" }) {
   return (
-    <div className="max-w-sm bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
-      <img
-        src={event.imageUrl}
-        alt={event.title}
-        className="w-full h-48 object-cover"
+    <div
+      className={`
+        w-full max-w-[260px] sm:max-w-sm 
+        bg-[#F2F4F7] text-center 
+        py-4 sm:py-6 px-2 sm:px-4 
+        rounded-xl shadow-sm 
+        ${className}
+      `}
+    >
+      {imageSrc && (
+        <img
+          src={imageSrc}
+          alt={`${month} ${year}`}
+          className="w-32 h-32 sm:w-64 sm:h-64 object-cover mx-auto mb-3 sm:mb-4"
+        />
+      )}
+      <h3 className="text-base sm:text-lg font-medium text-gray-700">{month}</h3>
+      <p className="text-xl sm:text-2xl font-semibold text-gray-900">{year}</p>
+      <Button
+        label="Download"
+        className="login mt-2 sm:mt-4 text-sm sm:text-base"
+        onClick={() => {}}
       />
-      <div className="p-6 flex flex-col gap-4">
-        <p className="text-gray-500 text-sm text-center">{event.date}</p>
-        <a
-          href={event.fileUrl}
-          download
-          className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-blue-600 text-white text-sm font-semibold rounded-lg hover:bg-blue-700 transition"
-        >
-          <Download className="w-4 h-4" />
-          Download
-        </a>
-      </div>
     </div>
   );
 }
 
-export default EventCard;
+EventCard.propTypes = {
+  imageSrc: PropTypes.string,
+  month: PropTypes.string,
+  year: PropTypes.string,
+  className: PropTypes.string,
+};
+
+EventCard.defaultProps = {
+  imageSrc: "https://via.placeholder.com/80",
+  month: "January",
+  year: "2025",
+  className: "",
+};
