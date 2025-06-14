@@ -11,7 +11,7 @@ const Stat = ({ end, label, Icon }) => {
       return;
     }
 
-    const duration = 1000;
+    const duration = 5000;
 
     const step = (timestamp) => {
       if (!startTimeRef.current) startTimeRef.current = timestamp;
