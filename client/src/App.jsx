@@ -1,21 +1,21 @@
-import Footer from "./Components/Elements/Footer" 
-import Login from "./Components/Elements/Login"
-import NavBar from "./Components/Elements/NavBar"
-import Landing from "./Components/Pages/Landing"
-import SignUp from "./Components/Elements/SignUp"
-
+import { Routes, Route } from "react-router-dom";
+import NavBar from "./Components/Elements/NavBar";
+import Footer from "./Components/Elements/Footer";
+import Landing from "./Components/Pages/Landing";
 
 function App() {
-  
-
   return (
     <>
-    <Landing/>
-  
-     
-     
+      <NavBar />
+
+      <Routes>
+        <Route path="/" element={<Landing />} />
+       
+      </Routes>
+
+      <Footer />
     </>
   );
 }
 
-export default App
+export default App;

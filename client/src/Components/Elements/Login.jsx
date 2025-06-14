@@ -1,22 +1,23 @@
 import Button from "./Button";
 import Input from "./Input";
 import logo from "../../assets/lion.svg";
+import { useEffect } from "react";
 
 
 
+export default function Login({ onClose }) {
+  useEffect(() => {
+    // Disable scroll on mount
+    document.body.classList.add("no-scroll");
 
-export default function Login({onClose}) {
-
-
- 
-
-
- 
- 
-
+    // Re-enable scroll on unmount
+    return () => {
+      document.body.classList.remove("no-scroll");
+    };
+  }, []);
 
   return (
-    <div className="min-h-[700px] flex items-center justify-center ">
+     <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
       <div className="relative bg-white rounded-lg shadow-lg flex flex-col md:flex-row max-w-4xl w-full md:h-[600px] overflow-hidden">
         {/* Close Button */}
         <button

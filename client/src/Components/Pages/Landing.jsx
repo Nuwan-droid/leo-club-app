@@ -6,18 +6,17 @@ import Content from "../Elements/Content"
 import Awards from "../Elements/Stat"
 import EventCardSlider from "../Elements/EventCardSlider"
 import StatsSection from "../Elements/StatSection"
-
+import SignUp from "../Elements/SignUp"
 
 function Landing(){
     return(<>
-      <NavBar/>
+     
       <ImageSlider/>
       <StatsSection/>
-     
       <Awards/>
       <Content/>
       <EventCardSlider/>
-      <Footer/>
+     
 
       
     </>)

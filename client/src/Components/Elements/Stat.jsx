@@ -8,7 +8,7 @@ const Stat = ({ end, label, Icon }) => {
 
   useEffect(() => {
     if (isNaN(end) || end <= 0) {
-      return 0;
+      return;
     }
 
     const duration = 1000;

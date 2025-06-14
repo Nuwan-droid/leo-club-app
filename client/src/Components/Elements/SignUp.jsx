@@ -1,9 +1,19 @@
 import Button from "./Button";
 import Input from "./Input";
 import logo from "../../assets/lion.svg";
-import { useState } from "react";
+import { useState ,useEffect} from "react";
 
 export default function SignIn() {
+   useEffect(() => {
+    // Disable scroll on mount
+    document.body.classList.add("no-scroll");
+
+    // Re-enable scroll on unmount
+    return () => {
+      document.body.classList.remove("no-scroll");
+    };
+  }, []);
+
   const [show, setShow] = useState(true);
   const [leoStatus, setLeoStatus] = useState("");
 
@@ -13,9 +23,9 @@ export default function SignIn() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center ">
+    <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
       {show && (
-        <div className="relative top-[10px] rounded-2xl shadow-2xl w-full max-w-6xl flex flex-col md:flex-row overflow-hidden">
+        <div className="relative top-[10px] rounded-2xl shadow-2xl w-full max-w-6xl flex flex-col md:flex-row overflow-hidden bg-white">
           {/* Close Button */}
           <button
             onClick={(e) => handleClose(e)}

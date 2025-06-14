@@ -33,6 +33,7 @@ function EventCardSlider() {
 
   return (
     <div className="flex flex-col items-center mt-10 mb-10 px-4">
+      <h2 className="text-3xl font-semibold mt-8 text-[black] mb-4">NewsLetter</h2>
       <div className="flex items-center space-x-4 w-full max-w-screen-lg overflow-x-auto sm:overflow-visible no-scrollbar">
         {/* Prev Button (hidden on mobile) */}
         {events.length > visibleCount && (
