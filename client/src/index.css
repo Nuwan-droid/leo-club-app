@@ -60,6 +60,15 @@
 body {
   margin: 0;
 }
+/* body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+ */
+
 
 /* Add this in your global CSS (e.g., index.css or App.css) */
 .no-scroll {

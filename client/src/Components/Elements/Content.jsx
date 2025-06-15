@@ -64,7 +64,7 @@ function Content() {
       </p>
 
       {/* Image and second paragraph in styled card */}
-      <div className="bg-[#fcfcfc] rounded-2xl shadow-xl p-6 flex flex-col md:flex-row items-center gap-10 transition-all duration-700 ease-in-out hover:scale-[1.01]">
+      <div className="bg-[#fcfcfc] rounded-2xl shadow-xl p-6 flex flex-col md:flex-row items-center gap-2 transition-all duration-700 ease-in-out hover:scale-[1.01]">
         {/* Image */}
         <div className="md:w-1/3 flex justify-center">
           <img
@@ -76,7 +76,7 @@ function Content() {
 
         {/* Paragraph beside image */}
         <div className="w-full md:w-2/3 text-black text-lg leading-relaxed text-justify">
-          <h1 className="uppercase text-2xl font-bold text-left mb-8">
+          <h1 className="uppercase text-2xl font-bold text-left mb-6">
             Team Work
           </h1>
           <p>

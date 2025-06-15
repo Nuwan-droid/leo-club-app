@@ -3,12 +3,13 @@ import { Link } from "react-router-dom";
 import { Menu } from "lucide-react";
 import Button from "./Button";
 import Header from "./Header";
-import Login from "./Login";
+import AuthPopup from "./AuthPop";
+
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [showHamburger, setShowHamburger] = useState(false);
-  const  [showLogin, setShowLogin] = useState(false);
+  const [showAuthPopup, setShowAuthPopup] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -23,7 +24,11 @@ export default function Navbar() {
   }, []);
 
   return (
-    <nav className="w-full bg-white shadow-md hover:bg-blue-50 transition duration-300 rounded-sm sticky top-0 ">
+    <>    
+    {showAuthPopup && (
+      <AuthPopup onClose={() => setShowAuthPopup(false)} />
+    )}
+    <nav className="w-full bg-white shadow-md hover:bg-blue-50 transition duration-300 rounded-sm fixed top-0 z-40">
       <div className="w-full px-4 sm:px-6 lg:px-12 xl:px-20">
         <div className="flex items-center justify-between h-20 relative">
           {/* Header always visible */}
@@ -64,13 +69,13 @@ export default function Navbar() {
             </div>
 
             <div className="flex items-center space-x-4">
-              <Button label="Log In" className="login" onClick={() => setShowLogin(true)} />
+              <Button label="Log In" className="login" onClick={() => setShowAuthPopup(true)} />
               <Button label="Donate" className="donate" />
             </div>
           </div>
         </div>
        
-          {showLogin && <Login onClose={() => setShowLogin(false)} />}
+      
         
 
         {/* Mobile dropdown menu: shows if open and hamburger visible */}
@@ -95,8 +100,8 @@ export default function Navbar() {
                 </Link>
               ))}
               <div className="flex flex-col items-center space-y-2 p-4">
-                <Button label="Log In" className="login w-full" onClick={() => setShowLogin(true)}/>
-                   {showLogin && <Login onClose={() => setShowLogin(false)} />}
+                <Button label="Log In" className="login w-full" onClick={() => setShowAuthPopup(true)}/>
+                 
                 <Button label="Donate" className="donate w-full" />
               </div>
             </div>
@@ -104,5 +109,7 @@ export default function Navbar() {
         )}
       </div>
     </nav>
+    </>
   );
 }
+
