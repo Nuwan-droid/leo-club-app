@@ -1,16 +1,20 @@
-import NavBar from './Components/NavBar/NavBar';
-import Footer from './Components/Footer/Footer';
-
+import { Routes, Route } from "react-router-dom";
+import NavBar from "./Components/Elements/NavBar";
+import Footer from "./Components/Elements/Footer";
+import Landing from "./Components/Pages/Landing";
 
 function App() {
-  
-
   return (
     <>
       <NavBar />
-      <Footer/>
+
+      <Routes>
+        <Route path="/" element={<Landing />} />
+      </Routes>
+
+      <Footer />
     </>
-  )
+  );
 }
 
-export default App
+export default App;

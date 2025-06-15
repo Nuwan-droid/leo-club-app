@@ -1,45 +1,55 @@
 @import "tailwindcss";
 
+@tailwind utilities;
 
 @layer components {
-    .login{
-      @apply bg-[#0A3DAB] hover:bg-[#F9C910] hover:text-black text-white px-6 py-2 rounded-md text-sm font-semibold transition
-    }
+  /* Optional enhancements */
+  /* global.css */
+  .login {
+    @apply bg-[#0A3DAB] text-white px-4 py-2 rounded hover:bg-yellow-400 transition hover:text-black;
+  }
+  .donate {
+    @apply bg-yellow-400 text-black px-4 py-2 rounded hover:bg-[#0A3DAB] transition hover:text-white;
+  }
 
-    .donate{
-      @apply bg-[#F9C910] hover:bg-[#0A3DAB] hover:text-white text-black px-6 py-2 rounded-md text-sm font-semibold transition
-    }
-    .social{
-        @apply text-gray-400 hover:text-white
-    }
-    .link{
-        @apply  text-[black] hover:text-[#0A3DAB] text-lg
-    }
+  .social {
+    @apply text-gray-400 hover:text-white;
+  }
+  /* styles.css */
+  /* tailwind.config.css or global.css */
+  .link {
+    @apply text-gray-700 hover:text-blue-600 transition  ;
+  }
+
+  .shortlink {
+    @apply text-sm font-semibold mb-2  tracking-wider text-[gray] hover:text-white mb-20;
+  }
 }
-
-@layer base{
+/* @layer base{
     h3{
        @apply text-sm font-semibold mb-2 uppercase tracking-wider text-gray-300
     }
     h4{
         @apply text-sm font-semibold mb-2 uppercase tracking-wider text-gray-300
      }
-     a{
-        @apply text-sm   tracking-wider text-gray-400 hover:text-white
-     }
+    } */
+/* global.css or tailwind.config.js (extend) */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
-
-
 :root {
-
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background-color: #ffffff;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -47,11 +57,20 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-
-
 body {
   margin: 0;
-
-
 }
+/* body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+ */
 
+
+/* Add this in your global CSS (e.g., index.css or App.css) */
+.no-scroll {
+  overflow: hidden;
+}

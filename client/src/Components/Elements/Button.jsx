@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-function Button({ label, className = "", onClick }) {
+export default function Button({ label, className = "", onClick }) {
   return (
     <button className={`${className}`} onClick={onClick}>
       {" "}
@@ -21,4 +21,4 @@ Button.defaultProps = {
   },
 };
 
-export default Button;
+
