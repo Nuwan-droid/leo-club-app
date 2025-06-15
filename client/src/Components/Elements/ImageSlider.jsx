@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import child from '../../assets/child.jpeg';
-import donate from '../../assets/donate.jpeg';
-import girl from '../../assets/girl.jpeg';
-import image1 from '../../assets/image1.jpeg';
+import child from '../../assets/LandingImage/child.jpeg';
+import donate from '../../assets/LandingImage/donate.jpeg';
+import girl from '../../assets/LandingImage/girl.jpeg';
+import image1 from '../../assets/LandingImage/image1.jpeg';
 
 export default function ImageSlider() {
   const images = [

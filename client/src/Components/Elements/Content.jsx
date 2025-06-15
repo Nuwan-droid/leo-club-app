@@ -1,5 +1,5 @@
-import image from "../../assets/image.jpeg";
-import book from "../../assets/book.jpg";
+import image from "../../assets/LandingImage/image.jpeg";
+import book from "../../assets/LandingImage/book.jpg";
 
 function Content() {
   return (

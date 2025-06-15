@@ -1,6 +1,6 @@
 import { useState } from "react";
 import EventCard from "./EventCard";
-import girlImage from "../../assets/girl.jpeg";
+import girlImage from '../../assets/LandingImage/girl.jpeg';
 import lionImage from "../../assets/lion.svg";
 
 const events = [
