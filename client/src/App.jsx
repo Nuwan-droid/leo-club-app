@@ -5,6 +5,9 @@ import Landing from "./Components/Pages/Landing";
 import About from "./Components/Pages/About";
 import PrivacyPolicy from "./Components/Pages/PrivacyPolicy";
 import Terms from "./Components/Pages/Terms";
+import Donation from "./Components/Pages/Donation";
+import DonateMoney from "./Components/Pages/DonateMoney";
+import DonateBooks from "./Components/Pages/DonateBook";
 
 function App() {
   return (
@@ -15,7 +18,10 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms" element={<Terms />} />
-      </Routes>
+        <Route path="/donation" element={<Donation/>}/>
+        <Route path="/donatemoney" element= {<DonateMoney/>}/>
+        <Route path="/donatebook" element={<DonateBooks/>} />
+      </Routes> 
       <Footer />
     </>
   );
