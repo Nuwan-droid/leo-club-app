@@ -12,7 +12,8 @@ const reviewSchema = new mongoose.Schema({
   },
   body: {
     type: String,
-    required: false
+    required: false,
+    maxlength: 255
   },
   user_id: {
     type: Number,
@@ -27,3 +28,5 @@ const reviewSchema = new mongoose.Schema({
     default: Date.now
   }
 });
+
+export default mongoose.model('Review', reviewSchema);

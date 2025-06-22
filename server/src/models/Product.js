@@ -8,33 +8,47 @@ const productSchema = new mongoose.Schema({
   },
   title: {
     type: String,
-    required: false
+    maxlength: 255,
+    trim: true
   },
   description: {
     type: String,
-    required: false
+    trim: true
   },
   colour: {
     type: String,
-    required: false
+    maxlength: 255,
+    trim: true
   },
   size: {
     type: String,
-    required: false
+    maxlength: 255,
+    trim: true
   },
   price: {
     type: Number,
-    required: false
+    min: 0,
+    validate: {
+      validator: function(v) {
+        return v >= 0 && Number(v.toFixed(2)) === v;
+      },
+      message: 'Price must be a positive number with max 2 decimal places'
+    }
   },
   stock: {
     type: Number,
-    required: false
+    min: 0,
+    validate: {
+      validator: Number.isInteger,
+      message: 'Stock must be an integer'
+    }
   },
   image_path: {
     type: String,
-    required: false
+    maxlength: 255,
+    trim: true
   },
-  creaed_at: {
+  created_at: {
     type: Date,
     default: Date.now
   },
@@ -43,5 +57,14 @@ const productSchema = new mongoose.Schema({
     default: Date.now
   }
 });
+
+// Pre-save middleware to update updated_at
+productSchema.pre('save', function(next) {
+  this.updated_at = Date.now();
+  next();
+});
+
+// Index for better query performance (equivalent to MySQL KEY)
+productSchema.index({ product_id: 1 });
 
 export default mongoose.model('Product', productSchema);
