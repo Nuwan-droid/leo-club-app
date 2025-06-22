@@ -6,12 +6,16 @@ const donateProjectSchema = new mongoose.Schema({
     required: true,
     unique: true
   },
-  type: {
+  donation_items: {
     type: String,
     required: false
   },
   title: {
     type: String,
+    required: false
+  },
+  item_quantity: {
+    type: Number,
     required: false
   },
   description: {

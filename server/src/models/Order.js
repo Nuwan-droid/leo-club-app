@@ -8,39 +8,51 @@ const orderSchema = new mongoose.Schema({
   },
   product_id: {
     type: Number,
-    required: false
+    required: false,
+    index: true // Equivalent to MySQL foreign key index
   },
   size: {
     type: String,
-    required: false
+    required: false,
+    maxlength: 255
   },
   colour: {
     type: String,
-    required: false
+    required: false,
+    maxlength: 255
   },
-  quatity: {
+  quantity: {
     type: Number,
-    required: false
+    required: false,
+    min: 0
   },
   amount: {
-    type: Number,
-    required: false
+    type: mongoose.Schema.Types.Decimal128,
+    required: false,
+    get: function(value) {
+      return parseFloat(value?.toString() || '0');
+    }
   },
   first_name: {
     type: String,
-    required: false
+    required: false,
+    maxlength: 255
   },
   last_name: {
     type: String,
-    required: false
+    required: false,
+    maxlength: 255
   },
   email: {
     type: String,
-    required: false
+    required: false,
+    maxlength: 255,
+    match: /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   },
   phone: {
     type: String,
-    required: false
+    required: false,
+    maxlength: 255
   },
   address: {
     type: String,
@@ -48,7 +60,9 @@ const orderSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    required: false
+    required: false,
+    maxlength: 255,
+    enum: ['pending', 'processing', 'shipped', 'delivered', 'cancelled', 'refunded']
   },
   creaed_at: {
     type: Date,
@@ -58,6 +72,16 @@ const orderSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   }
+});
+
+// Index for better query performance (equivalent to MySQL keys)
+orderSchema.index({ order_id: 1 });
+orderSchema.index({ product_id: 1 });
+
+// Pre-save middleware to update updated_at
+orderSchema.pre('save', function(next) {
+  this.updated_at = new Date();
+  next();
 });
 
 export default mongoose.model('Order', orderSchema);

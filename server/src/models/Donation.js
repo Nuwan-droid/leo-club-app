@@ -20,7 +20,8 @@ const donationSchema = new mongoose.Schema({
   },
   email: {
     type: String,
-    required: false
+    required: false,
+    match: /^[^\s@]+@[^\s@]+\.[^\s@]+$/ // Email validation
   },
   first_name: {
     type: String,
@@ -42,6 +43,12 @@ const donationSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   }
+});
+
+// Pre-save middleware to update updated_at
+donationSchema.pre('save', function(next) {
+  this.updated_at = Date.now();
+  next();
 });
 
 export default mongoose.model('Donation', donationSchema);
