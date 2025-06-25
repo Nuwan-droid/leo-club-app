@@ -54,7 +54,7 @@ export default function Navbar() {
               <Link to="/project" className="link">
                 Project
               </Link>
-              <Link to="/calander" className="link">
+              <Link to="/calendar" className="link">
                 Calendar
               </Link>
               <Link to="/shop" className="link">
