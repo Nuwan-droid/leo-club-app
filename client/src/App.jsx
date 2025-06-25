@@ -9,6 +9,8 @@ import Donation from "./Components/Pages/Donation";
 import DonateMoney from "./Components/Pages/DonateMoney";
 import DonateBooks from "./Components/Pages/DonateBook";
 import EventCalendar from "./Components/Pages/EventCalendar";
+import Shop from "./Components/Pages/LeoShop";
+import ProjectShowcasePage from "./Components/Pages/ProjectShowcasePage";
 
 function App() {
   return (
@@ -23,6 +25,9 @@ function App() {
         <Route path="/donatemoney" element= {<DonateMoney/>}/>
         <Route path="/donatebook" element={<DonateBooks/>} />
         <Route path="calander" element={<EventCalendar />} />
+        <Route path="shop" element={<Shop />} />
+        <Route path="project" element={<ProjectShowcasePage />} />
+
       </Routes> 
       <Footer />
     </>
