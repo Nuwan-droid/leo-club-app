@@ -36,7 +36,6 @@ const Shop = () => {
       badge: 'HURRY UP Guys'
     },
     {
-      
       id: 2,
       name: 'LEO Band',
       price: 300,
@@ -47,7 +46,7 @@ const Shop = () => {
     },
     {
       id: 3,
-      name: 'Lap Sleeve case',
+      name: 'Lap Sleeve Case',
       price: 3500,
       image: lapsleeve,
       images: [lapsleeve, lapCoverSide1, lapCoverSide2],

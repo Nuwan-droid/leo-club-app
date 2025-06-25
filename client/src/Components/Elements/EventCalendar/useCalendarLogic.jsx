@@ -17,20 +17,20 @@ const useCalendarLogic = () => {
     },
     {
       id: 2,
-      title: 'Hope for Paws',
-      date: '2025-06-20',
-      time: '02:00pm',
-      location: 'Uva Wellassa University',
-      color: 'bg-yellow-100 text-yellow-800 border-l-4 border-yellow-400'
-    },
-    {
-      id: 3,
       title: 'Senehase Arunelu',
       date: '2025-06-26',
       time: '09:30am',
       location: 'Senasuma Elders’ Home- Bandarawela',
       color: 'bg-yellow-100 text-yellow-800 border-l-4 border-yellow-400'
-    }
+    },
+    {
+      id: 3,
+      title: 'Hope for Paws',
+      date: '2025-07-10',
+      time: '02:00pm',
+      location: 'Uva Wellassa University',
+      color: 'bg-blue-100 text-blue-800 border-l-4 border-blue-400'
+    },
   ];
 
   const months = [

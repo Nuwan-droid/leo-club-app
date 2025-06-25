@@ -99,14 +99,14 @@ const ProductDetail = ({
             <div className="flex items-center space-x-4">
               <button
                 onClick={() => quantity > 1 && setQuantity(quantity - 1)}
-                className="p-2 border border-gray-300 rounded hover:bg-gray-100"
+                className="p-2 border border-gray-300 rounded hover:bg-gray-100  text-gray-800"
               >
                 <Minus size={16} />
               </button>
-              <span className="text-xl font-bold px-4">{quantity}</span>
+              <span className="text-xl font-bold px-4  text-gray-800">{quantity}</span>
               <button
                 onClick={() => setQuantity(quantity + 1)}
-                className="p-2 border border-gray-300 rounded hover:bg-gray-100"
+                className="p-2 border  text-gray-800 border-gray-300 rounded hover:bg-gray-100"
               >
                 <Plus size={16} />
               </button>
