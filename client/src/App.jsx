@@ -1,4 +1,4 @@
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route ,useLocation} from "react-router-dom";
 import NavBar from "./Components/Elements/NavBar";
 import Footer from "./Components/Elements/Footer";
 import Landing from "./Components/Pages/Landing";
@@ -11,11 +11,20 @@ import DonateBooks from "./Components/Pages/DonateBook";
 import EventCalendar from "./Components/Pages/EventCalendar";
 import Shop from "./Components/Pages/LeoShop";
 import ProjectShowcasePage from "./Components/Pages/ProjectShowcasePage";
+import MemberPortal from "./Components/Pages/memberportal/memberportal";
 
 function App() {
+
+const location = useLocation();
+  
+  // Check if current path is member portal
+  const isMemberPortal = location.pathname.startsWith('/memberportal');
+
+
   return (
     <>
-      <NavBar />
+
+      {!isMemberPortal && <NavBar/>}
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/about" element={<About />} />
@@ -28,6 +37,8 @@ function App() {
         <Route path="shop" element={<Shop />} />
         <Route path="project" element={<ProjectShowcasePage />} />
 
+        <Route path="/donatebook" element={<DonateBooks/>} />
+        <Route path="/memberportal" element={<MemberPortal/>} />
       </Routes> 
       <Footer />
     </>
