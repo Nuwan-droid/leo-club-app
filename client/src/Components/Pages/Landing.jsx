@@ -7,14 +7,13 @@ import Awards from "../Elements/Stat"
 import EventCardSlider from "../Elements/EventCardSlider"
 import StatsSection from "../Elements/StatSection"
 import SignUp from "../Elements/SignUp"
-import Whatsapp from "../Elements/Whatsapp"
+
 
 function Landing(){
     return(<>
      
       <ImageSlider/>
       <StatsSection/>
-      <Whatsapp/>
       <Awards/>
       <Content/>
       <EventCardSlider/>
