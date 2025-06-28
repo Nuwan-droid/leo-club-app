@@ -14,6 +14,7 @@ import ProjectShowcasePage from "./Components/Pages/ProjectShowcasePage";
 import MemberPortal from "./Components/Pages/memberportal/memberportal";
 import LearningHub from "./Components/Pages/learninghub/learninghub";
 import EventVolunteerPage from "./Components/Pages/event_volunteer/EventVolunteerPage";
+import NewsLetter from "./Components/Pages/NewsLetter";
 
 function App() {
 
@@ -41,6 +42,7 @@ const location = useLocation();
         <Route path="/donatebook" element={<DonateBooks/>} />
         <Route path="/memberportal" element={<MemberPortal/>} />
         <Route path="/memberportal/learning-hub" element={<LearningHub/>} />
+        <Route path="/memberportal/join-newsletter" element={<NewsLetter/>} />
         <Route path="/memberportal/event-volunteer" element={<EventVolunteerPage/>} />
         
       </Routes> 

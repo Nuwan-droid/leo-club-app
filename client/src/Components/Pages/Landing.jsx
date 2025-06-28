@@ -8,6 +8,7 @@ import EventCardSlider from "../Elements/EventCardSlider"
 import StatsSection from "../Elements/StatSection"
 import SignUp from "../Elements/SignUp"
 
+
 function Landing(){
     return(<>
      

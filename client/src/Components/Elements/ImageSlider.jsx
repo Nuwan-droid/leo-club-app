@@ -34,13 +34,12 @@ export default function ImageSlider() {
   };
 
   return (
-  <div className=" w-[full-100px] h-[700px] m-2 transition-transform duration-500 hover:scale-102">
-  <img
-    src={images[index].src}
-    alt={images[index].alt}
-    className="w-full h-full object-cover duration-500 rounded-sm "
-  />
-
+    <div className=" w-[full-100px] h-[800px] m-2 transition-transform duration-500 hover:scale-102 mt-20">
+      <img
+        src={images[index].src}
+        alt={images[index].alt}
+        className="w-full h-full object-cover duration-500 rounded-sm "
+      />
 
       {/* Left Button */}
       <button
