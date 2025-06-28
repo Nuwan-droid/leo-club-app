@@ -70,7 +70,11 @@ export default function Navbar() {
 
             <div className="flex items-center space-x-4">
               <Button label="Log In" className="login" onClick={() => setShowAuthPopup(true)} />
+              {/* <Button label="Donate" className="donate" /> */}
+             <Link to="/donation">
               <Button label="Donate" className="donate" />
+            </Link>
+
             </div>
           </div>
         </div>
@@ -102,7 +106,7 @@ export default function Navbar() {
               <div className="flex flex-col items-center space-y-2 p-4">
                 <Button label="Log In" className="login w-full" onClick={() => setShowAuthPopup(true)}/>
                  
-                <Button label="Donate" className="donate w-full" />
+                <Button label="Donate" className="donate w-full"onClick={() => (window.location.href = '/donation')}/>
               </div>
             </div>
           </div>
