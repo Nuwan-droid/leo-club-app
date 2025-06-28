@@ -32,7 +32,7 @@ function EventCardSlider() {
   const visibleEvents = events.slice(startIndex, startIndex + visibleCount);
 
   return (
-    <div className="flex flex-col items-center mt-10 mb-10 px-4">
+    <div className="flex flex-col items-center mt-10 mb-10 px-4 bg-[#ceceff]/20 pb-8 transition-all duration-700 ease-in-out hover:scale-[1.01]">
       <h2 className="text-3xl font-semibold mt-8 text-[black] mb-4">NewsLetter</h2>
       <div className="flex items-center space-x-4 w-full max-w-screen-lg overflow-x-auto sm:overflow-visible no-scrollbar">
         {/* Prev Button (hidden on mobile) */}
@@ -46,7 +46,7 @@ function EventCardSlider() {
         )}
 
         {/* Cards */}
-        <div className="flex space-x-4">
+        <div className="flex space-x-4 ">
           {visibleEvents.map((event, index) => (
             <EventCard
               key={index}

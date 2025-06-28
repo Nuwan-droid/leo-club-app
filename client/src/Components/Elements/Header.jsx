@@ -1,14 +1,16 @@
 import logo from "../../assets/leo.png";
+import {Link} from 'react-router-dom'
 
 export default function Header({ dark = false }) {
   return (
     <div className="flex items-center gap-2 flex-shrink-0">
       {/* Logo */}
+        <Link to="/">
       <img
         src={logo}
         alt="Club Logo"
         className={`h-16 w-16 sm:h-30 sm:w-30 object-contain ${dark ? "invert" : ""}`}
-      />
+      />  </Link>
 
       {/* Divider */}
       <div className={`w-0.5 h-10 sm:h-16 ${dark ? "bg-white" : "bg-black"}`} />
