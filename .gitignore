@@ -3,3 +3,52 @@ node_modules
 build
 dist
 .DS_Store
+
+
+# Python - Chatbot API
+chatbot-api/__pycache__/
+chatbot-api/*.py[cod]
+chatbot-api/*$py.class
+chatbot-api/*.so
+
+# Virtual Environment - Chatbot
+chatbot-api/venv/
+chatbot-api/leo_chatbot_env/
+chatbot-api/env/
+chatbot-api/ENV/
+
+# Model Files - Chatbot (Choose one option)
+# Option 1: Exclude model files (for large models)
+chatbot-api/models/
+chatbot-api/*.pkl
+chatbot-api/*.pth
+chatbot-api/*.h5
+chatbot-api/*.joblib
+
+# Option 2: Include specific Leo Club model files (recommended)
+# chatbot-api/models/
+# chatbot-api/*.pkl
+# chatbot-api/*.pth
+# !chatbot-api/models/leo_chatbot_model.pkl
+# !chatbot-api/models/leo_club_intents.json
+# !chatbot-api/models/preprocessing_config.json
+
+# Flask - Chatbot API
+chatbot-api/instance/
+chatbot-api/.webassets-cache
+chatbot-api/*.log
+
+# Environment Variables
+chatbot-api/.env
+chatbot-api/.env.local
+chatbot-api/.env.development.local
+chatbot-api/.env.test.local
+chatbot-api/.env.production.local
+
+# Logs
+chatbot-api/logs/
+chatbot-api/*.log
+
+# Temporary files
+chatbot-api/*.tmp
+chatbot-api/*.temp
