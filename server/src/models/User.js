@@ -1,65 +1,40 @@
 import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema({
-  user_id: {
-    type: Number,
+  leoStatus: {
+    type: String,
+    enum: ['member', 'not-member'],
     required: true,
-    unique: true
   },
-  first_name: {
+  memberId: {
     type: String,
-    required: false
+    validate: {
+      validator: function (value) {
+        if (this.leoStatus === 'member') {
+          return value && value.trim().length > 0;
+        }
+        return true;
+      },
+      message: 'Member ID is required for members.',
+    },
   },
-  last_name: {
-    type: String,
-    required: false
-  },
-  phone: {
-    type: String,
-    required: false
-  },
+  firstName: { type: String, trim: true },
+  lastName: { type: String, trim: true },
+  address: { type: String, trim: true },
+  birthday: { type: Date },
   email: {
     type: String,
-    required: false
+    required: [true, 'Email is required.'],
+    unique: true,
+    trim: true,
+    lowercase: true,
   },
-  Password: {
+  mobile: { type: String, trim: true },
+  password: {
     type: String,
-    required: false
+    required: [true, 'Password is required.'],
   },
-  bod: {
-    type: Date,
-    required: false
-  },
-  Role: {
-    type: String,
-    required: false
-  },
-  image_path: {
-    type: String,
-    required: false
-  },
-  remember_token: {
-    type: String,
-    required: false
-  },
-  score: {
-    type: Number,
-    required: false
-  },
-  creaed_at: {
-    type: Date,
-    default: Date.now
-  },
-  updated_at: {
-    type: Date,
-    default: Date.now
-  },
-  Field: {
-    type: mongoose.Schema.Types.Mixed,
-    required: false
-  }
-});
+}, { timestamps: true });
 
 const User = mongoose.model('User', userSchema);
-
 export default User;

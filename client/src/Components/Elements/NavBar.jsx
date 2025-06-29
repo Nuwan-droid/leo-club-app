@@ -48,7 +48,7 @@ export default function Navbar() {
           {/* Desktop nav links: show only on xl+ (≥1280px) */}
           <div className="hidden xl:flex items-center space-x-6 ml-auto">
             <div className="flex space-x-6">
-              <Link to="/memberportal" className="link">
+              <Link to="" className="link" onClick={() => setShowAuthPopup(true)}>
                 Member Portal
               </Link>
               <Link to="/project" className="link">
@@ -105,8 +105,9 @@ export default function Navbar() {
               ))}
               <div className="flex flex-col items-center space-y-2 p-4">
                 <Button label="Log In" className="login w-full" onClick={() => setShowAuthPopup(true)}/>
-                 
-                <Button label="Donate" className="donate w-full"onClick={() => (window.location.href = '/donation')}/>
+                 <Link to="/donation">
+                <Button label="Donate" className="donate w-full"/>
+              </Link>
               </div>
             </div>
           </div>
