@@ -15,6 +15,7 @@ import MemberPortal from "./Components/Pages/memberportal/memberportal";
 import LearningHub from "./Components/Pages/learninghub/learninghub";
 import EventVolunteerPage from "./Components/Pages/event_volunteer/EventVolunteerPage";
 import NewsLetter from "./Components/Pages/NewsLetter";
+import Chatbot from "./Components/Pages/chatbot/LeoChatbot"
 
 function App() {
 
@@ -46,6 +47,7 @@ const location = useLocation();
         <Route path="/memberportal/event-volunteer" element={<EventVolunteerPage/>} />
         
       </Routes> 
+      <Chatbot/>
       <Footer />
     </>
   );
