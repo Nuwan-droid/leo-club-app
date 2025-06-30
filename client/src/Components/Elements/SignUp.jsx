@@ -26,6 +26,11 @@ export default function SignUp({ onClose, onSwitchToLogin }) {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+   const validatePassword = (password) => {
+    const regex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+    return regex.test(password);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -49,6 +54,12 @@ export default function SignUp({ onClose, onSwitchToLogin }) {
     if (!formData.email.trim() || !formData.password.trim()) {
       setError("Email and password are required");
       return;
+    }
+
+     if (!formData.password || !validatePassword(formData.password)) {
+      return setError(
+        "Password must be at least 8 characters long and include uppercase, lowercase, number, and symbol."
+      );
     }
 
     const payload = {
@@ -207,6 +218,10 @@ export default function SignUp({ onClose, onSwitchToLogin }) {
                 onChange={handleChange}
               />
             </div>
+            <p className="text-xs text-gray-500 mt-1 ml-1">
+  Must be 8+ characters with uppercase, lowercase, number & symbol.
+</p>
+
 
             <div className="flex flex-col gap-2 mt-3 sm:mt-4 ml-2 sm:ml-4">
               {leoStatus === "not-member" ? (
@@ -218,7 +233,10 @@ export default function SignUp({ onClose, onSwitchToLogin }) {
                     className="login p-2 mt-2"
                     label="Proceed to Pay"
                     onClick={handleProceedToPay}
+
                   />
+                    {error && <p className="text-red-500 text-sm text-center mt-2">{error}</p>}
+
                 </>
               ) : (
                 <Button type="submit" className="login p-2 mt-3 sm:mt-4" label="Sign Up"  />
