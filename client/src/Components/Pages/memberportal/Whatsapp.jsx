@@ -28,7 +28,7 @@ function Whatsapp() {
                 Join and submit your ideas
               </p>
               <a
-                href="https://wa.me/XXXXXXXXXXX" // Replace with your WhatsApp link
+                href="https://wa.me/94" // Replace with your WhatsApp link
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-600 transition"
