@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import Projectcard from './ProjectCard';
+import ProjectCard from './ProjectCard';
 
 function ProjectGrid({ projects, onProjectClick }) {
   return (

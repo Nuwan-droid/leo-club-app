@@ -2,7 +2,7 @@ import React from "react";
 
 function ProjectFilter({ years, selectedYear, onYearChange }) {
   return (
-    <div className="max-w-xs ml-auto mr-40 mb-20">
+    <div className="max-w-xs text-black ml-auto mr-40 mb-20">
       <label className="block text-sm font-medium text-gray-700 mb-2">
         Filter by Year
       </label>
