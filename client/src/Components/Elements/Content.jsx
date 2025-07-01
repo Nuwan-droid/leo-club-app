@@ -11,56 +11,9 @@ function Content() {
 
       {/* Paragraph under the heading */}
       <p className="text-black text-lg leading-relaxed text-justify pt-8 mb-16 transition-all duration-500 ease-in-out">
-        In the vast digital landscape, communities flourish when they embrace
-        inclusivity, creativity, and a sense of belonging. Lo Club Uwu stands
-        out as a unique online sanctuary dedicated to spreading joy, kindness,
-        and lighthearted fun, inspired by the affectionate and playful “uwu”
-        expression that has captivated internet culture. Lo Club Uwu is more
-        than just a club—it’s a lifestyle and a mindset. The term “uwu” is an
-        emoticon representing a cute face, often used to convey happiness,
-        warmth, and affection. This emoticon has become symbolic of the
-        wholesome, friendly interactions that Lo Club Uwu encourages among its
-        members. The club embodies the spirit of embracing one’s softer side in
-        a world that often feels fast-paced and overwhelming. At its core, Lo
-        Club Uwu is a community built on the pillars of kindness,
-        self-expression, and creative exploration. Members from all walks of
-        life gather here to share their passions, whether that be art, music,
-        storytelling, or simply uplifting messages. The club fosters an
-        environment where people feel safe to express their authentic selves
-        without judgment or negativity. One of the defining features of Lo Club
-        Uwu is its emphasis on creativity. The club regularly hosts events such
-        as digital art contests, collaborative storytelling sessions, and music
-        sharing parties. These activities inspire members to tap into their
-        imagination and share their unique talents with the community. The sense
-        of camaraderie that arises from these shared creative experiences
-        strengthens the bonds between members, making Lo Club Uwu feel like a
-        second home. Moreover, Lo Club Uwu promotes mental wellness and positive
-        interactions. In an age where social media can sometimes breed toxicity,
-        the club acts as a refreshing alternative. Its moderators actively
-        nurture respectful dialogue and encourage members to support one another
-        through challenging times. The atmosphere is intentionally uplifting,
-        filled with encouraging words, cute emojis, and friendly gestures that
-        brighten everyone’s day. The visual identity of Lo Club Uwu is as
-        charming as its ethos. The club’s branding incorporates soft pastel
-        colors, adorable mascots, and whimsical designs that reflect the warm
-        and inviting nature of the community. This aesthetic creates a cozy and
-        welcoming vibe that attracts people looking for a respite from the
-        harsher edges of online spaces. In addition to online interactions, Lo
-        Club Uwu occasionally organizes virtual meetups, workshops, and charity
-        drives, bringing members closer together and giving back to broader
-        communities. These initiatives exemplify the club’s commitment to making
-        a positive impact both within and outside its digital borders. The
-        inclusivity of Lo Club Uwu is one of its greatest strengths. Everyone is
-        welcome—regardless of age, background, or interests. The club celebrates
-        diversity and encourages members to learn from each other’s experiences
-        and perspectives. This open-mindedness helps create a rich, vibrant
-        tapestry of friendships and collaborations. In summary, Lo Club Uwu is a
-        delightful digital haven where warmth, creativity, and kindness reign
-        supreme. It invites individuals to embrace their gentler sides, express
-        themselves freely, and connect with like-minded souls in a supportive
-        and joyful environment. Whether you’re looking for a place to share your
-        art, find inspiration, or simply enjoy some wholesome fun, Lo Club Uwu
-        welcomes you with open arms and an adorable “uwu” smile.
+        The Leo Club of Uva Wellassa University is a dynamic and inclusive community of young, passionate individuals who are dedicated to the principles of service, leadership, and personal development. As an officially recognized youth movement under the guidance of Lions Clubs International the world’s largest service organization we proudly carry forward the global Leo motto <span class="font-bold">"Leadership, Experience, Opportunity"</span>  Our club was established with the vision of inspiring positive change both within the university environment and in the wider society. We strongly believe that leadership is not just about holding titles, but about taking action and being a catalyst for change. Through a variety of structured activities, volunteer opportunities, and service initiatives, we empower university students to take on real-world challenges, build impactful solutions, and develop their confidence, teamwork, and communication skills.As a student-led club, we unite undergraduates from various academic disciplines ranging from science and technology to business and the arts who share a common passion: serving humanity with compassion, integrity, and dedication. The diversity of our members fuels creativity and innovation, enabling us to design meaningful programs that address real community needs.
+
+We are more than just a club we are a movement, a network, and a family of future changemakers. At the heart of everything we do is a deep commitment to leaving a positive impact on society. Together, we strive to uplift our communities, strengthen our bonds, and create a future where service is a way of life and leadership is guided by purpose.
       </p>
 
       {/* Image and second paragraph in styled card */}
@@ -77,12 +30,11 @@ function Content() {
         {/* Paragraph beside image */}
         <div className="w-full md:w-2/3 text-black text-lg leading-relaxed text-justify">
           <h1 className="uppercase text-2xl font-bold text-left mb-6">
-            Team Work
+            Vision
           </h1>
           <p>
-            Our team works tirelessly on a range of community projects — from
-            education to environmental sustainability — driven by our shared
-            values...
+           <span class="font-bold">“Let’s build a team, Let’s build a vision, Let’s build a plan, Let’s build success.” </span> This reflects the club’s dedication to serving society and staying committed to a purposeful path of positive community impact and youth empowerment.
+
           </p>
         </div>
       </div>
@@ -92,12 +44,13 @@ function Content() {
         {/* Paragraph beside image */}
         <div className="w-full md:w-2/3 text-black text-lg leading-relaxed text-justify">
           <h1 className="uppercase text-2xl font-bold text-left mb-8">
-            Team Work
+           Mission
           </h1>
           <p>
-            Our team works tirelessly on a range of community projects — from
-            education to environmental sustainability — driven by our shared
-            values...
+           To provide a unique platform for undergraduates of Uva Wellassa University to develop leadership skills, nurture their personalities, and foster meaningful changes within their communities through impactful service initiatives.To create a friendly environment that offers infinite leadership experiences and opportunities for young people, forming new bonds within the global Leo and Lions network while focusing on community service.
+
+In essence, the Leo Club of Uva Wellassa University aims to cultivate future leaders who are passionate about service, teamwork, and societal betterment, aligning with the broader Leo Club principles of leadership, experience, and opportunity.
+
           </p>
         </div>
 
