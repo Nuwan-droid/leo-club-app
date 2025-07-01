@@ -1,0 +1,105 @@
+{
+  "intents": [
+    {
+      "tag": "greeting",
+      "patterns": [
+        "Hi", "Hello", "Good morning", "Good evening", "Hey there",
+        "Greetings", "What's up", "How are you", "Hi there"
+      ],
+      "responses": [
+        "Hello! Welcome to our Leo Club. How can I assist you today?",
+        "Hi there! I'm here to help you learn about Leo Club activities and membership.",
+        "Greetings! What would you like to know about our Leo Club?"
+      ]
+    },
+    {
+      "tag": "about_leo",
+      "patterns": [
+        "What is Leo Club?", "Tell me about Leo Club", "What does Leo stand for?",
+        "Leo Club information", "About Leo Club", "Leo Club mission",
+        "What do Leo clubs do?", "Leo Club purpose"
+      ],
+      "responses": [
+        "Leo Club is a youth organization sponsored by Lions Club International. LEO stands for Leadership, Experience, and Opportunity.",
+        "Leo Clubs provide young people aged 12-30 with opportunities for leadership development and community service.",
+        "Our Leo Club focuses on developing leadership skills while serving our community through various service projects and activities."
+      ]
+    },
+    {
+      "tag": "membership",
+      "patterns": [
+        "How to join Leo Club?", "Membership requirements", "Can I become a member?",
+        "Join Leo Club", "Membership process", "How to apply", "Age requirements",
+        "Who can join?", "Membership criteria"
+      ],
+      "responses": [
+        "To join our Leo Club, you must be between 12-30 years old and have a passion for community service and leadership development.",
+        "Membership is open to young people who want to make a difference in their community. Contact us through this website for application details.",
+        "We welcome new members who are committed to our motto 'Leadership, Experience, Opportunity'. Check our contact page for membership information."
+      ]
+    },
+    {
+      "tag": "activities",
+      "patterns": [
+        "What activities do you do?", "Leo Club projects", "Community service",
+        "Events", "Activities", "What projects are you working on?",
+        "Service projects", "Fundraising", "Volunteer work"
+      ],
+      "responses": [
+        "We organize various community service projects including environmental cleanups, food drives, educational programs, and youth mentorship.",
+        "Our activities include leadership workshops, fundraising events, community outreach programs, and disaster relief efforts.",
+        "We regularly participate in sight conservation projects, blood donation drives, and programs supporting underprivileged children."
+      ]
+    },
+    {
+      "tag": "meetings",
+      "patterns": [
+        "When do you meet?", "Meeting schedule", "Meeting times",
+        "Where do you meet?", "Next meeting", "Meeting location",
+        "Meeting frequency", "Club meetings"
+      ],
+      "responses": [
+        "We typically meet twice a month. Please check our events page on this website for the current meeting schedule and locations.",
+        "Our meeting schedule varies by month. You can find the latest meeting information in the events section of our website.",
+        "Meeting details including dates, times, and locations are regularly updated on our website's calendar."
+      ]
+    },
+    {
+      "tag": "contact",
+      "patterns": [
+        "How to contact?", "Contact information", "Get in touch",
+        "Reach out", "Contact details", "Phone number", "Email",
+        "How can I reach you?"
+      ],
+      "responses": [
+        "You can contact our Leo Club through the contact form on this website, or reach out to our club officers directly.",
+        "For more information, please use the contact page on our website or attend one of our meetings.",
+        "Feel free to get in touch through our website's contact section. We'd love to hear from you!"
+      ]
+    },
+    {
+      "tag": "thanks",
+      "patterns": [
+        "Thank you", "Thanks", "Thank you so much", "I appreciate it",
+        "Thanks for the help", "Thank you for the information"
+      ],
+      "responses": [
+        "You're welcome! Feel free to ask if you have any other questions about Leo Club.",
+        "Happy to help! Don't hesitate to reach out if you need more information.",
+        "Glad I could assist you! Hope to see you at our next Leo Club event."
+      ]
+    },
+    {
+      "tag": "goodbye",
+      "patterns": [
+        "Bye", "Goodbye", "See you later", "Talk to you later",
+        "Have a good day", "Farewell", "Take care"
+      ],
+      "responses": [
+        "Goodbye! Thanks for your interest in Leo Club. Hope to see you soon!",
+        "Take care! Remember to check our website for upcoming events and activities.",
+        "See you later! Feel free to come back anytime with questions about Leo Club."
+      ]
+    }
+  ]
+}

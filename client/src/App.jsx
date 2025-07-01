@@ -12,6 +12,10 @@ import EventCalendar from "./Components/Pages/EventCalendar";
 import Shop from "./Components/Pages/LeoShop";
 import ProjectShowcasePage from "./Components/Pages/ProjectShowcasePage";
 import MemberPortal from "./Components/Pages/memberportal/memberportal";
+import LearningHub from "./Components/Pages/learninghub/learninghub";
+import EventVolunteerPage from "./Components/Pages/event_volunteer/EventVolunteerPage";
+import NewsLetter from "./Components/Pages/NewsLetter";
+import Chatbot from "./Components/Pages/chatbot/LeoChatbot"
 
 function App() {
 
@@ -36,10 +40,14 @@ const location = useLocation();
         <Route path="calander" element={<EventCalendar />} />
         <Route path="shop" element={<Shop />} />
         <Route path="project" element={<ProjectShowcasePage />} />
-
         <Route path="/donatebook" element={<DonateBooks/>} />
         <Route path="/memberportal" element={<MemberPortal/>} />
+        <Route path="/memberportal/learning-hub" element={<LearningHub/>} />
+        <Route path="/memberportal/join-newsletter" element={<NewsLetter/>} />
+        <Route path="/memberportal/event-volunteer" element={<EventVolunteerPage/>} />
+        
       </Routes> 
+      <Chatbot/>
       <Footer />
     </>
   );

@@ -112,16 +112,16 @@ function Content() {
       </div>
 
       {/* Awards Section */}
-      <div className="px-4 sm:px-6 lg:px-20 xl:px-32 py-10 transition-all duration-700 ease-in-out">
+      <div className="px-4 sm:px-6 lg:px-20 xl:px-32 py-10 transition-all duration-700 ease-in-out mt-10 ">
         <h1 className="text-3xl sm:text-4xl font-bold text-center text-[black]">
           Awards
         </h1>
 
-        <div className="mt-8 flex justify-center">
+        <div className="mt-8 flex justify-center ">
           <img
             src={book}
             alt="image book"
-            className="w-full  h-auto rounded-xl shadow-md object-cover "
+            className="w-full  h-auto rounded-xl shadow-md object-cover transition-all duration-700 ease-in-out hover:scale-[1.01]"
           />
         </div>
       </div>
