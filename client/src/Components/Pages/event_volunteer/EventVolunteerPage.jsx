@@ -154,11 +154,11 @@ const EventVolunteerPage = () => {
               onClick={() => setShowRequestForm(true)}
               className="w-full bg-blue-600 text-white py-3 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors mb-6"
             >
-              + Request for Event
+              + Request for New  Event
             </button>
 
             {/* Calendar */}
-            <div className="bg-gray-300 rounded-lg shadow-sm border p-4">
+            <div className=" bg-blue-100 rounded-lg shadow-sm border p-4">
              <BasicDateCalendar/>
             </div>
           </div>
