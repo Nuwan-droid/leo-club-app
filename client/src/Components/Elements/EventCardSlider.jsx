@@ -1,14 +1,19 @@
 import { useState } from "react";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa"; // beautiful chevron icons
 import EventCard from "./EventCard";
-import girlImage from '../../assets/LandingImage/girl.jpeg';
-import lionImage from "../../assets/lion.svg";
+import april from "../../assets/NewsLetters/april.png";
+import feb from "../../assets/NewsLetters/feb.jpg";
+import march from "../../assets/NewsLetters/march.jpg";
+import jan from "../../assets/NewsLetters/jan.jpg";
+import dec from "../../assets/NewsLetters/dec.jpg";
 
 const events = [
-  { month: "July", year: 2024, imageSrc: girlImage },
-  { month: "August", year: 2025, imageSrc: lionImage },
-  { month: "September", year: 2023, imageSrc: girlImage },
-  { month: "October", year: 2022, imageSrc: lionImage },
-  { month: "November", year: 2021, imageSrc: girlImage },
+  
+  { month: "April", year: 2025, imageSrc: april },
+  { month: "March", year: 2025, imageSrc: march },
+  { month: "February", year: 2025, imageSrc: feb },
+  { month: "January", year: 2025, imageSrc: jan },
+  { month: "December", year: 2024, imageSrc: dec },
 ];
 
 function EventCardSlider() {
@@ -39,14 +44,15 @@ function EventCardSlider() {
         {events.length > visibleCount && (
           <button
             onClick={handlePrev}
-            className="hidden sm:inline-block bg-gray-300 hover:bg-gray-400 text-black rounded-full px-4 py-2"
+            className="hidden sm:inline-flex items-center justify-center bg-gray-300 hover:bg-gray-400 text-black rounded-full w-10 h-10 transition-colors duration-200 shadow-md"
+            aria-label="Previous"
           >
-            ←
+            <FaChevronLeft size={22} />
           </button>
         )}
 
         {/* Cards */}
-        <div className="flex space-x-4 ">
+        <div className="flex space-x-4">
           {visibleEvents.map((event, index) => (
             <EventCard
               key={index}
@@ -61,9 +67,10 @@ function EventCardSlider() {
         {events.length > visibleCount && (
           <button
             onClick={handleNext}
-            className="hidden sm:inline-block bg-gray-300 hover:bg-gray-400 text-black rounded-full px-4 py-2"
+            className="hidden sm:inline-flex items-center justify-center bg-gray-300 hover:bg-gray-400 text-black rounded-full w-10 h-10 transition-colors duration-200 shadow-md"
+            aria-label="Next"
           >
-            →
+            <FaChevronRight size={22} />
           </button>
         )}
       </div>

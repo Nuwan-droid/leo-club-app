@@ -37,9 +37,9 @@ const location = useLocation();
         <Route path="/donation" element={<Donation/>}/>
         <Route path="/donatemoney" element= {<DonateMoney/>}/>
         <Route path="/donatebook" element={<DonateBooks/>} />
-        <Route path="calander" element={<EventCalendar />} />
-        <Route path="shop" element={<Shop />} />
-        <Route path="project" element={<ProjectShowcasePage />} />
+        <Route path="/calander" element={<EventCalendar />} />
+        <Route path="/shop" element={<Shop />} />
+        <Route path="/project" element={<ProjectShowcasePage />} />
         <Route path="/donatebook" element={<DonateBooks/>} />
         <Route path="/memberportal" element={<MemberPortal/>} />
         <Route path="/memberportal/learning-hub" element={<LearningHub/>} />
