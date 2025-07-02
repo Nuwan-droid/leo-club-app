@@ -8,6 +8,7 @@ import jan from "../../assets/NewsLetters/jan.jpg";
 import dec from "../../assets/NewsLetters/dec.jpg";
 
 const events = [
+  
   { month: "April", year: 2025, imageSrc: april },
   { month: "March", year: 2025, imageSrc: march },
   { month: "February", year: 2025, imageSrc: feb },
