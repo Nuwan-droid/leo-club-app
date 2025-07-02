@@ -210,16 +210,39 @@ function ProjectShowcasePage() {
 
   ]);
 
+  
   const [selectedYear, setSelectedYear] = useState("2025");
   const [selectedProject, setSelectedProject] = useState(null);
 
-  
+  // Per-project heart state
+  const [hearts, setHearts] = useState({});
+  const [hearted, setHearted] = useState({});
+
+  const handleHeartClick = (project) => {
+    setHearts((prev) => {
+      const count = prev[project.title] || 0;
+      return { ...prev, [project.title]: (hearted[project.title] ? count - 1 : count + 1) };
+    });
+    setHearted((prev) => ({
+      ...prev,
+      [project.title]: !prev[project.title]
+    }));
+  };
+
+  // Per-project reviews (comments)
+  const [reviews, setReviews] = useState({});
+  const handleAddReview = (projectTitle, review) => {
+    setReviews(prev => ({
+      ...prev,
+      [projectTitle]: [review, ...(prev[projectTitle] || [])]
+    }));
+  };
+
   const parseDate = (dateString) => {
     const [day, month, year] = dateString.split('/');
     return new Date(year, month - 1, day);
   };
 
-  // Sort projects by date in descending order (newest first)
   const sortedProjects = [...projects].sort((a, b) => {
     const dateA = parseDate(a.date);
     const dateB = parseDate(b.date);
@@ -240,20 +263,27 @@ function ProjectShowcasePage() {
   return (
     <div className="p-6 bg-gray-50 min-h-screen font-sans mt-20">
       <ProjectHeader />
-      <ProjectFilter 
+      <ProjectFilter
         years={years}
         selectedYear={selectedYear}
         onYearChange={setSelectedYear}
       />
-      <ProjectGrid 
+      {/* Pass heart props to ProjectGrid */}
+      <ProjectGrid
         projects={filteredProjects}
         onProjectClick={openDialog}
+        onHeartClick={handleHeartClick}
+        hearts={hearts}
+        hearted={hearted}
       />
-      <ProjectDialog 
+      {/* Pass project-specific reviews to dialog */}
+      <ProjectDialog
         project={selectedProject}
         isOpen={!!selectedProject}
         onClose={closeDialog}
         sliderImages={selectedProject ? selectedProject.sliderImages : []}
+        reviews={selectedProject ? reviews[selectedProject.title] || [] : []}
+        onAddReview={selectedProject ? (review) => handleAddReview(selectedProject.title, review) : () => {}}
       />
     </div>
   );
