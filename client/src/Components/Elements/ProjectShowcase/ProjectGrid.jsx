@@ -1,8 +1,7 @@
-import React, { useState } from "react";
-
+import React from "react";
 import ProjectCard from './ProjectCard';
 
-function ProjectGrid({ projects, onProjectClick }) {
+function ProjectGrid({ projects, onProjectClick, onHeartClick, hearts = {}, hearted = {} }) {
   return (
     <>
       {projects.length > 0 ? (
@@ -13,6 +12,9 @@ function ProjectGrid({ projects, onProjectClick }) {
               project={project}
               index={index}
               onClick={() => onProjectClick(project)}
+              onHeartClick={onHeartClick}
+              heartCount={hearts[project.title] || 0}
+              hearted={hearted[project.title] || false}
             />
           ))}
         </div>

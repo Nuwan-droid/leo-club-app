@@ -25,8 +25,8 @@ const useCalendarLogic = () => {
     },
     {
       id: 3,
-      title: 'Hope for Paws',
-      date: '2025-07-10',
+      title: 'Request for Blood Donation',
+      date: '2025-07-27',
       time: '02:00pm',
       location: 'Uva Wellassa University',
       color: 'bg-blue-100 text-blue-800 border-l-4 border-blue-400'

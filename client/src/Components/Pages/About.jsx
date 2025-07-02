@@ -1,21 +1,34 @@
 import React from 'react';
 import clubImage from '../../assets/AboutImages/2.png';
 import presidentImage from '../../assets/AboutImages/president.png';
+import Vicepresident3Image from '../../assets/AboutImages/Vicepresident3.jpg';
+import Vicepresident2Image from '../../assets/AboutImages/Vicepresident2.jpG';
+import Vicepresident1Image from '../../assets/AboutImages/Vicepresident1.jpg';
+import Secretary1Image from '../../assets/AboutImages/secretary1.png';
+import Secretary2Image from '../../assets/AboutImages/Secretary2.jpg';
+import ITDirectorImage from '../../assets/AboutImages/itdirector.png';
+import Secretary3Image from '../../assets/AboutImages/Secretary3.jpg';
+import TresurerImage from '../../assets/AboutImages/tresurer.jpg';
+import AssttreasurerImage from '../../assets/AboutImages/assttreasurer.jpeg';
+import ChiefcoordiImage from '../../assets/AboutImages/chiefcoordinator.jpg';
+import CreativedirecterImage from '../../assets/AboutImages/creativedirector.jpg';
+import CreativecodirecterImage from '../../assets/AboutImages/creativecodirector.jpg';
+
 
 const About = () => {
   const executiveMembers = [
-    { name: 'Leo Jane Smith', role: 'Vice President', image: presidentImage },
-    { name: 'Leo Mike Johnson', role: 'Secretary', image: presidentImage },
-    { name: 'Leo Sarah Wilson', role: 'Treasurer', image: presidentImage },
-    { name: 'Leo David Brown', role: 'Membership Director', image: presidentImage },
-    { name: 'Leo Emily Davis', role: 'Service Director', image: presidentImage },
-    { name: 'Leo Chris Miller', role: 'Marketing Director', image: presidentImage },
-    { name: 'Leo Lisa Anderson', role: 'Events Coordinator', image: presidentImage },
-    { name: 'Leo Tom Garcia', role: 'Public Relations', image: presidentImage },
-    { name: 'Leo Anna Martinez', role: 'IT Director', image: presidentImage },
-    { name: 'Leo Kevin Lee', role: 'Fundraising Director', image: presidentImage },
-    { name: 'Leo Rachel Taylor', role: 'Youth Coordinator', image: presidentImage },
-    { name: 'Leo Alex Johnson', role: 'Social Media Manager', image: presidentImage },
+    { name: 'Leo kavinda chamod ', role: '1st Vice President', image: Vicepresident1Image },
+    { name: 'Leo Madhavee Herath', role: '2nd Vice President', image: Vicepresident2Image },
+    { name: 'Leo Abhishake haththakage', role: '3rd Vice President', image: Vicepresident3Image },
+    { name: 'Leo Umayanga Ranasinghe', role: 'Joint Secretary', image: Secretary1Image  },
+    { name: 'Leo Poornima Rathnasinghe', role: 'Joint Secretary', image: Secretary2Image },
+    { name: 'Leo Dinithi Semini', role: 'Joint Secretary', image: Secretary3Image },
+    { name: 'Leo Sasiri Sadaruwan', role: 'Treasurer', image:  TresurerImage },
+    { name: 'Leo Thilina Supun', role: 'IT Director', image: ITDirectorImage },
+    { name: 'Leo Chamodya Prabhashini', role: 'Chief Coordinator', image: ChiefcoordiImage },
+    { name: 'Leo Wageesha Deshan', role: 'Asst. Treasurer', image: AssttreasurerImage  },
+    { name: 'Leo Ahinsa Arunodi', role: 'Creative CoDirector', image: CreativecodirecterImage },
+    { name: 'Leo Gihan vimukthi', role: 'Creative Director', image: CreativedirecterImage },
   ];
 
   return (
@@ -53,7 +66,7 @@ const About = () => {
                 />
               </div>
               <div className="w-2/5 p-4 lg:p-6 flex flex-col justify-center">
-                <h3 className="text-xl font-semibold text-blue-900 mb-2">Leo John Doe</h3>
+                <h3 className="text-xl font-semibold text-blue-900 mb-2">Leo Sahan Madushka</h3>
                 <p className="text-sm font-medium text-gray-600 uppercase">President</p>
               </div>
             </div>
