@@ -1,15 +1,15 @@
 import { useState, useEffect } from "react";
-import child from '../../assets/LandingImage/child.jpeg';
-import donate from '../../assets/LandingImage/donate.jpeg';
-import girl from '../../assets/LandingImage/girl.jpeg';
-import image1 from '../../assets/LandingImage/image1.jpeg';
+import slider1 from '../../assets/LandingImage/slider1.png';
+import slider2 from '../../assets/LandingImage/slider2.jpg';
+import slider3 from '../../assets/LandingImage/slider3.jpg';
+
 
 export default function ImageSlider() {
   const images = [
-    { src: child, alt: 'Child' },
-    { src: donate, alt: 'Donate' },
-    { src: girl, alt: 'Girl' },
-    { src: image1, alt: 'Image 1' }
+    { src: slider2, alt: 'slider2' },
+    { src: slider1, alt: 'slider1' },
+    { src: slider3, alt: 'slider3' }
+    
   ];
 
   const [index, setIndex] = useState(0);
