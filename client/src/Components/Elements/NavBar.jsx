@@ -51,8 +51,8 @@ export default function Navbar() {
           {/* Desktop nav links: show only on xl+ (≥1280px) */}
           <div className="hidden xl:flex items-center space-x-6 ml-auto">
             <div className="flex space-x-6">
-              <Link to="/memberportal" className="link">
-                Memberportal
+             <Link to="" className="link" onClick={() => setShowAuthPopup1(true)}>
+                Member Portal
               </Link>
               <Link to="/project" className="link">
                 Projects
