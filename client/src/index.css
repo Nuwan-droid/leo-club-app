@@ -1,6 +1,7 @@
 @import "tailwindcss";
 
 @tailwind utilities;
+/* src/index.css */
 
 @layer components {
   /* Optional enhancements */
