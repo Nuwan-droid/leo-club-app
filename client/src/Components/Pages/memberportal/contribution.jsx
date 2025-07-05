@@ -5,19 +5,19 @@ const ContributionSection = () => {
     {
       id: 1,
       type: 'SITHUM DEVA',
-      image: '/api/placeholder/150/200',
+      image: '../../../../public/newsletter1.png',
       title: 'Profile Submission'
     },
     {
       id: 2,
       type: 'SITHLUM DOHADA',
-      image: '/api/placeholder/150/200',
+      image: '../../../../public/newsletter2.png',
       title: 'Newsletter Content'
     },
     {
       id: 3,
       type: 'ARTICLES',
-      image: '/api/placeholder/150/200',
+      image: '../../../../public/newsletter3.png',
       title: 'Article Submission'
     }
   ];

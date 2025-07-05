@@ -8,7 +8,7 @@ const EventVolunteeringSection = () => {
       role: 'Project Chair',
       committee: 'Organizing committee',
       status: 'Participating',
-      image: '/api/placeholder/80/60'
+      image: '../../../../public/event4.png'
     },
     {
       id: 2,
@@ -16,7 +16,7 @@ const EventVolunteeringSection = () => {
       role: 'Project Chair',
       committee: 'Organizing committee',
       status: 'Participating',
-      image: '/api/placeholder/80/60'
+      image: '../../../../public/event4.png'
     }
   ];
 

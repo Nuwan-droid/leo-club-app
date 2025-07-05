@@ -10,7 +10,7 @@ export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [showHamburger, setShowHamburger] = useState(false);
   const [showAuthPopup, setShowAuthPopup] = useState(false);
-
+  const [showAuthPopup1, setShowAuthPopup1] = useState(false);
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
@@ -26,7 +26,10 @@ export default function Navbar() {
   return (
     <>    
     {showAuthPopup && (
-      <AuthPopup onClose={() => setShowAuthPopup(false)} />
+      <AuthPopup onClose={() => setShowAuthPopup(false)} defaultMode="signup" />
+    )}
+    {showAuthPopup1 && (
+      <AuthPopup onClose={() => setShowAuthPopup1(false)} defaultMode="login" />
     )}
     <nav className="w-full bg-white shadow-md hover:bg-blue-50 transition duration-300 rounded-sm fixed top-0 z-40">
       <div className="w-full px-4 sm:px-6 lg:px-12 xl:px-20">
@@ -48,11 +51,11 @@ export default function Navbar() {
           {/* Desktop nav links: show only on xl+ (≥1280px) */}
           <div className="hidden xl:flex items-center space-x-6 ml-auto">
             <div className="flex space-x-6">
-              <Link to="" className="link" onClick={() => setShowAuthPopup(true)}>
-                Member Portal
+              <Link to="/memberportal" className="link">
+                Memberportal
               </Link>
               <Link to="/project" className="link">
-                Project
+                Projects
               </Link>
               <Link to="/calander" className="link">
                 Calendar
@@ -63,14 +66,12 @@ export default function Navbar() {
               <Link to="/about" className="link">
                 About
               </Link>
-              <Link to="/leoai" className="link">
-                Leo AI ✨
-              </Link>
+              
             </div>
 
             <div className="flex items-center space-x-4">
-              <Button label="Log In" className="login" onClick={() => setShowAuthPopup(true)} />
-              {/* <Button label="Donate" className="donate" /> */}
+             <Button label="Register" className="login" onClick={() => setShowAuthPopup(true)} />
+             <Button label="Login" className="login" onClick={() => setShowAuthPopup1(true)} />
              <Link to="/donation">
               <Button label="Donate" className="donate" />
             </Link>
@@ -92,7 +93,7 @@ export default function Navbar() {
                 { label: "Calendar", to: "/calander" },
                 { label: "Shop", to: "/shop" },
                 { label: "About", to: "/about" },
-                { label: "Leo AI ✨", to: "/leoai" },
+                //{ label: "Leo AI ✨", to: "/leoai" },
               ].map(({ label, to }) => (
                 <Link
                   key={to}
@@ -107,7 +108,7 @@ export default function Navbar() {
                 <Button label="Log In" className="login w-full" onClick={() => setShowAuthPopup(true)}/>
                  <Link to="/donation">
                 <Button label="Donate" className="donate w-full"/>
-              </Link>
+                </Link>
               </div>
             </div>
           </div>

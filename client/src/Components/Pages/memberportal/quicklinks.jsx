@@ -1,38 +1,38 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { FaGlobe, FaUser, FaProjectDiagram, FaExternalLinkAlt } from "react-icons/fa";
 
 const QuickLinks = () => {
   const links = [
-    { id: 1, title: "Links 1", url: "#" },
-    { id: 2, title: "Links 1", url: "#" },
-    { id: 3, title: "Links 1", url: "#" },
+    { id: 1, title: "Lions International", url: "https://www.lionsclubs.org/en", icon: <FaGlobe /> },
+    { id: 2, title: "My LEO Portal", url: "https://myleo.leomd306.org", icon: <FaUser /> },
+    { id: 3, title: "LEO World Projects", url: "https://www.lionsclubs.org/en", icon: <FaProjectDiagram /> },
   ];
 
   return (
-    <div className="space-y-4">
-      <div className="bg-yellow-400 rounded-lg p-4 text-center">
-        <Link to="/donation" className="text-black font-medium block w-full">
-          Donate
-        </Link>
-      </div>
-
-      <div className="bg-white rounded-lg shadow-sm p-4">
-        <h4 className="font-medium text-gray-900 mb-3">Quick Links</h4>
-        <div className="space-y-2">
+    <div className="w-full max-w-sm mx-auto">
+      <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+        <div className="p-4 bg-gray-50 border-b">
+          <h4 className="text-lg font-semibold text-gray-800">Quick Links</h4>
+        </div>
+        <div className="p-2">
           {links.map((link) => (
             <a
               key={link.id}
               href={link.url}
-              className="block text-sm text-gray-600 hover:text-blue-600 transition-colors"
+              target="_blank" // Opens link in a new tab
+              rel="noopener noreferrer" // Security best practice for external links
+              className="flex items-center justify-between p-3 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-all duration-200 ease-in-out group"
             >
-              {link.title}
+              <div className="flex items-center space-x-3">
+                <span className="text-blue-500 group-hover:text-blue-600 transition-colors">
+                  {link.icon}
+                </span>
+                <span className="font-medium">{link.title}</span>
+              </div>
+              <FaExternalLinkAlt className="text-gray-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" size="0.8em" />
             </a>
           ))}
         </div>
-      </div>
-
-      <div className="bg-blue-600 rounded-lg p-4 text-center">
-        <button className="text-white font-medium">Leo AI ✨</button>
       </div>
     </div>
   );

@@ -287,7 +287,7 @@ import Input from "./Input";
 import logo from "../../assets/lion.svg";
 import { useNavigate } from "react-router-dom";
 
-export default function Login({ onClose, onSwitchToSignUp }) {
+export default function Login({ onClose}) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
@@ -416,19 +416,7 @@ export default function Login({ onClose, onSwitchToSignUp }) {
 
             {error && <p className="text-red-500 text-sm text-center">{error}</p>}
 
-            <p className="text-center text-sm text-gray-500 mt-8">
-              Don't have an account?{" "}
-              <a
-                href="#"
-                className="text-blue-600 hover:underline"
-                onClick={(e) => {
-                  e.preventDefault();
-                  onSwitchToSignUp();
-                }}
-              >
-                Sign Up
-              </a>
-            </p>
+          
           </form>
         </div>
       </div>
