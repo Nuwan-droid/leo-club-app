@@ -15,7 +15,6 @@ const RequestEventPopup = ({ onClose }) => {
 
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [imagePreview, setImagePreview] = useState(null);
 
   // Set default dates
   useEffect(() => {
@@ -34,8 +33,8 @@ const RequestEventPopup = ({ onClose }) => {
 
   const categories = [
     { value: 'workshop', label: 'Workshop', emoji: '🛠️' },
-    { value: 'social service', label: 'Social Event', emoji: '🎉' },
-    { value: 'webinar', label: 'Training', emoji: '📚' },
+    { value: 'social service', label: 'social service', emoji: '🎉' },
+    { value: 'webinar', label: 'webinar', emoji: '📚' },
   ];
 
   const validateForm = () => {
@@ -85,16 +84,7 @@ const RequestEventPopup = ({ onClose }) => {
     }
   };
 
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setImagePreview(e.target.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+  
 
   const handleSubmit = async () => {
     if (!validateForm()) {
@@ -128,7 +118,7 @@ const RequestEventPopup = ({ onClose }) => {
     >
       <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[95vh] overflow-hidden shadow-2xl transform transition-all duration-300 animate-in slide-in-from-bottom-4">
         {/* Header */}
-        <div className="relative bg-gradient-to-br from-blue-600 via-blue-700 to-purple-700 p-8 text-white">
+        <div className="relative bg-blue-800 p-8 text-white">
           <button 
             onClick={onClose}
             className="absolute top-6 right-6 bg-red-500 hover:bg-red-600 rounded-full w-10 h-10 flex items-center justify-center transition-all duration-200 shadow-lg"
@@ -137,9 +127,7 @@ const RequestEventPopup = ({ onClose }) => {
           </button>
           
           <div className="flex items-center space-x-4 mb-6">
-            <div className="bg-white bg-opacity-20 rounded-full p-3 backdrop-blur-sm">
-              <Calendar size={24} />
-            </div>
+            
             <div>
               <h2 className="text-3xl font-bold">Request Event</h2>
               <p className="text-blue-100 mt-1">Fill out the details to submit your event request</p>
@@ -150,51 +138,7 @@ const RequestEventPopup = ({ onClose }) => {
         {/* Form Content */}
         <div className="p-8 overflow-y-auto max-h-[calc(95vh-120px)]">
           <div className="space-y-8">
-            {/* Event Image Upload */}
-            <div className="bg-gray-50 rounded-xl p-6 border-2 border-dashed border-gray-200 hover:border-blue-300 transition-colors">
-              <div className="text-center">
-                {imagePreview ? (
-                  <div className="relative inline-block">
-                    <img 
-                      src={imagePreview} 
-                      alt="Event preview"
-                      className="w-48 h-32 object-cover rounded-lg shadow-md"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => setImagePreview(null)}
-                      className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600"
-                    >
-                      ×
-                    </button>
-                  </div>
-                ) : (
-                  <div className="space-y-3">
-                    <div className="mx-auto w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
-                      <Upload size={24} className="text-blue-600" />
-                    </div>
-                    <div>
-                      <p className="text-gray-600 font-medium">Upload Event Image</p>
-                      <p className="text-sm text-gray-500">PNG, JPG up to 5MB</p>
-                    </div>
-                  </div>
-                )}
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                  className="hidden"
-                  id="image-upload"
-                />
-                <label
-                  htmlFor="image-upload"
-                  className="mt-4 inline-flex items-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 cursor-pointer transition-colors"
-                >
-                  <Upload size={16} className="mr-2" />
-                  {imagePreview ? 'Change Image' : 'Upload Image'}
-                </label>
-              </div>
-            </div>
+          
 
             {/* Event Details Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -360,7 +304,7 @@ const RequestEventPopup = ({ onClose }) => {
                 type="button"
                 onClick={handleSubmit}
                 disabled={isSubmitting}
-                className="px-8 py-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-105 active:scale-95 flex items-center space-x-2"
+                className="px-8 py-3 bg-yellow-400 text-black rounded-lg font-semibold hover:from-blue-700 hover:to-purple-700 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 transform hover:scale-105 active:scale-95 flex items-center space-x-2"
               >
                 {isSubmitting ? (
                   <>
