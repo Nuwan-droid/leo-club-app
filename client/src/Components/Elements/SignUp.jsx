@@ -246,19 +246,7 @@ export default function SignUp({ onClose, onSwitchToLogin }) {
                 <p className="text-red-500 text-sm text-center mt-2">{error}</p>
               )}
 
-              <p className="text-center text-sm text-gray-500 mt-0">
-                Already have an account?{" "}
-                <a
-                  href="#"
-                  className="text-blue-600 hover:underline"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    onSwitchToLogin();
-                  }}
-                >
-                  LOGIN HERE
-                </a>
-              </p>
+              
             </div>
           </form>
         </div>
