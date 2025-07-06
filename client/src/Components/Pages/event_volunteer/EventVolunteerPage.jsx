@@ -12,8 +12,8 @@ const EventVolunteerPage = () => {
   const upcomingEvents = [
     {
       id: 1,
-      date: 'June 28',
-      day: 'Wednesday',
+      date: 'July 28',
+      day: 'Monday',
       time: '10:00 AM',
       title: 'Seeds for Hope',
       location: 'Nika/wari/ Katupatha M.V.',
@@ -79,7 +79,7 @@ const EventVolunteerPage = () => {
             <div className="mb-6">
               <h1 className="text-2xl font-bold text-gray-900 mb-4">Events</h1>
               <div className="flex space-x-4 mb-6">
-                <button className="px-4 py-2 bg-blue-100 text-blue-700 rounded-lg font-medium">Competition</button>
+                <button className="px-4 py-2 bg-blue-100 text-blue-700 rounded-lg font-medium">Service projects</button>
                 <button className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">Webinar</button>
                 <button className="px-4 py-2 text-gray-600 hover:bg-gray-100 rounded-lg">Workshop</button>
               </div>
