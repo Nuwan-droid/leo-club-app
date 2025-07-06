@@ -61,9 +61,7 @@ export default function Navbar() {
 
             <div className="hidden xl:flex items-center space-x-6 ml-auto">
               <div className="flex space-x-6">
-                <Link to="" className="link" onClick={() => setShowAuthPopup1(true)}>
-                  Member Portal
-                </Link>
+                <Link to="/memberportal" className="link" > Member Portal </Link>
                 <Link to="/project" className="link">Projects</Link>
                 <Link to="/calander" className="link">Calendar</Link>
                 <Link to="/shop" className="link">Shop</Link>

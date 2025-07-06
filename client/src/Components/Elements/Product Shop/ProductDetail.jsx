@@ -11,12 +11,28 @@ const ProductDetail = ({
   setQuantity,
   selectedImage,
   setSelectedImage,
-  handleBackClick
+  handleBackClick,
+  addToCart // Add this prop
 }) => {
   const colorMap = {
     'Black': 'bg-black',
     'Dark Blue': 'bg-blue-900',
     'Dark Green': 'bg-green-900'
+  };
+
+  // Add this function to handle adding to cart
+  const handleAddToCart = () => {
+    const cartItem = {
+      id: `${product.id}-${selectedSize}-${selectedColor}`,
+      productId: product.id,
+      name: product.name,
+      price: product.price,
+      image: product.image,
+      size: selectedSize,
+      color: selectedColor,
+      quantity: quantity
+    };
+    addToCart(cartItem);
   };
 
   return (
@@ -52,7 +68,7 @@ const ProductDetail = ({
 
         <div className="space-y-6">
           <h1 className="text-3xl font-bold text-gray-800 mb-2">{product.name} 2025</h1>
-          <div className="text-3xl font-bold text-gray-800 mb-2">Rs {product.price}.00</div>
+          <div className="text-3xl font-bold text-blue-800 mb-2">Rs {product.price}.00</div>
           {product.originalPrice && (
             <div className="text-red-500 text-sm">(Rs. {product.originalPrice})</div>
           )}
@@ -99,24 +115,34 @@ const ProductDetail = ({
             <div className="flex items-center space-x-4">
               <button
                 onClick={() => quantity > 1 && setQuantity(quantity - 1)}
-                className="p-2 border border-gray-300 rounded hover:bg-gray-100  text-gray-800"
+                className="p-2 border border-gray-300 rounded hover:bg-gray-100 text-gray-800"
               >
                 <Minus size={16} />
               </button>
-              <span className="text-xl font-bold px-4  text-gray-800">{quantity}</span>
+              <span className="text-xl font-bold px-4 text-gray-800">{quantity}</span>
               <button
                 onClick={() => setQuantity(quantity + 1)}
-                className="p-2 border  text-gray-800 border-gray-300 rounded hover:bg-gray-100"
+                className="p-2 border text-gray-800 border-gray-300 rounded hover:bg-gray-100"
               >
                 <Plus size={16} />
               </button>
             </div>
           </div>
 
-          <button className="w-full font-bold py-3 px-6 rounded-lg bg-yellow-400 text-black hover:bg-yellow-500 transition-colors flex items-center justify-center space-x-2">
-            <ShoppingCart size={20} />
-            <span>Buy Now</span>
-          </button>
+          {/* Update the button section */}
+          <div className="flex space-x-4">
+            <button 
+              onClick={handleAddToCart}
+              className="flex-1 font-bold py-3 px-6 rounded-lg bg-white text-black border-2 border-gray-300 hover:bg-gray-100 transition-colors flex items-center justify-center space-x-2"
+            >
+              <ShoppingCart size={20} />
+              <span>Add to cart</span>
+            </button>
+            <button className="flex-1 font-bold py-3 px-6 rounded-lg bg-yellow-400 text-black hover:bg-yellow-500 transition-colors flex items-center justify-center space-x-2">
+              <ShoppingCart size={20} />
+              <span>Buy Now</span>
+            </button>
+          </div>
 
           {product.material && (
             <div className="pt-6 border-t">
