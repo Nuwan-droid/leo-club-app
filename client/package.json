@@ -21,7 +21,7 @@
     "@vis.gl/react-google-maps": "^1.5.3",
     "axios": "^1.10.0",
     "dayjs": "^1.11.13",
-    "framer-motion": "^12.22.0",
+    "framer-motion": "^12.23.0",
     "lucide-react": "^0.514.0",
     "prop-types": "^15.8.1",
     "react": "^19.1.0",
