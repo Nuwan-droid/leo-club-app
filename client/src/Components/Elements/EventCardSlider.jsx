@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa"; 
 import EventCard from "./EventCard";
 import april from "../../assets/NewsLetters/april.png";
 import feb from "../../assets/NewsLetters/feb.jpg";
@@ -78,11 +78,12 @@ function EventCardSlider() {
                   View Details
                 </button>
               </div>
-
+            
               {showPDF && (
                 <div className="fixed inset-0 bg-transparent bg-opacity-75 flex items-center justify-center z-50 p-4">
                   <div className="bg-white rounded-lg w-full max-w-6xl h-[90vh] flex flex-col">
                     <div className="flex justify-between items-center p-4 border-b">
+                      <h3 className="text-lg font-semibold">Document Viewer</h3>
                       <button
                         onClick={() => setShowPDF(false)}
                         className="p-2 bg-red-800 -100 rounded-full"
