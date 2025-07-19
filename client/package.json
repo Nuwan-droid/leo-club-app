@@ -1,6 +1,6 @@
 {
   "name": "client",
-  "homepage":"https:Nuwan-droid.github.io/leo-club-app/",
+  "homepage": "https://Nuwan-droid.github.io/leo-club-app/",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -9,8 +9,8 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "predeploy":"npm run dev",
-    "deploy":"gh-pages -d dist"
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -25,6 +25,7 @@
     "axios": "^1.10.0",
     "dayjs": "^1.11.13",
     "framer-motion": "^12.23.0",
+    "gh-pages": "^6.3.0",
     "lucide-react": "^0.514.0",
     "prop-types": "^15.8.1",
     "react": "^19.1.0",
