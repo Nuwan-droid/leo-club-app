@@ -39,13 +39,13 @@ const LeoChatbot = () => {
     setError(null);
 
     try {
-      const response = await axios.post('http://localhost:5000/api/chat', {
+      const response = await axios.post('http://localhost:5001/api/chat', {
         message: inputMessage
       }, {
         timeout: 10000 // 10 second timeout
       });
 
-      if (response.data.status === 'success') {
+      if (response.data.status === 'success' && response.data.response) {
         const botMessage = { 
           text: response.data.response, 
           sender: 'bot',
@@ -164,4 +164,3 @@ const LeoChatbot = () => {
 };
 
 export default LeoChatbot;
-

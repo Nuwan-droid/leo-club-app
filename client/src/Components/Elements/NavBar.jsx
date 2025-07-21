@@ -66,7 +66,6 @@ export default function Navbar() {
                 <Link to="/calander" className="link">Calendar</Link>
                 <Link to="/shop" className="link">Shop</Link>
                 <Link to="/about" className="link">About</Link>
-                <Link to="/admin" className="link">admin</Link>
               </div>
 
               <div className="flex items-center space-x-4">
