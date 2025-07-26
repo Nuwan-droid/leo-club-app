@@ -4,9 +4,9 @@ const userSchema = new mongoose.Schema({
   leoStatus: {
     type: String,
     enum: ['member', 'not-member'],
-    required: true,
+    required: false,
   },
-  memberId: {
+  userId: {
     type: String,
     validate: {
       validator: function (value) {
@@ -15,7 +15,7 @@ const userSchema = new mongoose.Schema({
         }
         return true;
       },
-      message: 'Member ID is required for members.',
+      message: 'user ID is required for all users.',
     },
   },
   firstName: { type: String, trim: true },
@@ -33,6 +33,17 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     required: [true, 'Password is required.'],
+  },
+  userImage: {
+    type: String, // Path or URL to the user's profile image
+    trim: true,
+    default: 'https://randomuser.me/api/portraits',
+  },
+  role: {
+    type: String,
+    enum: ['member', 'admin'],
+    required: true,
+    default: 'member',
   },
 }, { timestamps: true });
 
