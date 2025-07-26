@@ -1,5 +1,4 @@
 import React from 'react';
-import StatusBadge from './StatusBadge';
 import ActionButtons from './ActionButtons';
 
 const UserTableRow = ({ user, isSelected, onSelect, onEdit, onDelete }) => {
@@ -22,21 +21,16 @@ const UserTableRow = ({ user, isSelected, onSelect, onEdit, onDelete }) => {
               alt={user.name}
             />
           </div>
-          <div className="ml-4">
-            <div className="text-sm font-medium text-gray-900">
-              {user.name}
-            </div>
-          </div>
         </div>
+      </td>
+       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+        {user.first_name}
+      </td>
+       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+        {user.last_name}
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
         {user.email}
-      </td>
-      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-        {user.username}
-      </td>
-      <td className="px-6 py-4 whitespace-nowrap">
-        <StatusBadge status={user.status} />
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
         {user.role}

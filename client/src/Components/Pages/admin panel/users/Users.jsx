@@ -6,21 +6,19 @@ const Users = () => {
   const [users, setUsers] = useState([
     {
       id: 1,
-      name: 'John Smith',
-      email: 'john.smith@gmail.com',
-      username: 'jonny77',
-      status: 'Active',
+      first_name: 'charith',
+      last_name: 'jayasinghe',
+      email: 'charith26@gmail.com',
       role: 'Admin',
       avatar: 'https://randomuser.me/api/portraits/men/1.jpg'
     },
     {
       id: 2,
-      name: 'Olivia Bennett',
-      email: 'ollyben@gmail.com',
-      username: 'olly659',
-      status: 'Inactive',
-      role: 'Member',
-      avatar: 'https://randomuser.me/api/portraits/women/2.jpg'
+      first_name: 'thilina',
+      last_name: 'adikari',
+      email: 'thilina@gmail.com',
+      role: 'member',
+      avatar: 'https://randomuser.me/api/portraits/men/2.jpg'
     },
     {
       id: 3,
