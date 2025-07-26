@@ -30,7 +30,7 @@ function App() {
       {!isMemberPortal && !isAdmin && <NavBar />}
       <Routes>
         <Route path="/" element={<Landing />} />
-        <Route path="/about" element={<Chatbot />} />
+        <Route path="/about" element={<About />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms" element={<Terms />} />
         <Route path="/donation" element={<Donation />} />
