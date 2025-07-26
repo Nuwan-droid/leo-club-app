@@ -1,10 +1,14 @@
 import { useState, useEffect } from "react";
+import toast from 'react-hot-toast';
 import Button from "./Button";
 import Input from "./Input";
 import logo from "../../assets/lion.svg";
 
 export default function SignUp({ onClose, onSwitchToLogin }) {
+<<<<<<< HEAD
 
+=======
+>>>>>>> origin/Dev
   const [leoStatus, setLeoStatus] = useState("member");
   const [formData, setFormData] = useState({
     memberId: "",
@@ -37,29 +41,35 @@ export default function SignUp({ onClose, onSwitchToLogin }) {
     setError("");
 
     if (!leoStatus) {
-      setError("Please select your membership status");
+      toast.error("Please select your membership status");
       return;
     }
 
     if (leoStatus === "member" && !formData.memberId.trim()) {
-      setError("Member ID is required for members");
+      toast.error("Member ID is required for members");
       return;
     }
 
     if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match");
+      toast.error("Passwords do not match");
       return;
     }
 
     if (!formData.email.trim() || !formData.password.trim()) {
-      setError("Email and password are required");
+      toast.error("Email and password are required");
       return;
     }
 
+<<<<<<< HEAD
     if (!formData.password || !validatePassword(formData.password)) {
       return setError(
         "Password must be at least 8 characters long and include uppercase, lowercase, number, and symbol."
       );
+=======
+     if (!formData.password || !validatePassword(formData.password)) {
+      toast.error("Password must be at least 8 characters long and include uppercase, lowercase, number, and symbol.");
+      return;
+>>>>>>> origin/Dev
     }
 
     const payload = {
@@ -74,8 +84,11 @@ export default function SignUp({ onClose, onSwitchToLogin }) {
       password: formData.password.trim(),
     };
 
+    // Show loading toast
+    const loadingToast = toast.loading("Creating your account...");
+
     try {
-      const res = await fetch("http://localhost:5000/api/signup", {
+      const res = await fetch("http://localhost:5001/api/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -83,21 +96,29 @@ export default function SignUp({ onClose, onSwitchToLogin }) {
 
       const data = await res.json();
 
+      // Dismiss loading toast
+      toast.dismiss(loadingToast);
+
       if (res.ok) {
-        alert("🎉 Registered successfully! Please log in.");
+        toast.success("🎉 Registered successfully! Please log in.", {
+          duration: 4000,
+        });
         console.log("✅ User registered:", data);
         onSwitchToLogin();
       } else {
-        setError(data.message || "Sign up failed");
+        toast.error(data.message || "Sign up failed");
       }
     } catch (err) {
+      // Dismiss loading toast
+      toast.dismiss(loadingToast);
       console.error("Signup error:", err);
-      setError("Server error");
+      toast.error("Server error. Please try again.");
     }
   };
 
   const handleProceedToPay = () => {
     console.log("Redirecting to payment...");
+    toast.success("Redirecting to payment gateway...");
     // Add your payment redirect logic here
   };
 
@@ -121,9 +142,7 @@ export default function SignUp({ onClose, onSwitchToLogin }) {
         </div>
 
         <div className="w-full md:w-1/2 p-4 sm:p-8 mb-4 sm:mb-6">
-          <h2 className="text-lg sm:text-xl font-bold text-center text-gray-800 mb-6 sm:mb-10">
-            Get Membership
-          </h2>
+         
 
           <form
             onSubmit={

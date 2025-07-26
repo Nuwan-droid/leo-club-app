@@ -6,7 +6,6 @@ import tailwindcss from '@tailwindcss/vite'
 export default defineConfig({
   plugins: [react()
      , tailwindcss()],
-    base: "/Leo-club-frontend",
    server: {
     proxy: {
       '/api': 'http://localhost:5000',

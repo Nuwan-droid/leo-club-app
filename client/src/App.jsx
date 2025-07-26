@@ -16,7 +16,6 @@ import LearningHub from "./Components/Pages/learninghub/learninghub";
 import EventVolunteerPage from "./Components/Pages/event_volunteer/EventVolunteerPage";
 import NewsLetter from "./Components/Pages/NewsLetter";
 import Chatbot from "./Components/Pages/chatbot/LeoChatbot";
-
 import Admin from "./Components/Pages/admin panel/main_admin";
 
 function App() {
@@ -31,7 +30,7 @@ function App() {
       {!isMemberPortal && !isAdmin && <NavBar />}
       <Routes>
         <Route path="/" element={<Landing />} />
-        <Route path="/about" element={<About />} />
+        <Route path="/about" element={<Chatbot />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms" element={<Terms />} />
         <Route path="/donation" element={<Donation />} />
@@ -44,6 +43,7 @@ function App() {
         <Route path="/memberportal/learning-hub" element={<LearningHub />} />
         <Route path="/memberportal/join-newsletter" element={<NewsLetter />} />
         <Route path="/memberportal/event-volunteer" element={<EventVolunteerPage />} />
+        <Route path="/chatbot" element={<Chatbot/>} />
         
         {/* Admin routes - use wildcard to handle nested routing */}
         <Route path="/admin/*" element={<Admin />} />
