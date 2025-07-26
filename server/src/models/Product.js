@@ -3,68 +3,74 @@ import mongoose from 'mongoose';
 const productSchema = new mongoose.Schema({
   product_id: {
     type: Number,
+    unique: true,
+    // required: true // Temporarily removed to test hook
+  },
+  name: {
+    type: String,
     required: true,
-    unique: true
-  },
-  title: {
-    type: String,
-    maxlength: 255,
-    trim: true
-  },
-  description: {
-    type: String,
-    trim: true
-  },
-  colour: {
-    type: String,
-    maxlength: 255,
-    trim: true
-  },
-  size: {
-    type: String,
-    maxlength: 255,
     trim: true
   },
   price: {
     type: Number,
-    min: 0,
-    validate: {
-      validator: function(v) {
-        return v >= 0 && Number(v.toFixed(2)) === v;
-      },
-      message: 'Price must be a positive number with max 2 decimal places'
-    }
+    required: true,
+    min: 0
   },
-  stock: {
+  originalPrice: {
     type: Number,
-    min: 0,
-    validate: {
-      validator: Number.isInteger,
-      message: 'Stock must be an integer'
-    }
+    default: null,
+    min: 0
   },
-  image_path: {
+  description: {
     type: String,
-    maxlength: 255,
+    required: true,
     trim: true
   },
-  created_at: {
-    type: Date,
-    default: Date.now
+  sizes: [{
+    type: String,
+    enum: ['XS', 'S', 'M', 'L', 'XL', 'XXL', 'XXXL', 'One Size']
+  }],
+  colors: [{
+    type: String
+  }],
+  material: [{
+    type: String,
+    trim: true
+  }],
+  badge: {
+    type: String,
+    default: null,
+    trim: true
   },
-  updated_at: {
-    type: Date,
-    default: Date.now
-  }
+  mainImage: {
+    type: String,
+    default: ''
+  },
+  additionalImages: [{
+    type: String
+  }]
+}, {
+  timestamps: true
 });
 
-// Pre-save middleware to update updated_at
-productSchema.pre('save', function(next) {
-  this.updated_at = Date.now();
+// Pre-save hook to handle product_id generation
+productSchema.pre('save', async function(next) {
+  console.log('Pre-save hook triggered for document:', this.isNew ? 'New' : 'Existing', JSON.stringify(this, null, 2));
+  if (this.isNew) {
+    try {
+      const lastProduct = await this.constructor.findOne({}, {}, { sort: { product_id: -1 } }).exec();
+      this.product_id = lastProduct && lastProduct.product_id ? lastProduct.product_id + 1 : 1;
+      console.log('Generated product_id:', this.product_id);
+    } catch (error) {
+      console.error('Error generating product_id:', error);
+      return next(new Error('Failed to generate product_id: ' + error.message));
+    }
+  }
   next();
 });
 
-// Index for better query performance (equivalent to MySQL KEY)
-productSchema.index({ product_id: 1 });
+// Indexes for better performance
+productSchema.index({ name: 1 });
+productSchema.index({ createdAt: -1 });
 
 export default mongoose.model('Product', productSchema);
