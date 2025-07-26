@@ -4,7 +4,7 @@ import { Calendar, Clock, MapPin, User, X, ChevronLeft, Share2, Heart, Users } f
 const EventDetailsPopup = ({ event, onClose }) => {
   const [isJoined, setIsJoined] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
-  const [attendeeCount, setAttendeeCount] = useState(127);
+  const [attendeeCount, setAttendeeCount] = useState(32);
   const [isLoading, setIsLoading] = useState(false);
   const [showFullDescription, setShowFullDescription] = useState(false);
 
@@ -66,13 +66,13 @@ const EventDetailsPopup = ({ event, onClose }) => {
       <div className="bg-white rounded-2xl max-w-lg w-full max-h-[95vh] overflow-hidden shadow-2xl transform transition-all duration-300 scale-100">
         {/* Header with Image */}
         <div className="relative">
-          <div className="h-56 bg-gradient-to-br from-green-400 via-blue-500 to-purple-600 flex items-center justify-center">
+          <div className="h-56 bg-blue-800 flex items-center justify-center">
             <div className="text-center text-white">
               <div className="w-20 h-20 bg-white bg-opacity-20 rounded-full flex items-center justify-center mb-4 mx-auto backdrop-blur-sm">
                 <span className="text-3xl">🌱</span>
               </div>
               <h1 className="text-2xl font-bold mb-2">Seeds for Hope</h1>
-              <p className="text-green-100 text-sm">Community Environmental Initiative</p>
+              <p className="text-green-100 text-sm"> Environmental Community</p>
             </div>
           </div>
           
@@ -163,8 +163,7 @@ const EventDetailsPopup = ({ event, onClose }) => {
                 <User size={20} className="text-white" />
               </div>
               <div>
-                <p className="font-medium text-gray-900">Organized by Thilina Aakari</p>
-                <p className="text-sm text-gray-600">Environmental Advocate</p>
+                <p className="font-medium text-gray-900">Organized by Thilina Adikari</p>
               </div>
             </div>
           </div>
@@ -178,7 +177,7 @@ const EventDetailsPopup = ({ event, onClose }) => {
                 className={`w-full py-4 px-6 rounded-xl font-semibold text-white transition-all duration-200 ${
                   isLoading 
                     ? 'bg-gray-400 cursor-not-allowed' 
-                    : 'bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 shadow-lg hover:shadow-xl transform hover:scale-105'
+                    : 'bg-yellow-400 shadow-lg hover:shadow-xl transform hover:scale-105'
                 }`}
               >
                 {isLoading ? (

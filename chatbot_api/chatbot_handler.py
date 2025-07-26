@@ -4,68 +4,59 @@ import random
 import nltk
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords
-import numpy as np
 
 class LeoClubChatbot:
     def __init__(self):
+        # Download required NLTK data quietly (only if not already downloaded)
+        nltk.download('punkt', quiet=True)
+        nltk.download('wordnet', quiet=True)
+        nltk.download('stopwords', quiet=True)
+        nltk.download('omw-1.4', quiet=True)
+        
         try:
-            # Load the trained model
+            # Load the trained AI model
             self.pipeline = joblib.load('leo_chatbot_model.pkl')
-            
-            # Load intents data
+        except Exception as e:
+            print(f"Error loading model: {e}")
+            self.pipeline = None
+        
+        try:
+            # Load the intents data
             with open('leo_club_intents.json', 'r') as f:
                 self.intents = json.load(f)
-            
-            # Initialize preprocessing tools
-            self.lemmatizer = WordNetLemmatizer()
-            self.stop_words = set(stopwords.words('english'))
-            
-            print("Leo Club Chatbot initialized successfully!")
-            
         except Exception as e:
-            print(f"Error initializing chatbot: {e}")
-            self.pipeline = None
+            print(f"Error loading intents: {e}")
             self.intents = None
-    
-    def preprocess_message(self, message):
-        if not message:
-            return ""
         
+        self.lemmatizer = WordNetLemmatizer()
+        self.stop_words = set(stopwords.words('english'))
+        self.valid_keywords = {'leo', 'club', 'leadership', 'experience', 'opportunity', 'navigate', 'events', 'members'}
+
+    def clean_message(self, message):
         words = nltk.word_tokenize(message.lower())
-        words = [self.lemmatizer.lemmatize(word) for word in words 
-                if word.isalnum() and word not in self.stop_words]
+        words = [self.lemmatizer.lemmatize(word) for word in words if word.isalnum() and word not in self.stop_words]
         return ' '.join(words)
-    
-    def predict_intent(self, message):
-        if not self.pipeline:
-            return "unknown", 0.0
-        
-        processed_message = self.preprocess_message(message)
-        if not processed_message:
-            return "unknown", 0.0
-        
-        try:
-            predicted_intent = self.pipeline.predict([processed_message])[0]
-            confidence = max(self.pipeline.predict_proba([processed_message])[0])
-            return predicted_intent, confidence
-        except Exception as e:
-            print(f"Prediction error: {e}")
-            return "unknown", 0.0
-    
+
+    def is_leo_related(self, message):
+        words = set(self.clean_message(message).split())
+        return bool(words.intersection(self.valid_keywords))
+
     def get_response(self, message):
-        if not self.intents:
-            return "Sorry, I'm currently unavailable. Please try again later."
+        if self.pipeline is None or self.intents is None:
+            return "Sorry, the chatbot is not properly initialized. Please check the server."
         
-        intent, confidence = self.predict_intent(message)
+        if not self.is_leo_related(message):
+            return "I can only help with Leo Club information and website navigation."
         
-        # Low confidence or unknown intent
-        if confidence < 0.3 or intent == "unknown":
-            return "I'm sorry, I can only help with Leo Club related questions. You can ask me about our activities, membership, meetings, leadership opportunities, or general information about Leo Club."
+        clean_msg = self.clean_message(message)
+        predicted_intent = self.pipeline.predict([clean_msg])[0]
+        confidence = max(self.pipeline.predict_proba([clean_msg])[0])
         
-        # Find the intent and return a random response
+        if confidence < 0.3:
+            return "Please ask about Leo Club topics."
+        
         for intent_data in self.intents['intents']:
-            if intent_data['tag'] == intent:
+            if intent_data['tag'] == predicted_intent:
                 return random.choice(intent_data['responses'])
         
-        return "I'm here to help with Leo Club information. What would you like to know about our organization?"
-
+        return "I'm here to help with Leo Club information."

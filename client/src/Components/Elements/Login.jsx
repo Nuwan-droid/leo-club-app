@@ -39,7 +39,7 @@ export default function Login({ onClose}) {
     setError("");
 
     try {
-      const res = await fetch("http://localhost:5000/api/login", {
+      const res = await fetch("http://localhost:5001/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -57,7 +57,10 @@ export default function Login({ onClose}) {
         // Optional: Redirect based on user role
         if (user?.leoStatus === "member") {
           navigate("/memberportal");
-        } else {
+        }else if(user?.leoStatus === "admin") {
+          navigate("/admin");
+        }
+        else {
           navigate("/newmemberpayment");
         }
       } else {

@@ -17,7 +17,7 @@ const EventVolunteerPage = () => {
       time: '10:00 AM',
       title: 'Seeds for Hope',
       location: 'Nika/wari/ Katupatha M.V.',
-      type: 'Workshop',
+      type: 'Service projects',
       image: '../../../../public/event1.png'
     }
   ];
@@ -30,7 +30,7 @@ const EventVolunteerPage = () => {
       time: '10:00 AM',
       title: 'Snehaloka',
       location: 'Badulla Hospital',
-      type: 'Workshop',
+      type: 'Service projects',
       image: '../../../../public/event2.png'
     },
     {
@@ -40,7 +40,7 @@ const EventVolunteerPage = () => {
       time: '10:00 AM',
       title: 'Degree Vistas',
       location: 'Uva wellassa University',
-      type: 'Workshop',
+      type: 'Service projects',
       image: '../../../../public/event3.png'
     }
   ];
