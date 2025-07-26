@@ -57,18 +57,9 @@ export default function Login({ onClose}) {
         //  Redirect based on user role
         if (user?.leoStatus === "member") {
           navigate("/memberportal");
-<<<<<<< HEAD
-        } else if (user?.leoStatus === "not-member") {
-=======
-        }else if(user?.leoStatus === "admin") {
-          navigate("/admin");
-        }
-        else {
->>>>>>> origin/Dev
+        } else if (user?.leoStatus === "notmember") {
           navigate("/newmemberpayment");
-        }
-        else if (user?.leoStatus === "admin") {
-          navigate("/admin");
+         
         }
       } else {
         setError(data.message || "Login failed");

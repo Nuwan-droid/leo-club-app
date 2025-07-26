@@ -1,14 +1,9 @@
 import { useState, useEffect } from "react";
-import toast from 'react-hot-toast';
 import Button from "./Button";
 import Input from "./Input";
 import logo from "../../assets/lion.svg";
 
 export default function SignUp({ onClose, onSwitchToLogin }) {
-<<<<<<< HEAD
-
-=======
->>>>>>> origin/Dev
   const [leoStatus, setLeoStatus] = useState("member");
   const [formData, setFormData] = useState({
     memberId: "",
@@ -31,8 +26,9 @@ export default function SignUp({ onClose, onSwitchToLogin }) {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-  const validatePassword = (password) => {
-    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+   const validatePassword = (password) => {
+    const regex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
     return regex.test(password);
   };
 
@@ -41,35 +37,29 @@ export default function SignUp({ onClose, onSwitchToLogin }) {
     setError("");
 
     if (!leoStatus) {
-      toast.error("Please select your membership status");
+      setError("Please select your membership status");
       return;
     }
 
     if (leoStatus === "member" && !formData.memberId.trim()) {
-      toast.error("Member ID is required for members");
+      setError("Member ID is required for members");
       return;
     }
 
     if (formData.password !== formData.confirmPassword) {
-      toast.error("Passwords do not match");
+      setError("Passwords do not match");
       return;
     }
 
     if (!formData.email.trim() || !formData.password.trim()) {
-      toast.error("Email and password are required");
+      setError("Email and password are required");
       return;
     }
 
-<<<<<<< HEAD
-    if (!formData.password || !validatePassword(formData.password)) {
+     if (!formData.password || !validatePassword(formData.password)) {
       return setError(
         "Password must be at least 8 characters long and include uppercase, lowercase, number, and symbol."
       );
-=======
-     if (!formData.password || !validatePassword(formData.password)) {
-      toast.error("Password must be at least 8 characters long and include uppercase, lowercase, number, and symbol.");
-      return;
->>>>>>> origin/Dev
     }
 
     const payload = {
@@ -84,11 +74,8 @@ export default function SignUp({ onClose, onSwitchToLogin }) {
       password: formData.password.trim(),
     };
 
-    // Show loading toast
-    const loadingToast = toast.loading("Creating your account...");
-
     try {
-      const res = await fetch("http://localhost:5001/api/signup", {
+      const res = await fetch("http://localhost:5000/api/signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -96,29 +83,21 @@ export default function SignUp({ onClose, onSwitchToLogin }) {
 
       const data = await res.json();
 
-      // Dismiss loading toast
-      toast.dismiss(loadingToast);
-
       if (res.ok) {
-        toast.success("🎉 Registered successfully! Please log in.", {
-          duration: 4000,
-        });
+        alert("🎉 Registered successfully! Please log in.");
         console.log("✅ User registered:", data);
         onSwitchToLogin();
       } else {
-        toast.error(data.message || "Sign up failed");
+        setError(data.message || "Sign up failed");
       }
     } catch (err) {
-      // Dismiss loading toast
-      toast.dismiss(loadingToast);
       console.error("Signup error:", err);
-      toast.error("Server error. Please try again.");
+      setError("Server error");
     }
   };
 
   const handleProceedToPay = () => {
     console.log("Redirecting to payment...");
-    toast.success("Redirecting to payment gateway...");
     // Add your payment redirect logic here
   };
 
@@ -134,21 +113,15 @@ export default function SignUp({ onClose, onSwitchToLogin }) {
         </button>
 
         <div className="w-full md:w-1/2 h-40 md:h-auto">
-          <img
-            src={logo}
-            alt="Leo Club Logo"
-            className="w-full h-full object-cover"
-          />
+          <img src={logo} alt="Leo Club Logo" className="w-full h-full object-cover" />
         </div>
 
         <div className="w-full md:w-1/2 p-4 sm:p-8 mb-4 sm:mb-6">
-         
+          <h2 className="text-lg sm:text-xl font-bold text-center text-gray-800 mb-6 sm:mb-10">
+            Get Membership
+          </h2>
 
-          <form
-            onSubmit={
-              leoStatus === "member" ? handleSubmit : (e) => e.preventDefault()
-            }
-          >
+          <form onSubmit={leoStatus === "member" ? handleSubmit : (e) => e.preventDefault()}>
             <div className="grid grid-cols-1 gap-2 sm:gap-3 p-1 sm:p-2 mb-3 sm:mb-4 sm:grid-cols-2">
               <label className="flex items-center gap-2 text-gray-800 text-sm sm:text-base">
                 <input
@@ -246,8 +219,9 @@ export default function SignUp({ onClose, onSwitchToLogin }) {
               />
             </div>
             <p className="text-xs text-gray-500 mt-1 ml-1">
-              Must be 8+ characters with uppercase, lowercase, number & symbol.
-            </p>
+  Must be 8+ characters with uppercase, lowercase, number & symbol.
+</p>
+
 
             <div className="flex flex-col gap-2 mt-3 sm:mt-4 ml-2 sm:ml-4">
               {leoStatus === "not-member" ? (
@@ -259,24 +233,20 @@ export default function SignUp({ onClose, onSwitchToLogin }) {
                     className="login p-2 mt-2"
                     label="Proceed to Pay"
                     onClick={handleProceedToPay}
+
                   />
-                  {error && (
-                    <p className="text-red-500 text-sm text-center mt-2">
-                      {error}
-                    </p>
-                  )}
+                    {error && <p className="text-red-500 text-sm text-center mt-2">{error}</p>}
+
                 </>
               ) : (
-                <Button
-                  type="submit"
-                  className="login p-2 mt-3 sm:mt-4"
-                  label="Sign Up"
-                />
+                <Button type="submit" className="login p-2 mt-3 sm:mt-4" label="Sign Up"  />
               )}
 
               {error && (
                 <p className="text-red-500 text-sm text-center mt-2">{error}</p>
               )}
+
+              
             </div>
           </form>
         </div>
