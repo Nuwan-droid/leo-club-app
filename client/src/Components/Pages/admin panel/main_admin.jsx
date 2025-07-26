@@ -14,7 +14,7 @@ import Projects from './projects/Projects';
 import Newsletters from './newsletter/Newsletters';
 import LearningHub from './learninghub/LearningHub';
 import EventVolunteer from './eventvolunteer/EventVolunteer';
-import Products from './products/Products';
+import Products from './products/ListProducts';
 import Orders from './orders/Orders';
 import Donation from './donation/Donation';
 import ManageAbout from './manageabout/ManageAbout';
