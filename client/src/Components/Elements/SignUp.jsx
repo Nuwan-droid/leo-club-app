@@ -4,7 +4,8 @@ import Input from "./Input";
 import logo from "../../assets/lion.svg";
 
 export default function SignUp({ onClose, onSwitchToLogin }) {
-  const [leoStatus, setLeoStatus] = useState("");
+
+  const [leoStatus, setLeoStatus] = useState("member");
   const [formData, setFormData] = useState({
     memberId: "",
     firstName: "",
@@ -26,9 +27,8 @@ export default function SignUp({ onClose, onSwitchToLogin }) {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-   const validatePassword = (password) => {
-    const regex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+  const validatePassword = (password) => {
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
     return regex.test(password);
   };
 
@@ -56,7 +56,7 @@ export default function SignUp({ onClose, onSwitchToLogin }) {
       return;
     }
 
-     if (!formData.password || !validatePassword(formData.password)) {
+    if (!formData.password || !validatePassword(formData.password)) {
       return setError(
         "Password must be at least 8 characters long and include uppercase, lowercase, number, and symbol."
       );
@@ -113,7 +113,11 @@ export default function SignUp({ onClose, onSwitchToLogin }) {
         </button>
 
         <div className="w-full md:w-1/2 h-40 md:h-auto">
-          <img src={logo} alt="Leo Club Logo" className="w-full h-full object-cover" />
+          <img
+            src={logo}
+            alt="Leo Club Logo"
+            className="w-full h-full object-cover"
+          />
         </div>
 
         <div className="w-full md:w-1/2 p-4 sm:p-8 mb-4 sm:mb-6">
@@ -121,7 +125,11 @@ export default function SignUp({ onClose, onSwitchToLogin }) {
             Get Membership
           </h2>
 
-          <form onSubmit={leoStatus === "member" ? handleSubmit : (e) => e.preventDefault()}>
+          <form
+            onSubmit={
+              leoStatus === "member" ? handleSubmit : (e) => e.preventDefault()
+            }
+          >
             <div className="grid grid-cols-1 gap-2 sm:gap-3 p-1 sm:p-2 mb-3 sm:mb-4 sm:grid-cols-2">
               <label className="flex items-center gap-2 text-gray-800 text-sm sm:text-base">
                 <input
@@ -219,9 +227,8 @@ export default function SignUp({ onClose, onSwitchToLogin }) {
               />
             </div>
             <p className="text-xs text-gray-500 mt-1 ml-1">
-  Must be 8+ characters with uppercase, lowercase, number & symbol.
-</p>
-
+              Must be 8+ characters with uppercase, lowercase, number & symbol.
+            </p>
 
             <div className="flex flex-col gap-2 mt-3 sm:mt-4 ml-2 sm:ml-4">
               {leoStatus === "not-member" ? (
@@ -233,20 +240,24 @@ export default function SignUp({ onClose, onSwitchToLogin }) {
                     className="login p-2 mt-2"
                     label="Proceed to Pay"
                     onClick={handleProceedToPay}
-
                   />
-                    {error && <p className="text-red-500 text-sm text-center mt-2">{error}</p>}
-
+                  {error && (
+                    <p className="text-red-500 text-sm text-center mt-2">
+                      {error}
+                    </p>
+                  )}
                 </>
               ) : (
-                <Button type="submit" className="login p-2 mt-3 sm:mt-4" label="Sign Up"  />
+                <Button
+                  type="submit"
+                  className="login p-2 mt-3 sm:mt-4"
+                  label="Sign Up"
+                />
               )}
 
               {error && (
                 <p className="text-red-500 text-sm text-center mt-2">{error}</p>
               )}
-
-              
             </div>
           </form>
         </div>
