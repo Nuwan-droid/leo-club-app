@@ -1,13 +1,17 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const executiveMemberSchema = new mongoose.Schema({
   email: {
     type: String,
-    required: true
+    required: true,
+    unique: true,
+    lowercase: true,
+    trim: true
   },
   first_name: {
     type: String,
-    required: true
+    required: true,
+    trim: true
   },
   image_path: {
     type: String,
@@ -15,19 +19,24 @@ const executiveMemberSchema = new mongoose.Schema({
   },
   last_name: {
     type: String,
-    required: true
+    required: true,
+    trim: true
   },
   member_id: {
     type: String,
-    required: true
+    required: true,
+    unique: true,
+    trim: true
   },
   phone: {
     type: String,
-    required: true
+    required: true,
+    trim: true
   },
   position: {
     type: String,
-    required: true
+    required: true,
+    trim: true
   },
   created_at: {
     type: Date,
@@ -59,4 +68,4 @@ executiveMemberSchema.pre(['updateOne', 'findOneAndUpdate'], function(next) {
 const ExecutiveMember = mongoose.model('ExecutiveMember', executiveMemberSchema);
 
 // Export the model
-module.exports = ExecutiveMember;
+export default ExecutiveMember;
