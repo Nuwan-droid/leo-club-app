@@ -1,12 +1,20 @@
 import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema({
+  role: {
+    type: String,
+    enum: ['member', 'admin'],
+    required: true,
+    default: 'member',
+  },
+
   leoStatus: {
     type: String,
     enum: ['member', 'not-member'],
     required: false,
   },
-  userId: {
+
+  memberId: {
     type: String,
     validate: {
       validator: function (value) {
@@ -15,13 +23,15 @@ const userSchema = new mongoose.Schema({
         }
         return true;
       },
-      message: 'user ID is required for all users.',
+      message: 'Member ID is required for members.',
     },
   },
+
   firstName: { type: String, trim: true },
   lastName: { type: String, trim: true },
   address: { type: String, trim: true },
   birthday: { type: Date },
+
   email: {
     type: String,
     required: [true, 'Email is required.'],
@@ -29,22 +39,20 @@ const userSchema = new mongoose.Schema({
     trim: true,
     lowercase: true,
   },
+
   mobile: { type: String, trim: true },
+
   password: {
     type: String,
     required: [true, 'Password is required.'],
   },
+
   userImage: {
     type: String, // Path or URL to the user's profile image
     trim: true,
     default: 'https://randomuser.me/api/portraits',
   },
-  role: {
-    type: String,
-    enum: ['member', 'admin'],
-    required: true,
-    default: 'member',
-  },
+
 }, { timestamps: true });
 
 const User = mongoose.model('User', userSchema);
