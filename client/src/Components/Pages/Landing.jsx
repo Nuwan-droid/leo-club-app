@@ -1,6 +1,6 @@
 import NavBar from "../Elements/NavBar"
 import Footer from "../Elements/Footer"
-import Login from "../Elements/Login"
+import Login from "../Elements/signIn.jsx"
 import ImageSlider from "../Elements/ImageSlider"
 import Content from "../Elements/Content"
 import Awards from "../Elements/Stat"
