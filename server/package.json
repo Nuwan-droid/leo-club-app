@@ -22,7 +22,11 @@
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.17.0",
     "mongoose": "^8.16.1",
+<<<<<<< HEAD
     "razorpay": "^2.9.6"
+=======
+    "multer": "^2.0.2"
+>>>>>>> origin/Dev
   },
   "devDependencies": {
     "nodemon": "^3.1.10"

@@ -1,6 +1,6 @@
+// CartSidebar.jsx
 import React from 'react';
-import { ShoppingCart, Plus, Minus,X, Trash2} from 'lucide-react';
-
+import { ShoppingCart, Plus, Minus, X, Trash2 } from 'lucide-react';
 
 const CartSidebar = ({ isOpen, onClose, cartItems, updateQuantity, removeFromCart }) => {
   const totalAmount = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
@@ -16,7 +16,6 @@ const CartSidebar = ({ isOpen, onClose, cartItems, updateQuantity, removeFromCar
       <div className={`fixed right-0 top-0 h-full w-96 bg-white shadow-2xl transform transition-all duration-500 ease-in-out z-50 ${
         isOpen ? 'translate-x-0' : 'translate-x-full'
       }`}>
-        {/* Header */}
         <div className="p-6 border-b border-gray-200 bg-blue-800 text-white">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
@@ -37,7 +36,6 @@ const CartSidebar = ({ isOpen, onClose, cartItems, updateQuantity, removeFromCar
           </div>
         </div>
 
-        {/* Content */}
         <div className="flex-1 overflow-y-auto p-6 bg-white">
           {cartItems.length === 0 ? (
             <div className="text-center mt-16 text-black">
@@ -49,7 +47,7 @@ const CartSidebar = ({ isOpen, onClose, cartItems, updateQuantity, removeFromCar
             </div>
           ) : (
             <div className="space-y-4">
-              {cartItems.map((item, index) => (
+              {cartItems.map((item) => (
                 <div 
                   key={item.id} 
                   className="group bg-white rounded-xl p-4 shadow border hover:border-blue-300 transition"
@@ -72,25 +70,24 @@ const CartSidebar = ({ isOpen, onClose, cartItems, updateQuantity, removeFromCar
                       <div className="flex items-center space-x-2">
                         <button
                           onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                          className="p-1 bg-gray-100  text-blue-800 border rounded-full hover:bg-red-100 hover:text-red-600"
+                          className="p-1 bg-gray-100 text-blue-800 border rounded-full hover:bg-red-100 hover:text-red-600"
                         >
                           <Minus size={14} />
                         </button>
                         <span className="w-8 text-center font-semibold text-gray-700">{item.quantity}</span>
                         <button
                           onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                          className="p-1 bg-gray-100  text-blue-800 border rounded-full hover:bg-green-100 hover:text-green-600"
+                          className="p-1 bg-gray-100 text-blue-800 border rounded-full hover:bg-green-100 hover:text-green-600"
                         >
                           <Plus size={14} />
                         </button>
                       </div>
-                        <button
+                      <button
                         onClick={() => removeFromCart(item.id)}
                         className="text-red-500 hover:text-red-900 p-1 rounded-full"
-                        >
+                      >
                         <Trash2 size={16} />
-                        </button>
-
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -99,7 +96,6 @@ const CartSidebar = ({ isOpen, onClose, cartItems, updateQuantity, removeFromCar
           )}
         </div>
 
-        {/* Footer */}
         {cartItems.length > 0 && (
           <div className="p-6 border-t border-gray-200 bg-white">
             <div className="p-4 mb-4 bg-blue-50 rounded">

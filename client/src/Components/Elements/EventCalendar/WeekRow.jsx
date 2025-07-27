@@ -14,6 +14,7 @@ const WeekRow = ({ week, weekIndex, getEventsForDate, isToday, monthName }) => {
         const dayEvents = dayObj.isCurrentMonth ? getEventsForDate(dayObj.day) : [];
         const todayCheck = dayObj.isCurrentMonth && isToday(dayObj.day);
         
+        
         return (
           <DayCell
             key={dayIndex}
