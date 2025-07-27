@@ -67,7 +67,7 @@ const ProfileSection = () => {
             />
           </div>
           <div>
-            <h2 className="text-xl font-semibold text-gray-900">Welcome ...! A.M.T.S. Arikari</h2>
+            <h2 className="text-xl font-semibold text-gray-900">Welcome, A.M.T.S. Adikari...!</h2>
             <p className="text-gray-500 text-sm">Volunteer</p>
           </div>
         </div>

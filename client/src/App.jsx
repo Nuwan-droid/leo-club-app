@@ -1,4 +1,4 @@
-import { Routes, Route ,useLocation} from "react-router-dom";
+import { Routes, Route, useLocation } from "react-router-dom";
 import NavBar from "./Components/Elements/NavBar";
 import Footer from "./Components/Elements/Footer";
 import Landing from "./Components/Pages/Landing";
@@ -15,40 +15,41 @@ import MemberPortal from "./Components/Pages/memberportal/memberportal";
 import LearningHub from "./Components/Pages/learninghub/learninghub";
 import EventVolunteerPage from "./Components/Pages/event_volunteer/EventVolunteerPage";
 import NewsLetter from "./Components/Pages/NewsLetter";
-import Chatbot from "./Components/Pages/chatbot/LeoChatbot"
+import Chatbot from "./Components/Pages/chatbot/LeoChatbot";
+import Admin from "./Components/Pages/admin panel/main_admin";
 
 function App() {
+  const location = useLocation();
 
-const location = useLocation();
-  
-  // Check if current path is member portal
-  const isMemberPortal = location.pathname.startsWith('/memberportal');
-
+  // Check if current path is member portal or admin
+  const isMemberPortal = location.pathname.startsWith("/memberportal");
+  const isAdmin = location.pathname.startsWith("/admin");
 
   return (
     <>
-
-      {!isMemberPortal && <NavBar/>}
+      {!isMemberPortal && !isAdmin && <NavBar />}
       <Routes>
         <Route path="/" element={<Landing />} />
         <Route path="/about" element={<About />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
         <Route path="/terms" element={<Terms />} />
-        <Route path="/donation" element={<Donation/>}/>
-        <Route path="/donatemoney" element= {<DonateMoney/>}/>
-        <Route path="/donatebook" element={<DonateBooks/>} />
+        <Route path="/donation" element={<Donation />} />
+        <Route path="/donatemoney" element={<DonateMoney />} />
+        <Route path="/donatebook" element={<DonateBooks />} />
         <Route path="/calander" element={<EventCalendar />} />
         <Route path="/shop" element={<Shop />} />
         <Route path="/project" element={<ProjectShowcasePage />} />
-        <Route path="/donatebook" element={<DonateBooks/>} />
-        <Route path="/memberportal" element={<MemberPortal/>} />
-        <Route path="/memberportal/learning-hub" element={<LearningHub/>} />
-        <Route path="/memberportal/join-newsletter" element={<NewsLetter/>} />
-        <Route path="/memberportal/event-volunteer" element={<EventVolunteerPage/>} />
+        <Route path="/memberportal" element={<MemberPortal />} />
+        <Route path="/memberportal/learning-hub" element={<LearningHub />} />
+        <Route path="/memberportal/join-newsletter" element={<NewsLetter />} />
+        <Route path="/memberportal/event-volunteer" element={<EventVolunteerPage />} />
+        <Route path="/chatbot" element={<Chatbot/>} />
         
-      </Routes> 
-      <Chatbot/>
-      <Footer />
+        {/* Admin routes - use wildcard to handle nested routing */}
+        <Route path="/admin/*" element={<Admin />} />
+      </Routes>
+      <Chatbot />
+      {!isAdmin && <Footer />}
     </>
   );
 }
