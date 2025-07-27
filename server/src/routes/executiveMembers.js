@@ -12,7 +12,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Ensure uploads directory exists
-const uploadsDir = path.join(__dirname, '../../uploads/executive-members');
+const uploadsDir = path.join(__dirname, '../../upload/images');
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir, { recursive: true });
 }
@@ -124,7 +124,7 @@ router.post('/', upload.single('image'), async (req, res) => {
     }
 
     // Generate image path for storage
-    const image_path = `/uploads/executive-members/${req.file.filename}`;
+    const image_path = `/images/${req.file.filename}`;
 
     const newMember = new ExecutiveMember({
       email,
@@ -220,7 +220,7 @@ router.put('/:id', upload.single('image'), async (req, res) => {
         fs.unlinkSync(oldImagePath);
       }
       
-      updateData.image_path = `/uploads/executive-members/${req.file.filename}`;
+      updateData.image_path = `/images/${req.file.filename}`;
     }
 
     const updatedMember = await ExecutiveMember.findByIdAndUpdate(
