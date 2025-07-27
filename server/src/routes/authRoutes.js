@@ -2,12 +2,10 @@ import express from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/User.js";
-import 'dotenv/config';
-
-
+import "dotenv/config";
 
 const router = express.Router();
-const JWT_SECRET = process.env.JWT_SECRET ;
+const JWT_SECRET = process.env.JWT_SECRET;
 
 // --------------------- SIGNUP ---------------------
 router.post("/signup", async (req, res) => {
@@ -26,11 +24,15 @@ router.post("/signup", async (req, res) => {
 
     // ✅ Required field checks
     if (!email || !password || !leoStatus) {
-      return res.status(400).json({ message: "Email, password, and leoStatus are required." });
+      return res
+        .status(400)
+        .json({ message: "Email, password, and leoStatus are required." });
     }
 
     if (leoStatus === "member" && (!memberId || memberId.trim() === "")) {
-      return res.status(400).json({ message: "Member ID is required for members." });
+      return res
+        .status(400)
+        .json({ message: "Member ID is required for members." });
     }
 
     // ✅ Check duplicate email
@@ -71,7 +73,9 @@ router.post("/login", async (req, res) => {
 
     // ✅ Validate fields
     if (!email || !password) {
-      return res.status(400).json({ message: "Email and password are required." });
+      return res
+        .status(400)
+        .json({ message: "Email and password are required." });
     }
 
     // ✅ Find user
