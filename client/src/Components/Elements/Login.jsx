@@ -1,11 +1,10 @@
-
 import { useState, useEffect } from "react";
 import Button from "./Button";
 import Input from "./Input";
 import logo from "../../assets/lion.svg";
 import { useNavigate } from "react-router-dom";
 
-export default function Login({ onClose}) {
+export default function Login({ onClose }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
@@ -39,7 +38,8 @@ export default function Login({ onClose}) {
     setError("");
 
     try {
-      const res = await fetch("http://localhost:5001/api/login", {
+      // Use the correct API endpoint
+      const res = await fetch("http://localhost:5000/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -50,16 +50,21 @@ export default function Login({ onClose}) {
       if (res.ok) {
         const { token, user } = data;
 
-        localStorage.setItem("leoToken", token);
+        // Store token based on Remember Me
+        if (rememberMe) {
+          localStorage.setItem("leoToken", token);
+        } else {
+          sessionStorage.setItem("leoToken", token);
+        }
 
         onClose();
 
-        //  Redirect based on user role
+        // Redirect based on user role
         if (user?.leoStatus === "member") {
           navigate("/memberportal");
-        } else if (user?.leoStatus === "notmember") {
+        } else if (user?.leoStatus === "not-member") {
           navigate("/newmemberpayment");
-         
+       
         }
       } else {
         setError(data.message || "Login failed");
@@ -102,6 +107,8 @@ export default function Login({ onClose}) {
               placeholder="Email"
               value={email}
               onChange={handleEmailChange}
+              required
+              autoComplete="email"
             />
 
             <Input
@@ -109,6 +116,8 @@ export default function Login({ onClose}) {
               placeholder="Password"
               value={password}
               onChange={handlePasswordChange}
+              required
+              autoComplete="current-password"
             />
 
             <div className="flex items-center justify-between text-sm text-gray-600 mt-4">
@@ -134,16 +143,9 @@ export default function Login({ onClose}) {
             />
 
             {error && <p className="text-red-500 text-sm text-center">{error}</p>}
-
-          
           </form>
         </div>
       </div>
     </div>
   );
 }
-
-
-
-
-

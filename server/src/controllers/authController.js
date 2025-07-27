@@ -1,4 +1,6 @@
 import User from '../models/User.js';
+import bcrypt from 'bcryptjs';
+import generateToken from '../utils/generateToken.js';
 
 export const signup = async (req, res) => {
   try {
@@ -14,23 +16,25 @@ export const signup = async (req, res) => {
       password,
     } = req.body;
 
-    // ✅ Check if required fields are provided
     if (!leoStatus || !firstName || !lastName || !email || !password) {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
-    // ✅ Check if email already exists
+    // Check if email already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(400).json({ message: "Email already exists" });
     }
 
-    // ✅ Check memberId only if leoStatus is 'member'
+    // Check memberId only if leoStatus is 'member'
     if (leoStatus === 'member' && (!memberId || memberId.trim() === '')) {
       return res.status(400).json({ message: "Member ID is required for LEO members" });
     }
 
-    // 📦 Create and save the new user
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create and save the new user
     const newUser = new User({
       leoStatus,
       memberId: leoStatus === 'member' ? memberId : null,
@@ -40,12 +44,27 @@ export const signup = async (req, res) => {
       birthday,
       email,
       mobile,
-      password, // Optional: you can hash it before saving
+      password: hashedPassword,
+      status: 'pending', // new users need approval
     });
 
     await newUser.save();
 
-    res.status(201).json({ message: "User created successfully", user: newUser });
+    // Generate token after saving (using newUser._id)
+    const token = generateToken(newUser._id);
+
+    res.status(201).json({
+      message: "User created successfully, awaiting admin approval",
+      user: {
+        _id: newUser._id,
+        email: newUser.email,
+        firstName: newUser.firstName,
+        lastName: newUser.lastName,
+        leoStatus: newUser.leoStatus,
+        status: newUser.status,
+      },
+      token,
+    });
 
   } catch (error) {
     console.error("Signup error:", error);

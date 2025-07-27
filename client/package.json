@@ -19,7 +19,7 @@
     "@mui/x-date-pickers": "^8.6.0",
     "@tailwindcss/vite": "^4.1.8",
     "@vis.gl/react-google-maps": "^1.5.3",
-    "axios": "^1.10.0",
+    "axios": "^1.11.0",
     "dayjs": "^1.11.13",
     "dotenv": "^17.0.1",
     "framer-motion": "^12.23.0",

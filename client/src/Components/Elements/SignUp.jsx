@@ -3,6 +3,7 @@ import Button from "./Button";
 import Input from "./Input";
 import logo from "../../assets/lion.svg";
 
+
 export default function SignUp({ onClose, onSwitchToLogin }) {
   const [leoStatus, setLeoStatus] = useState("member");
   const [formData, setFormData] = useState({
