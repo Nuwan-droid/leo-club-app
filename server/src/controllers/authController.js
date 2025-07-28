@@ -25,7 +25,7 @@ export const signup = async (req, res) => {
     // Check existing user
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(400).json({ message: "Email already exists" });
+      return res.status(409).json({ message: "Email already registered." });
     }
 
     // Validate member ID if leoStatus is 'member'

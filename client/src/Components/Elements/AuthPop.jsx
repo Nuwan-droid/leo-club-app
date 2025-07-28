@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Login from "./Login";
+import Login from "./Login.jsx";
 import SignUp from "./SignUp";
 
 function AuthPop({ onClose, defaultMode = "login" }) {
