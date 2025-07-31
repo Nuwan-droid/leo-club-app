@@ -55,9 +55,9 @@ export default function Login({ onClose}) {
         onClose();
 
         // Optional: Redirect based on user role
-        if (user?.leoStatus === "member") {
+        if (user?.role === "member") {
           navigate("/memberportal");
-        }else if(user?.leoStatus === "admin") {
+        }else if(user?.role === "admin") {
           navigate("/admin");
         }
         else {

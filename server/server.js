@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
-
+import cookieParser  from "cookie-parser";
 import executiveMemberRoutes from "./src/routes/executiveMembers.js";
 import connectDB from "./src/config/database.js";
 import authRoutes from "./src/routes/authRoutes.js";
@@ -34,6 +34,7 @@ app.use((req, res, next) => {
   next();
 });
 app.use(express.urlencoded({ extended: true })); // ✅ Added for form data
+
 
 // Serve uploaded images (static route)
 app.use("/images", express.static(path.join(__dirname, "upload/images")));
