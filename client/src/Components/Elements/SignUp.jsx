@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Button from "./Button";
 import Input from "./Input";
 import logo from "../../assets/lion.svg";
+import { toast } from 'react-toastify';
 
 export default function SignUp({ onClose, onSwitchToLogin }) {
   const [leoStatus, setLeoStatus] = useState("member");
@@ -64,7 +65,7 @@ export default function SignUp({ onClose, onSwitchToLogin }) {
 
     const payload = {
       leoStatus,
-      userId: formData.memberId.trim(), // ✅ key fix here
+      userId: formData.memberId.trim(),
       firstName: formData.firstName.trim(),
       lastName: formData.lastName.trim(),
       address: formData.address.trim(),
@@ -85,7 +86,6 @@ export default function SignUp({ onClose, onSwitchToLogin }) {
 
       if (res.ok) {
         alert("🎉 Registered successfully! Please log in.");
-        console.log("✅ User registered:");
         onSwitchToLogin();
       } else {
         setError(data.message || "Sign up failed");
@@ -96,10 +96,66 @@ export default function SignUp({ onClose, onSwitchToLogin }) {
     }
   };
 
-  const handleProceedToPay = () => {
-    console.log("Redirecting to payment...");
-    // Add your payment redirect logic here
+const handleProceedToPay = () => {
+  setError(""); // Clear previous errors
+
+  // Basic required field validation
+  const requiredFields = ["firstName", "lastName", "address", "birthday", "email", "mobile", "password", "confirmPassword"];
+  const emptyFields = requiredFields.filter(field => !formData[field]?.trim());
+
+  if (emptyFields.length > 0) {
+    setError("Please fill in all required fields before proceeding to payment.");
+    return;
+  }
+
+  if (formData.password !== formData.confirmPassword) {
+    setError("Passwords do not match.");
+    return;
+  }
+
+  if (!validatePassword(formData.password)) {
+    setError(
+      "Password must be at least 8 characters long and include uppercase, lowercase, number, and symbol."
+    );
+    return;
+  }
+  
+
+  // If all checks pass → proceed to PayHere
+  const orderId = `LEO-${Date.now()}`;
+  const paymentData = {
+    merchant_id: 'YOUR_MERCHANT_ID',
+    return_url: 'https://your-site.com/payment-success',
+    cancel_url: 'https://your-site.com/payment-cancel',
+    notify_url: 'https://your-api.com/api/payment/payhere-notify',
+    order_id: orderId,
+    items: 'Leo Club Membership',
+    amount: '400.00',
+    currency: 'LKR',
+    first_name: formData.firstName,
+    last_name: formData.lastName,
+    email: formData.email,
+    phone: formData.mobile,
+    address: formData.address,
+    city: 'Colombo',
+    country: 'Sri Lanka',
   };
+
+  const form = document.createElement('form');
+  form.method = 'POST';
+  form.action = 'https://www.payhere.lk/pay/checkout';
+
+  Object.entries(paymentData).forEach(([key, value]) => {
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = key;
+    input.value = value;
+    form.appendChild(input);
+  });
+
+  document.body.appendChild(form);
+  form.submit();
+};
 
   return (
     <div className="fixed inset-0 bg-black/10 z-50 flex items-center justify-center px-2 sm:px-0">
@@ -161,62 +217,14 @@ export default function SignUp({ onClose, onSwitchToLogin }) {
             )}
 
             <div className="grid grid-cols-1 gap-3 sm:gap-6 sm:grid-cols-2 p-1">
-              <Input
-                type="text"
-                placeholder="First Name"
-                name="firstName"
-                value={formData.firstName}
-                onChange={handleChange}
-              />
-              <Input
-                type="text"
-                placeholder="Last Name"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleChange}
-              />
-              <Input
-                type="text"
-                placeholder="Address"
-                name="address"
-                value={formData.address}
-                onChange={handleChange}
-              />
-              <Input
-                type="date"
-                placeholder="Birthday"
-                name="birthday"
-                value={formData.birthday}
-                onChange={handleChange}
-              />
-              <Input
-                type="email"
-                placeholder="Email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-              />
-              <Input
-                type="tel"
-                placeholder="Mobile no"
-                name="mobile"
-                value={formData.mobile}
-                onChange={handleChange}
-              />
-              <Input
-                type="password"
-                placeholder="Password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-              />
-              <Input
-                type="password"
-                placeholder="Confirm Password"
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-              />
+              <Input type="text" placeholder="First Name" name="firstName" value={formData.firstName} onChange={handleChange} />
+              <Input type="text" placeholder="Last Name" name="lastName" value={formData.lastName} onChange={handleChange} />
+              <Input type="text" placeholder="Address" name="address" value={formData.address} onChange={handleChange} />
+              <Input type="date" placeholder="Birthday" name="birthday" value={formData.birthday} onChange={handleChange} />
+              <Input type="email" placeholder="Email" name="email" value={formData.email} onChange={handleChange} />
+              <Input type="tel" placeholder="Mobile no" name="mobile" value={formData.mobile} onChange={handleChange} />
+              <Input type="password" placeholder="Password" name="password" value={formData.password} onChange={handleChange} />
+              <Input type="password" placeholder="Confirm Password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} />
             </div>
 
             <p className="text-xs text-gray-500 mt-1 ml-1">
@@ -228,21 +236,13 @@ export default function SignUp({ onClose, onSwitchToLogin }) {
                 <>
                   <p className="text-black text-sm">Be a Member</p>
                   <p className="text-black text-sm">Membership Fee: Rs400.00</p>
-                  <Button
-                    type="button"
-                    className="login p-2 mt-2"
-                    label="Proceed to Pay"
-                    onClick={handleProceedToPay}
-                  />
+                  <Button type="button" className="login p-2 mt-2" label="Proceed to Pay" onClick={handleProceedToPay} />
                   {error && <p className="text-red-500 text-sm text-center mt-2">{error}</p>}
                 </>
               ) : (
                 <Button type="submit" className="login p-2 mt-3 sm:mt-4" label="Sign Up" />
               )}
-
-              {error && (
-                <p className="text-red-500 text-sm text-center mt-2">{error}</p>
-              )}
+              {error && <p className="text-red-500 text-sm text-center mt-2">{error}</p>}
             </div>
           </form>
         </div>

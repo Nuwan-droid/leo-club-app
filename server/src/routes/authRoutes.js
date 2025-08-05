@@ -1,13 +1,13 @@
-// import express from "express";
-// import "dotenv/config";
-// import { signup, signIn } from "../controllers/authController.js";
+import express from "express";
+import "dotenv/config";
+import { signup, signIn } from "../controllers/authController.js";
 
-// const router = express.Router();
+const router = express.Router();
 
-// // --------------------- SIGNUP ---------------------
-// router.post("/signup", signup);
+// --------------------- SIGNUP ---------------------
+router.post("/signup", signup);
 
-// // --------------------- SIGNIN ---------------------
-// router.post("/signIn", signIn);
+// --------------------- SIGNIN ---------------------
+router.post("/signIn", signIn);
 
-// export default router;
+export default router;

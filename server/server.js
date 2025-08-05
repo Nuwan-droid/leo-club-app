@@ -3,10 +3,11 @@ import dotenv from "dotenv";
 import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
+import paymentRoutes from "./src/routes/payment.js";
 
 import executiveMemberRoutes from "./src/routes/executiveMembers.js";
 import connectDB from "./src/config/database.js";
-import authRoutes from "./src/routes/auth.js";
+import authRoutes from "./src/routes/authRoutes.js";
 import productRoutes from "./src/routes/productRoutes.js";
 
 dotenv.config();
@@ -42,6 +43,8 @@ app.use("/images", express.static(path.join(__dirname, "upload/images")));
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/executive-members", executiveMemberRoutes);
+app.use('/api/payment', paymentRoutes);
+
 
 // Root route
 app.get("/", (req, res) => {
@@ -52,3 +55,10 @@ app.get("/", (req, res) => {
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
+
+
+
+
+
+
+
