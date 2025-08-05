@@ -21,6 +21,7 @@
     "@vis.gl/react-google-maps": "^1.5.3",
     "axios": "^1.10.0",
     "dayjs": "^1.11.13",
+    "dotenv": "^17.0.1",
     "framer-motion": "^12.23.0",
     "gh-pages": "^6.3.0",
     "lucide-react": "^0.514.0",

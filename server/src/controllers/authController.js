@@ -1,13 +1,13 @@
 import User from "../models/User.js";
-import bcrypt from "bcryptjs";
-import "dotenv/config";
-import generateToken from "../utils/generateToken.js";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
-const signup = async (req, res) => {
+// SIGNUP
+export const signup = async (req, res) => {
   try {
     const {
       leoStatus,
-      memberId,
+      userId,
       firstName,
       lastName,
       address,
@@ -17,32 +17,29 @@ const signup = async (req, res) => {
       password,
     } = req.body;
 
-    // ✅ Required field checks
-    if (!email || !password || !leoStatus) {
-      return res
-        .status(400)
-        .json({ message: "Email, password, and leoStatus are required." });
+    // Validate required fields
+    if (!leoStatus || !firstName || !lastName || !email || !password) {
+      return res.status(400).json({ message: "Missing required fields" });
     }
 
-    if (leoStatus === "member" && (!memberId || memberId.trim() === "")) {
-      return res
-        .status(400)
-        .json({ message: "Member ID is required for members." });
-    }
-
-    // ✅ Check duplicate email
+    // Check existing user
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(409).json({ message: "Email already registered." });
     }
 
-    // ✅ Hash password
+    // Validate member ID if leoStatus is 'member'
+    if (leoStatus === "member" && (!userId || userId.trim() === "")) {
+      return res.status(400).json({ message: "Member ID is required for LEO members" });
+    }
+
+    // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // ✅ Save user
-    const user = new User({
+    // Create new user
+    const newUser = new User({
       leoStatus,
-      memberId: leoStatus === "member" ? memberId : null,
+      userId: leoStatus === "member" ? userId : null,
       firstName,
       lastName,
       address,
@@ -52,71 +49,60 @@ const signup = async (req, res) => {
       password: hashedPassword,
     });
 
-    await user.save();
+    await newUser.save();
 
-    // ✅ Auto-login after signup (optional - you can remove this if you want manual login)
-    const token = generateToken(user._id, res);
-
-    res.status(201).json({
-      message: "User registered successfully.",
-      token,
-      user: {
-        id: user._id,
-        email: user.email,
-        leoStatus: user.leoStatus,
-        firstName: user.firstName,
-        lastName: user.lastName,
-      },
-    });
+    res.status(201).json({ message: "User created successfully", user: newUser });
   } catch (error) {
     console.error("Signup error:", error);
-    res.status(500).json({ message: "Server error during signup." });
+    res.status(500).json({ message: "Internal server error" });
   }
 };
 
-const signIn = async (req, res) => {
+// LOGIN
+
+
+export const signIn = async (req, res) => {
   try {
     const { email, password } = req.body;
-    // ✅ Validate fields
+
+    // Validate input
     if (!email || !password) {
-      return res
-        .status(400)
-        .json({ message: "Email and password are required." });
+      return res.status(400).json({ message: "Email and password are required" });
     }
 
-    // ✅ Find user
+    // Find user by email
     const user = await User.findOne({ email });
     if (!user) {
-      return res.status(401).json({ message: "Invalid email or password." });
+      return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    // ✅ Compare password
+    // Check password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(401).json({ message: "Invalid email or password." });
+      return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    // ✅ Create JWT token
-    const token = generateToken(user._id, res);
+    // Generate JWT token
+    const token = jwt.sign(
+      { id: user._id, role: user.role },
+      process.env.JWT_SECRET || "yoursecret",
+      { expiresIn: "1d" }
+    );
 
-    // ✅ Send response
-    res.json({
-      message: "Login successful",
+    // Return token and user data, including leoStatus
+    res.status(200).json({
       token,
       user: {
         id: user._id,
         email: user.email,
-        leoStatus: user.leoStatus,
         firstName: user.firstName,
         lastName: user.lastName,
+        leoStatus: user.leoStatus,   // <---- Add this line
+        role: user.role,
       },
     });
   } catch (error) {
     console.error("Login error:", error);
-    console.error("Error stack:", error.stack);
-    res.status(500).json({ message: "Server error during login." });
+    res.status(500).json({ message: "Internal server error" });
   }
 };
-
-// ✅ Fixed export - use named exports instead of default object
-export { signup, signIn };
