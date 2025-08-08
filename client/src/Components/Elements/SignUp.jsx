@@ -4,6 +4,7 @@ import Input from "./Input";
 import logo from "../../assets/lion.svg";
 import { toast } from 'react-toastify';
 
+
 export default function SignUp({ onClose, onSwitchToLogin }) {
   const [leoStatus, setLeoStatus] = useState("member");
   const [formData, setFormData] = useState({
@@ -57,7 +58,11 @@ export default function SignUp({ onClose, onSwitchToLogin }) {
       return;
     }
 
+<<<<<<< HEAD
+     if (!formData.password || !validatePassword(formData.password)) {
+=======
     if (!formData.password || !validatePassword(formData.password)) {
+>>>>>>> 1ca627577843a7ae33fdb2e8d324e1011c9fae89
       return setError(
         "Password must be at least 8 characters long and include uppercase, lowercase, number, and symbol."
       );
@@ -76,7 +81,11 @@ export default function SignUp({ onClose, onSwitchToLogin }) {
     };
 
     try {
+<<<<<<< HEAD
+      const res = await fetch("http://localhost:5000/api/signup", {
+=======
       const res = await fetch("http://localhost:5001/api/auth/signup", {
+>>>>>>> 1ca627577843a7ae33fdb2e8d324e1011c9fae89
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -86,6 +95,10 @@ export default function SignUp({ onClose, onSwitchToLogin }) {
 
       if (res.ok) {
         alert("🎉 Registered successfully! Please log in.");
+<<<<<<< HEAD
+        console.log("✅ User registered:", data);
+=======
+>>>>>>> 1ca627577843a7ae33fdb2e8d324e1011c9fae89
         onSwitchToLogin();
       } else {
         setError(data.message || "Sign up failed");
@@ -96,6 +109,11 @@ export default function SignUp({ onClose, onSwitchToLogin }) {
     }
   };
 
+<<<<<<< HEAD
+  const handleProceedToPay = () => {
+    console.log("Redirecting to payment...");
+    // Add your payment redirect logic here
+=======
 const handleProceedToPay = () => {
   setError(""); // Clear previous errors
 
@@ -139,6 +157,7 @@ const handleProceedToPay = () => {
     address: formData.address,
     city: 'Colombo',
     country: 'Sri Lanka',
+>>>>>>> 1ca627577843a7ae33fdb2e8d324e1011c9fae89
   };
 
   const form = document.createElement('form');

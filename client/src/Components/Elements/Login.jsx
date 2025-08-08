@@ -38,17 +38,48 @@ export default function Login({ onClose }) {
     setError("");
 
     try {
+<<<<<<< HEAD
+      // Use the correct API endpoint
+      const res = await fetch("http://localhost:5000/api/login", {
+=======
       const res = await fetch("http://localhost:5001/api/auth/login", {
+>>>>>>> 1ca627577843a7ae33fdb2e8d324e1011c9fae89
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
 
+<<<<<<< HEAD
+      const data = await res.json();
+
+      if (res.ok) {
+        const { token, user } = data;
+
+        // Store token based on Remember Me
+        if (rememberMe) {
+          localStorage.setItem("leoToken", token);
+        } else {
+          sessionStorage.setItem("leoToken", token);
+        }
+
+        onClose();
+
+        // Redirect based on user role
+        if (user?.leoStatus === "member") {
+          navigate("/memberportal");
+        } else if (user?.leoStatus === "not-member") {
+          navigate("/newmemberpayment");
+       
+        }
+      } else {
+        setError(data.message || "Login failed");
+=======
       if (!res.ok) {
         const text = await res.text();
         setError(text || "Login failed");
         setLoading(false);
         return;
+>>>>>>> 1ca627577843a7ae33fdb2e8d324e1011c9fae89
       }
 
       const data = await res.json();
@@ -113,6 +144,10 @@ export default function Login({ onClose }) {
               value={email}
               onChange={handleEmailChange}
               required
+<<<<<<< HEAD
+              autoComplete="email"
+=======
+>>>>>>> 1ca627577843a7ae33fdb2e8d324e1011c9fae89
             />
 
             <Input
@@ -121,6 +156,10 @@ export default function Login({ onClose }) {
               value={password}
               onChange={handlePasswordChange}
               required
+<<<<<<< HEAD
+              autoComplete="current-password"
+=======
+>>>>>>> 1ca627577843a7ae33fdb2e8d324e1011c9fae89
             />
 
             <div className="flex items-center justify-between text-sm text-gray-600 mt-4">

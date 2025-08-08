@@ -1,6 +1,12 @@
+<<<<<<< HEAD
+import User from '../models/User.js';
+import bcrypt from 'bcryptjs';
+import generateToken from '../utils/generateToken.js';
+=======
 import User from "../models/User.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+>>>>>>> 1ca627577843a7ae33fdb2e8d324e1011c9fae89
 
 // SIGNUP
 export const signup = async (req, res) => {
@@ -17,26 +23,42 @@ export const signup = async (req, res) => {
       password,
     } = req.body;
 
+<<<<<<< HEAD
+=======
     // Validate required fields
+>>>>>>> 1ca627577843a7ae33fdb2e8d324e1011c9fae89
     if (!leoStatus || !firstName || !lastName || !email || !password) {
       return res.status(400).json({ message: "Missing required fields" });
     }
 
+<<<<<<< HEAD
+    // Check if email already exists
+=======
     // Check existing user
+>>>>>>> 1ca627577843a7ae33fdb2e8d324e1011c9fae89
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(409).json({ message: "Email already registered." });
     }
 
+<<<<<<< HEAD
+    // Check memberId only if leoStatus is 'member'
+    if (leoStatus === 'member' && (!memberId || memberId.trim() === '')) {
+=======
     // Validate member ID if leoStatus is 'member'
     if (leoStatus === "member" && (!userId || userId.trim() === "")) {
+>>>>>>> 1ca627577843a7ae33fdb2e8d324e1011c9fae89
       return res.status(400).json({ message: "Member ID is required for LEO members" });
     }
 
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
+<<<<<<< HEAD
+    // Create and save the new user
+=======
     // Create new user
+>>>>>>> 1ca627577843a7ae33fdb2e8d324e1011c9fae89
     const newUser = new User({
       leoStatus,
       userId: leoStatus === "member" ? userId : null,
@@ -47,11 +69,34 @@ export const signup = async (req, res) => {
       email,
       mobile,
       password: hashedPassword,
+<<<<<<< HEAD
+      status: 'pending', // new users need approval
+=======
+>>>>>>> 1ca627577843a7ae33fdb2e8d324e1011c9fae89
     });
 
     await newUser.save();
 
+<<<<<<< HEAD
+    // Generate token after saving (using newUser._id)
+    const token = generateToken(newUser._id);
+
+    res.status(201).json({
+      message: "User created successfully, awaiting admin approval",
+      user: {
+        _id: newUser._id,
+        email: newUser.email,
+        firstName: newUser.firstName,
+        lastName: newUser.lastName,
+        leoStatus: newUser.leoStatus,
+        status: newUser.status,
+      },
+      token,
+    });
+
+=======
     res.status(201).json({ message: "User created successfully", user: newUser });
+>>>>>>> 1ca627577843a7ae33fdb2e8d324e1011c9fae89
   } catch (error) {
     console.error("Signup error:", error);
     res.status(500).json({ message: "Internal server error" });
