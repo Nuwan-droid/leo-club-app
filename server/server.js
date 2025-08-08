@@ -9,7 +9,7 @@ import executiveMemberRoutes from "./src/routes/executiveMembers.js";
 import connectDB from "./src/config/database.js";
 import authRoutes from "./src/routes/authRoutes.js";
 import productRoutes from "./src/routes/productRoutes.js";
-
+import eventRoutes from "./src/routes/eventRoutes.js";
 dotenv.config();
 connectDB();
 
@@ -44,6 +44,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/executive-members", executiveMemberRoutes);
 app.use('/api/payment', paymentRoutes);
+app.use("/api", eventRoutes);
 
 
 // Root route
@@ -55,10 +56,3 @@ app.get("/", (req, res) => {
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
-
-
-
-
-
-
-
