@@ -1,130 +1,28 @@
 import mongoose from 'mongoose';
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> 1ca627577843a7ae33fdb2e8d324e1011c9fae89
-const userSchema = new mongoose.Schema(
-  {
-    leoStatus: {
-      type: String,
-      enum: ["member", "not-member"],
-      required: true,
-<<<<<<< HEAD
-    },
-    memberId: {
-      type: String,
-      validate: {
-        validator: function (value) {
-          if (this.leoStatus === "member") {
-            return value && value.trim().length > 0;
-          }
-          return true;
-        },
-        message: "Member ID is required for members.",
-      },
-    },
-    firstName: { type: String, trim: true },
-    lastName: { type: String, trim: true },
-    address: { type: String, trim: true },
-    birthday: { type: Date },
-
-    email: {
-      type: String,
-      required: [true, "Email is required."],
-      unique: true,
-      trim: true,
-      lowercase: true,
-    },
-    mobile: { type: String, trim: true },
-
-    password: {
-      type: String,
-      required: [true, "Password is required."],
-    },
-
-   
-    status: {
-      type: String,
-      enum: ["pending", "approved", "rejected"],
-      default: "pending",
-    },
-    approvedAt: {
-      type: Date,
-    },
-
-    
-    score: {
-      type: Number,
-      default: 0,
-    },
-    eventsParticipated: {
-      type: Number,
-      default: 0,
-    },
-    volunteering: [
-      {
-        event: { type: String },
-        date: { type: Date },
-        hours: { type: Number },
-      },
-    ],
-    newsletterSubscribed: {
-      type: Number,
-      default: 0,
-    },
-    profileImage: {
-      type: String, 
-    },
-
-   
-    role: {
-      type: String,
-      enum: ["user", "admin"],
-      default: "user",
-    },
-  },
-  { timestamps: true }
-);
-=======
 const userSchema = new mongoose.Schema({
-  leoStatus: {
+  leo_Id: {
     type: String,
-    enum: ['member', 'not-member'],
-    required: false,
+    trim: true,
   },
-  userId: {
-    type: String,
-    validate: {
-      validator: function (value) {
-        if (this.leoStatus === 'member') {
-          return value && value.trim().length > 0;
-        }
-        return true;
-      },
-      message: 'user ID is required for all users.',
-    },
-  },
-  firstName: { type: String, trim: true },
-  lastName: { type: String, trim: true },
-  address: { type: String, trim: true },
-  birthday: { type: Date },
-  email: {
-    type: String,
-    required: [true, 'Email is required.'],
+  // Admin-specific ID (only for admins)
+  admin_id: {
+    type: Number,
+    sparse: true, // Allows null/undefined values but maintains uniqueness when present
     unique: true,
-    trim: true,
-    lowercase: true,
   },
-  mobile: { type: String, trim: true },
-  password: {
+  firstName: { 
+    type: String, 
+    trim: true 
+  },
+  lastName: { 
+    type: String, 
+    trim: true 
+  },
+  // Combined name field (can be computed from firstName + lastName or stored separately)
+  name: {
     type: String,
-    required: [true, 'Password is required.'],
-  },
-  userImage: {
-    type: String, // Path or URL to the user's profile image
     trim: true,
-    default: 'https://randomuser.me/api/portraits',
   },
   role: {
     type: String,
@@ -132,78 +30,252 @@ const userSchema = new mongoose.Schema({
     required: true,
     default: 'member',
   },
-}, { timestamps: true });
->>>>>>> origin/Dev
-
-=======
-    },
-    memberId: {
-      type: String,
-      validate: {
-        validator: function (value) {
-          if (this.leoStatus === "member") {
-            return value && value.trim().length > 0;
-          }
-          return true;
-        },
-        message: "Member ID is required for members.",
-      },
-    },
-    firstName: { type: String, trim: true },
-    lastName: { type: String, trim: true },
-    address: { type: String, trim: true },
-    birthday: { type: Date },
-
-    email: {
-      type: String,
-      required: [true, "Email is required."],
-      unique: true,
-      trim: true,
-      lowercase: true,
-    },
-    mobile: { type: String, trim: true },
-
-    password: {
-      type: String,
-      required: [true, "Password is required."],
-    },
-
-   
-    status: {
-      type: String,
-      enum: ["pending", "approved", "rejected"],
-      default: "pending",
-    },
-    approvedAt: {
-      type: Date,
-    },
-
-    
-    score: {
-      type: Number,
-      default: 0,
-    },
-    eventsParticipated: {
-      type: Number,
-      default: 0,
-    },
-    volunteering: [
-      {
-        event: { type: String },
-        date: { type: Date },
-        hours: { type: Number },
-      },
-    ],
-    newsletterSubscribed: {
-      type: Number,
-      default: 0,
-    },
-    profileImage: {
-      type: String, 
+  // Admin-specific position
+  position: {
+    type: String,
+    trim: true,
+    required: function() {
+      return this.role === 'admin';
     }
   },
-  { timestamps: true }
-);
+  address: { 
+    type: String, 
+    trim: true 
+  },
+  birthday: { 
+    type: Date 
+  },
+  email: {
+    type: String,
+    required: [true, 'Email is required.'],
+    unique: true,
+    trim: true,
+    lowercase: true,
+  },
+  mobile: { 
+    type: String, 
+    trim: true 
+  },
+  password: {
+    type: String,
+    required: [true, 'Password is required.'],
+  },
+  userImage: {
+    type: String,
+    trim: true,
+    default: 'https://randomuser.me/api/portraits',
+  },
+  // Admin image path (different from userImage)
+  image_path: {
+    type: String,
+    trim: true,
+  },
+  // Admin permissions
+  permissions: {
+    type: [String], // Array of permission strings
+    enum: [
+      // Common permissions (all admins have these)
+      'manage_about',
+      'dashboard',
+      'learning_hub',
+      
+      // IT Director (Super Admin) - has all permissions
+      'super_admin',
+      'users_management',
+      'requests_management',
+      'event_volunteers',
+      'projects_management',
+      'newsletters_management',
+      'products_management',
+      'orders_management',
+      'donations_management',
+      
+      // Membership Admin specific
+      'membership_admin',
+      
+      // Event Coordinator Admin specific
+      'event_coordinator',
+      
+      // Chief Editor Admin specific
+      'chief_editor',
+      
+      // Treasurer Admin specific
+      'treasurer'
+    ],
+    default: function() {
+      if (this.role === 'admin') {
+        return ['manage_about', 'dashboard', 'learning_hub']; // Common permissions
+      }
+      return [];
+    },
+    validate: {
+      validator: function(permissions) {
+        if (this.role === 'admin') {
+          // All admins must have at least the common permissions
+          const commonPermissions = ['manage_about', 'dashboard', 'learning_hub'];
+          const hasAllCommon = commonPermissions.every(perm => permissions.includes(perm));
+          return permissions && permissions.length > 0 && hasAllCommon;
+        }
+        return true;
+      },
+      message: 'Admin users must have at least the common permissions (manage_about, dashboard, learning_hub).'
+    }
+  },
+  
+  // Admin role type for easier querying and role management
+  adminRole: {
+    type: String,
+    enum: ['it_director', 'membership_admin', 'event_coordinator', 'chief_editor', 'treasurer'],
+    required: function() {
+      return this.role === 'admin';
+    }
+  },
+  // Admin active status
+  is_active: {
+    type: Boolean,
+    default: true,
+  },
+  // Member-specific fields (only for members)
+  score: {
+    type: Number,
+    default: function() {
+      return this.role === 'member' ? 0 : undefined;
+    },
+    validate: {
+      validator: function(value) {
+        // Only allow score for members
+        if (this.role === 'admin') {
+          return value === undefined || value === null;
+        }
+        return true;
+      },
+      message: 'Score field is only applicable to members.'
+    }
+  },
+  eventsParticipated: {
+    type: Number,
+    default: function() {
+      return this.role === 'member' ? 0 : undefined;
+    },
+    validate: {
+      validator: function(value) {
+        // Only allow eventsParticipated for members
+        if (this.role === 'admin') {
+          return value === undefined || value === null;
+        }
+        return true;
+      },
+      message: 'Events participated field is only applicable to members.'
+    }
+  },
+  newsletterParticipated: {
+    type: Boolean,
+    default: function() {
+      return this.role === 'member' ? false : undefined;
+    },
+    validate: {
+      validator: function(value) {
+        // Only allow newsletterParticipated for members
+        if (this.role === 'admin') {
+          return value === undefined || value === null;
+        }
+        return true;
+      },
+      message: 'Newsletter participated field is only applicable to members.'
+    }
+  },
+}, { 
+  timestamps: true,
+  // Add discriminator key for potential future separation
+  discriminatorKey: 'userType'
+});
 
->>>>>>> 1ca627577843a7ae33fdb2e8d324e1011c9fae89
-export default mongoose.model('User', userSchema);
+// Method to check if user has specific permission
+userSchema.methods.hasPermission = function(permission) {
+  return this.role === 'admin' && this.permissions.includes(permission);
+};
+
+// Method to get admin role-specific permissions
+userSchema.methods.getRolePermissions = function() {
+  if (this.role !== 'admin') return [];
+  
+  const commonPermissions = ['manage_about', 'dashboard', 'learning_hub'];
+  
+  switch (this.adminRole) {
+    case 'it_director':
+      return [
+        ...commonPermissions,
+        'super_admin',
+        'users_management',
+        'requests_management', 
+        'event_volunteers',
+        'projects_management',
+        'newsletters_management',
+        'products_management',
+        'orders_management',
+        'donations_management'
+      ];
+    case 'membership_admin':
+      return [
+        ...commonPermissions,
+        'membership_admin',
+        'users_management',
+        'requests_management'
+      ];
+    case 'event_coordinator':
+      return [
+        ...commonPermissions,
+        'event_coordinator',
+        'event_volunteers',
+        'projects_management'
+      ];
+    case 'chief_editor':
+      return [
+        ...commonPermissions,
+        'chief_editor',
+        'newsletters_management'
+      ];
+    case 'treasurer':
+      return [
+        ...commonPermissions,
+        'treasurer',
+        'products_management',
+        'orders_management',
+        'donations_management'
+      ];
+    default:
+      return commonPermissions;
+  }
+};
+
+// Pre-save middleware to auto-assign permissions based on admin role
+userSchema.pre('save', function(next) {
+  if (!this.name && this.firstName && this.lastName) {
+    this.name = `${this.firstName} ${this.lastName}`;
+  }
+  
+  // Auto-assign permissions based on admin role
+  if (this.role === 'admin' && this.adminRole) {
+    this.permissions = this.getRolePermissions();
+  }
+  
+  next();
+});
+
+// Virtual to get full name
+userSchema.virtual('fullName').get(function() {
+  return this.name || `${this.firstName || ''} ${this.lastName || ''}`.trim();
+});
+
+// Static method to find admins by role
+userSchema.statics.findAdminsByRole = function(adminRole) {
+  return this.find({ role: 'admin', adminRole: adminRole, is_active: true });
+};
+
+// Static method to find active admins
+userSchema.statics.findActiveAdmins = function() {
+  return this.find({ role: 'admin', is_active: true });
+};
+
+const User = mongoose.model('User', userSchema);
+export default User;
