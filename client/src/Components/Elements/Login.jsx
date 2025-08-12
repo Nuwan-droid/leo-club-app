@@ -4,7 +4,7 @@ import Input from "./Input";
 import logo from "../../assets/lion.svg";
 import { useNavigate } from "react-router-dom";
 
-export default function Login({ onClose}) {
+export default function Login({ onClose }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
@@ -38,36 +38,76 @@ export default function Login({ onClose}) {
     setError("");
 
     try {
-      const res = await fetch("http://localhost:5001/api/auth/signIn", {
+<<<<<<< HEAD
+      // Use the correct API endpoint
+      const res = await fetch("http://localhost:5000/api/login", {
+=======
+      const res = await fetch("http://localhost:5001/api/auth/login", {
+>>>>>>> 1ca627577843a7ae33fdb2e8d324e1011c9fae89
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
 
+<<<<<<< HEAD
       const data = await res.json();
 
       if (res.ok) {
         const { token, user } = data;
 
-        localStorage.setItem("leoToken", token);
+        // Store token based on Remember Me
+        if (rememberMe) {
+          localStorage.setItem("leoToken", token);
+        } else {
+          sessionStorage.setItem("leoToken", token);
+        }
 
         onClose();
 
-        // Optional: Redirect based on user role
-        if (user?.role === "member") {
+        // Redirect based on user role
+        if (user?.leoStatus === "member") {
           navigate("/memberportal");
-        }else if(user?.role === "admin") {
-          navigate("/admin");
-        }
-        else {
+        } else if (user?.leoStatus === "not-member") {
           navigate("/newmemberpayment");
+       
         }
       } else {
         setError(data.message || "Login failed");
+=======
+      if (!res.ok) {
+        const text = await res.text();
+        setError(text || "Login failed");
+        setLoading(false);
+        return;
+>>>>>>> 1ca627577843a7ae33fdb2e8d324e1011c9fae89
       }
+
+      const data = await res.json();
+      const { token, user } = data;
+
+      
+      if (!token || !user) {
+        setError("Invalid server response");
+        setLoading(false);
+        return;
+      }
+
+      localStorage.setItem("leoToken", token);
+
+      if (onClose) onClose();
+
+      // Safe check and redirect
+      if ((user.leoStatus || "").toLowerCase() === "member") {
+        console.log("Redirecting to /memberportal");
+        navigate("/memberportal");
+      } else {
+        console.log("Redirecting to /newmemberpayment");
+        navigate("/newmemberpayment");
+      }
+
     } catch (err) {
       console.error("Error logging in:", err);
-      setError(" Network error. Please try again.");
+      setError("Server error");
     } finally {
       setLoading(false);
     }
@@ -103,6 +143,11 @@ export default function Login({ onClose}) {
               placeholder="Email"
               value={email}
               onChange={handleEmailChange}
+              required
+<<<<<<< HEAD
+              autoComplete="email"
+=======
+>>>>>>> 1ca627577843a7ae33fdb2e8d324e1011c9fae89
             />
 
             <Input
@@ -110,6 +155,11 @@ export default function Login({ onClose}) {
               placeholder="Password"
               value={password}
               onChange={handlePasswordChange}
+              required
+<<<<<<< HEAD
+              autoComplete="current-password"
+=======
+>>>>>>> 1ca627577843a7ae33fdb2e8d324e1011c9fae89
             />
 
             <div className="flex items-center justify-between text-sm text-gray-600 mt-4">
@@ -135,5 +185,9 @@ export default function Login({ onClose}) {
             />
 
             {error && <p className="text-red-500 text-sm text-center">{error}</p>}
-
-
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+}

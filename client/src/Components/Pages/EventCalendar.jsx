@@ -4,6 +4,7 @@ import CalendarGrid from '../Elements/EventCalendar/CalendarGrid';
 import EventNotes from '../Elements/EventCalendar/EventNotes';
 import useCalendarLogic from '../Elements/EventCalendar/useCalendarLogic';
 
+
 const EventCalendar = () => {
   const {
     year,

@@ -11,6 +11,7 @@ const Sidebar = () => {
     { name: 'Users', path: '/admin/users' },
     { name: 'Request', path: '/admin/request' },
     { name: 'Projects', path: '/admin/projects' },
+    { name: 'Event Calendar', path: '/admin/eventCalendar' },
     { name: 'Newsletters', path: '/admin/newsletters' },
     { name: 'Learning Hub', path: '/admin/learning-hub' },
     { name: 'Event Volunteer', path: '/admin/event-volunteer' },

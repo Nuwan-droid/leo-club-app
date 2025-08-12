@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import toast from 'react-hot-toast';
 import Button from "./Button";
 import Input from "./Input";
 import logo from "../../assets/lion.svg";
+import { toast } from 'react-toastify';
+
 
 export default function SignUp({ onClose, onSwitchToLogin }) {
   const [leoStatus, setLeoStatus] = useState("member");
@@ -27,9 +28,9 @@ export default function SignUp({ onClose, onSwitchToLogin }) {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-   const validatePassword = (password) => {
-    const regex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+
+  const validatePassword = (password) => {
+    const regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
     return regex.test(password);
   };
 
@@ -38,33 +39,38 @@ export default function SignUp({ onClose, onSwitchToLogin }) {
     setError("");
 
     if (!leoStatus) {
-      toast.error("Please select your membership status");
+      setError("Please select your membership status");
       return;
     }
 
     if (leoStatus === "member" && !formData.memberId.trim()) {
-      toast.error("Member ID is required for members");
+      setError("Member ID is required for members");
       return;
     }
 
     if (formData.password !== formData.confirmPassword) {
-      toast.error("Passwords do not match");
+      setError("Passwords do not match");
       return;
     }
 
     if (!formData.email.trim() || !formData.password.trim()) {
-      toast.error("Email and password are required");
+      setError("Email and password are required");
       return;
     }
 
+<<<<<<< HEAD
      if (!formData.password || !validatePassword(formData.password)) {
-      toast.error("Password must be at least 8 characters long and include uppercase, lowercase, number, and symbol.");
-      return;
+=======
+    if (!formData.password || !validatePassword(formData.password)) {
+>>>>>>> 1ca627577843a7ae33fdb2e8d324e1011c9fae89
+      return setError(
+        "Password must be at least 8 characters long and include uppercase, lowercase, number, and symbol."
+      );
     }
 
     const payload = {
       leoStatus,
-      memberId: formData.memberId.trim(),
+      userId: formData.memberId.trim(),
       firstName: formData.firstName.trim(),
       lastName: formData.lastName.trim(),
       address: formData.address.trim(),
@@ -74,11 +80,12 @@ export default function SignUp({ onClose, onSwitchToLogin }) {
       password: formData.password.trim(),
     };
 
-    // Show loading toast
-    const loadingToast = toast.loading("Creating your account...");
-
     try {
-      const res = await fetch("http://localhost:5001/api/signup", {
+<<<<<<< HEAD
+      const res = await fetch("http://localhost:5000/api/signup", {
+=======
+      const res = await fetch("http://localhost:5001/api/auth/signup", {
+>>>>>>> 1ca627577843a7ae33fdb2e8d324e1011c9fae89
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -86,31 +93,88 @@ export default function SignUp({ onClose, onSwitchToLogin }) {
 
       const data = await res.json();
 
-      // Dismiss loading toast
-      toast.dismiss(loadingToast);
-
       if (res.ok) {
-        toast.success("🎉 Registered successfully! Please log in.", {
-          duration: 4000,
-        });
+        alert("🎉 Registered successfully! Please log in.");
+<<<<<<< HEAD
         console.log("✅ User registered:", data);
+=======
+>>>>>>> 1ca627577843a7ae33fdb2e8d324e1011c9fae89
         onSwitchToLogin();
       } else {
-        toast.error(data.message || "Sign up failed");
+        setError(data.message || "Sign up failed");
       }
     } catch (err) {
-      // Dismiss loading toast
-      toast.dismiss(loadingToast);
       console.error("Signup error:", err);
-      toast.error("Server error. Please try again.");
+      setError("Server error");
     }
   };
 
+<<<<<<< HEAD
   const handleProceedToPay = () => {
     console.log("Redirecting to payment...");
-    toast.success("Redirecting to payment gateway...");
     // Add your payment redirect logic here
+=======
+const handleProceedToPay = () => {
+  setError(""); // Clear previous errors
+
+  // Basic required field validation
+  const requiredFields = ["firstName", "lastName", "address", "birthday", "email", "mobile", "password", "confirmPassword"];
+  const emptyFields = requiredFields.filter(field => !formData[field]?.trim());
+
+  if (emptyFields.length > 0) {
+    setError("Please fill in all required fields before proceeding to payment.");
+    return;
+  }
+
+  if (formData.password !== formData.confirmPassword) {
+    setError("Passwords do not match.");
+    return;
+  }
+
+  if (!validatePassword(formData.password)) {
+    setError(
+      "Password must be at least 8 characters long and include uppercase, lowercase, number, and symbol."
+    );
+    return;
+  }
+  
+
+  // If all checks pass → proceed to PayHere
+  const orderId = `LEO-${Date.now()}`;
+  const paymentData = {
+    merchant_id: 'YOUR_MERCHANT_ID',
+    return_url: 'https://your-site.com/payment-success',
+    cancel_url: 'https://your-site.com/payment-cancel',
+    notify_url: 'https://your-api.com/api/payment/payhere-notify',
+    order_id: orderId,
+    items: 'Leo Club Membership',
+    amount: '400.00',
+    currency: 'LKR',
+    first_name: formData.firstName,
+    last_name: formData.lastName,
+    email: formData.email,
+    phone: formData.mobile,
+    address: formData.address,
+    city: 'Colombo',
+    country: 'Sri Lanka',
+>>>>>>> 1ca627577843a7ae33fdb2e8d324e1011c9fae89
   };
+
+  const form = document.createElement('form');
+  form.method = 'POST';
+  form.action = 'https://www.payhere.lk/pay/checkout';
+
+  Object.entries(paymentData).forEach(([key, value]) => {
+    const input = document.createElement('input');
+    input.type = 'hidden';
+    input.name = key;
+    input.value = value;
+    form.appendChild(input);
+  });
+
+  document.body.appendChild(form);
+  form.submit();
+};
 
   return (
     <div className="fixed inset-0 bg-black/10 z-50 flex items-center justify-center px-2 sm:px-0">
@@ -128,7 +192,9 @@ export default function SignUp({ onClose, onSwitchToLogin }) {
         </div>
 
         <div className="w-full md:w-1/2 p-4 sm:p-8 mb-4 sm:mb-6">
-         
+          <h2 className="text-lg sm:text-xl font-bold text-center text-gray-800 mb-6 sm:mb-10">
+            Get Membership
+          </h2>
 
           <form onSubmit={leoStatus === "member" ? handleSubmit : (e) => e.preventDefault()}>
             <div className="grid grid-cols-1 gap-2 sm:gap-3 p-1 sm:p-2 mb-3 sm:mb-4 sm:grid-cols-2">
@@ -170,92 +236,32 @@ export default function SignUp({ onClose, onSwitchToLogin }) {
             )}
 
             <div className="grid grid-cols-1 gap-3 sm:gap-6 sm:grid-cols-2 p-1">
-              <Input
-                type="text"
-                placeholder="First Name"
-                name="firstName"
-                value={formData.firstName}
-                onChange={handleChange}
-              />
-              <Input
-                type="text"
-                placeholder="Last Name"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleChange}
-              />
-              <Input
-                type="text"
-                placeholder="Address"
-                name="address"
-                value={formData.address}
-                onChange={handleChange}
-              />
-              <Input
-                type="date"
-                placeholder="Birthday"
-                name="birthday"
-                value={formData.birthday}
-                onChange={handleChange}
-              />
-              <Input
-                type="email"
-                placeholder="Email"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-              />
-              <Input
-                type="tel"
-                placeholder="Mobile no"
-                name="mobile"
-                value={formData.mobile}
-                onChange={handleChange}
-              />
-              <Input
-                type="password"
-                placeholder="Password"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-              />
-              <Input
-                type="password"
-                placeholder="Confirm Password"
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-              />
+              <Input type="text" placeholder="First Name" name="firstName" value={formData.firstName} onChange={handleChange} />
+              <Input type="text" placeholder="Last Name" name="lastName" value={formData.lastName} onChange={handleChange} />
+              <Input type="text" placeholder="Address" name="address" value={formData.address} onChange={handleChange} />
+              <Input type="date" placeholder="Birthday" name="birthday" value={formData.birthday} onChange={handleChange} />
+              <Input type="email" placeholder="Email" name="email" value={formData.email} onChange={handleChange} />
+              <Input type="tel" placeholder="Mobile no" name="mobile" value={formData.mobile} onChange={handleChange} />
+              <Input type="password" placeholder="Password" name="password" value={formData.password} onChange={handleChange} />
+              <Input type="password" placeholder="Confirm Password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} />
             </div>
-            <p className="text-xs text-gray-500 mt-1 ml-1">
-  Must be 8+ characters with uppercase, lowercase, number & symbol.
-</p>
 
+            <p className="text-xs text-gray-500 mt-1 ml-1">
+              Must be 8+ characters with uppercase, lowercase, number & symbol.
+            </p>
 
             <div className="flex flex-col gap-2 mt-3 sm:mt-4 ml-2 sm:ml-4">
               {leoStatus === "not-member" ? (
                 <>
                   <p className="text-black text-sm">Be a Member</p>
                   <p className="text-black text-sm">Membership Fee: Rs400.00</p>
-                  <Button
-                    type="button"
-                    className="login p-2 mt-2"
-                    label="Proceed to Pay"
-                    onClick={handleProceedToPay}
-
-                  />
-                    {error && <p className="text-red-500 text-sm text-center mt-2">{error}</p>}
-
+                  <Button type="button" className="login p-2 mt-2" label="Proceed to Pay" onClick={handleProceedToPay} />
+                  {error && <p className="text-red-500 text-sm text-center mt-2">{error}</p>}
                 </>
               ) : (
-                <Button type="submit" className="login p-2 mt-3 sm:mt-4" label="Sign Up"  />
+                <Button type="submit" className="login p-2 mt-3 sm:mt-4" label="Sign Up" />
               )}
-
-              {error && (
-                <p className="text-red-500 text-sm text-center mt-2">{error}</p>
-              )}
-
-              
+              {error && <p className="text-red-500 text-sm text-center mt-2">{error}</p>}
             </div>
           </form>
         </div>

@@ -6,7 +6,6 @@ import generateToken from '../utils/generateToken.js';
 // Signup Controller
 
 
-
 const signup = async (req, res) => {
   try {
     const {

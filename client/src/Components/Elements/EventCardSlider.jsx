@@ -39,7 +39,7 @@ function EventCardSlider() {
   const visibleEvents = events.slice(startIndex, startIndex + visibleCount);
 
   return (
-    <div className="flex flex-col items-center mt-10 mb-10 px-4 bg-[#ceceff]/20 pb-8 transition-all duration-700 ease-in-out hover:scale-[1.01]">
+    <div className="flex flex-col items-center mt-10 mb-10 px-4 bg-[#ceceff]/20 pb-8 transition-all duration-700 ease-in-out hover:scale-[1.01] z-50">
       <h2 className="text-3xl font-semibold mt-8 text-[black] mb-4">
         NewsLetter
       </h2>

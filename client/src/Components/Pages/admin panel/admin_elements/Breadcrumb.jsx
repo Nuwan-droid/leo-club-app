@@ -20,6 +20,7 @@ const Breadcrumb = () => {
       '/admin/users': 'Users',
       '/admin/request': 'Request',
       '/admin/projects': 'Projects',
+      '/admin/eventCalendar': 'Event Calendar',
       '/admin/newsletters': 'Newsletters',
       '/admin/learning-hub': 'Learning Hub',
       '/admin/event-volunteer': 'Event Volunteer',

@@ -11,6 +11,7 @@ import Dashboard from './dashboard/dashboard';
 import Users from './users/Users';
 import Request from './request/request';
 import Projects from './projects/Projects';
+import EventCalendar from './eventCalendar/ListEventCalendar';
 import Newsletters from './newsletter/Newsletters';
 import LearningHub from './learninghub/LearningHub';
 import EventVolunteer from './eventvolunteer/EventVolunteer';
@@ -33,6 +34,7 @@ const Adminmain = () => {
             <Route path="/users" element={<Users />} />
             <Route path="/request" element={<Request />} />
             <Route path="/projects" element={<Projects />} />
+            <Route path="/eventCalendar" element={<EventCalendar />} />
             <Route path="/newsletters" element={<Newsletters />} />
             <Route path="/learning-hub" element={<LearningHub />} />
             <Route path="/event-volunteer" element={<EventVolunteer />} />
