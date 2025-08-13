@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import Button from "./Button";
 import Input from "./Input";
@@ -39,7 +38,7 @@ export default function Login({ onClose}) {
     setError("");
 
     try {
-      const res = await fetch("http://localhost:5001/api/auth/signIn", {
+      const res = await fetch("http://localhost:5001/api/authRoutes/signIn", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
@@ -55,9 +54,9 @@ export default function Login({ onClose}) {
         onClose();
 
         // Optional: Redirect based on user role
-        if (user?.leoStatus === "member") {
+        if (user?.role === "member") {
           navigate("/memberportal");
-        }else if(user?.leoStatus === "admin") {
+        }else if(user?.role === "admin") {
           navigate("/admin");
         }
         else {
@@ -137,12 +136,16 @@ export default function Login({ onClose}) {
 
             {error && <p className="text-red-500 text-sm text-center">{error}</p>}
 
-          
+
+            <p className="text-center text-sm text-gray-600">
+              Don't have an account?{" "}
+              <a href="#" className="text-blue-600 hover:underline">
+                Sign Up
+              </a>
+            </p>
           </form>
         </div>
       </div>
     </div>
   );
 }
-
-

@@ -2,20 +2,25 @@ import jwt from "jsonwebtoken";
 import "dotenv/config";
 
 const generateToken = (userId, res) => {
+    if (!process.env.JWT_SECRET) {
+        throw new Error("JWT_SECRET not defined in environment");
+    }
+
     const token = jwt.sign({ id: userId }, process.env.JWT_SECRET, {
-        expiresIn: "1d", // Token expiration time
+        expiresIn: "1d",
     });
-    
-    // Set the token in the response header
+
     res.cookie("token", token, {
-        httpOnly: true,  // prevent XSS attacks
-        sameSite: "Strict", // prevent CSRF attacks
-        secure: process.env.NODE_ENV !== "development", // Use secure cookies in production
-        maxAge: 24 * 60 * 60 * 1000, // 1 day
+        httpOnly: true,
+        sameSite: "Strict",
+        secure: process.env.NODE_ENV !== "development",
+        maxAge: 24 * 60 * 60 * 1000,
     });
+
+    // Optional: Only if you need to send token via header too
     res.header("Authorization", `Bearer ${token}`);
+
     return token;
-}
+};
 
 export default generateToken;
- 

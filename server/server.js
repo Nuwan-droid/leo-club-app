@@ -3,13 +3,13 @@ import dotenv from "dotenv";
 import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
+import cookieParser from "cookie-parser";
 import paymentRoutes from "./src/routes/payment.js";
-
 import executiveMemberRoutes from "./src/routes/executiveMembers.js";
 import connectDB from "./src/config/database.js";
 import authRoutes from "./src/routes/authRoutes.js";
 import productRoutes from "./src/routes/productRoutes.js";
-
+import eventRoutes from "./src/routes/eventRoutes.js";
 dotenv.config();
 connectDB();
 
@@ -36,14 +36,16 @@ app.use((req, res, next) => {
 });
 app.use(express.urlencoded({ extended: true })); // ✅ Added for form data
 
+
 // Serve uploaded images (static route)
 app.use("/images", express.static(path.join(__dirname, "upload/images")));
 
 // API Routes - Grouped together
-app.use("/api/auth", authRoutes);
+app.use("/api/authRoutes", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/executive-members", executiveMemberRoutes);
 app.use('/api/payment', paymentRoutes);
+app.use("/api", eventRoutes);
 
 
 // Root route
@@ -55,10 +57,3 @@ app.get("/", (req, res) => {
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
 });
-
-
-
-
-
-
-

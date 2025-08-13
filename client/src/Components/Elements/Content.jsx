@@ -98,7 +98,7 @@ function Content() {
 
 
 {/* Awards Section */}
-    <div className="relative z-10 flex justify-center mt-16">
+    <div className="relative  flex justify-center mt-16">
       <div className="w-full max-w-5xl bg-blue-700 rounded-[60px] shadow-lg px-6 py-10 flex flex-col items-center">
         <h2 className="text-3xl md:text-4xl font-bold text-center text-white mb-8">
           Awards

@@ -4,6 +4,7 @@ import Input from "./Input";
 import logo from "../../assets/lion.svg";
 import { toast } from 'react-toastify';
 
+
 export default function SignUp({ onClose, onSwitchToLogin }) {
   const [leoStatus, setLeoStatus] = useState("member");
   const [formData, setFormData] = useState({
@@ -34,67 +35,73 @@ export default function SignUp({ onClose, onSwitchToLogin }) {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
+  e.preventDefault();
+  setError("");
 
-    if (!leoStatus) {
-      setError("Please select your membership status");
-      return;
-    }
+  if (!leoStatus) {
+    setError("Please select your membership status");
+    return;
+  }
 
-    if (leoStatus === "member" && !formData.memberId.trim()) {
-      setError("Member ID is required for members");
-      return;
-    }
+  if (leoStatus === "member" && !formData.memberId.trim()) {
+    setError("Member ID is required for members");
+    return;
+  }
 
-    if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match");
-      return;
-    }
+  if (formData.password !== formData.confirmPassword) {
+    setError("Passwords do not match");
+    return;
+  }
 
-    if (!formData.email.trim() || !formData.password.trim()) {
-      setError("Email and password are required");
-      return;
-    }
+  if (!formData.email.trim() || !formData.password.trim()) {
+    setError("Email and password are required");
+    return;
+  }
 
-    if (!formData.password || !validatePassword(formData.password)) {
-      return setError(
-        "Password must be at least 8 characters long and include uppercase, lowercase, number, and symbol."
-      );
-    }
+  if (!formData.password || !validatePassword(formData.password)) {
+    return setError(
+      "Password must be at least 8 characters long and include uppercase, lowercase, number, and symbol."
+    );
+  }
 
-    const payload = {
-      leoStatus,
-      userId: formData.memberId.trim(),
-      firstName: formData.firstName.trim(),
-      lastName: formData.lastName.trim(),
-      address: formData.address.trim(),
-      birthday: formData.birthday,
-      email: formData.email.trim().toLowerCase(),
-      mobile: formData.mobile.trim(),
-      password: formData.password.trim(),
-    };
-
-    try {
-      const res = await fetch("http://localhost:5001/api/auth/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      const data = await res.json();
-
-      if (res.ok) {
-        alert("🎉 Registered successfully! Please log in.");
-        onSwitchToLogin();
-      } else {
-        setError(data.message || "Sign up failed");
-      }
-    } catch (err) {
-      console.error("Signup error:", err);
-      setError("Server error");
-    }
+  // Prepare payload with keys matching backend
+  const payload = {
+    role: leoStatus === "member" ? "member" : "not-member", // match backend role field
+    leo_Id: leoStatus === "member" ? formData.memberId.trim() : undefined, // send leo_Id only for members
+    firstName: formData.firstName.trim(),
+    lastName: formData.lastName.trim(),
+    address: formData.address.trim(),
+    birthday: formData.birthday,
+    email: formData.email.trim().toLowerCase(),
+    mobile: formData.mobile.trim(),
+    password: formData.password.trim(),
   };
+
+  // Remove undefined fields (like leo_Id for non-members)
+  Object.keys(payload).forEach(
+    (key) => payload[key] === undefined && delete payload[key]
+  );
+
+  try {
+    const res = await fetch("http://localhost:5001/api/authRoutes/signup", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    const data = await res.json();
+
+    if (res.ok) {
+      alert("🎉 Registered successfully! Please log in.");
+      onSwitchToLogin();
+    } else {
+      setError(data.message || "Sign up failed");
+    }
+  } catch (err) {
+    console.error("Signup error:", err);
+    setError("Server error");
+  }
+};
 
 const handleProceedToPay = () => {
   setError(""); // Clear previous errors
