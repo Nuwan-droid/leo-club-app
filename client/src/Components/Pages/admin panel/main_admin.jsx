@@ -10,7 +10,7 @@ import Breadcrumb from './admin_elements/Breadcrumb';
 import Dashboard from './dashboard/dashboard';
 import Users from './users/Users';
 import Request from './request/request';
-import Projects from './projects/Projects';
+import Projects from './projects/ListProject';
 import EventCalendar from './eventCalendar/ListEventCalendar';
 import Newsletters from './newsletter/Newsletters';
 import LearningHub from './learninghub/LearningHub';
