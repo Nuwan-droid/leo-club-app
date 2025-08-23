@@ -22,7 +22,7 @@ export const initiatePayHerePayment = async (req, res) => {
     const payherePayload = {
       merchant_id: PAYHERE_MERCHANT_ID,                               // << your sandbox ID
       return_url: `${BASE_URL}/payment-success`,
-      cancel_url: `${BASE_URL}/payment-cancel`,
+      cancel_url: `${BASE_URL}/`,
       notify_url: `${BASE_URL}/api/payment/payhere-notify`,
       order_id,
       items: "Leo Club Membership",
