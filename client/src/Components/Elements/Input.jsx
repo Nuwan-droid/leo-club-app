@@ -17,7 +17,7 @@ export default function Input({ type, placeholder, className, name, value, onCha
       <input
         type={inputType}
         placeholder={placeholder}
-        className={`w-full px-4 py-3 text-10 border text-[gray]  border-gray-300 rounded-2xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400 ${className}`}
+        className={`w-full px-4 py-3 text-10 border text-[gray] border-gray-300 rounded-2xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 placeholder-gray-400 ${className}`}
         required
         name={name}
         value={value}

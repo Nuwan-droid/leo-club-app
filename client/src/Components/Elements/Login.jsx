@@ -3,12 +3,13 @@ import Button from "./Button";
 import Input from "./Input";
 import logo from "../../assets/lion.svg";
 import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export default function Login({ onClose }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
@@ -18,65 +19,43 @@ export default function Login({ onClose }) {
     return () => document.body.classList.remove("no-scroll");
   }, []);
 
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-    setError("");
-  };
-
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
-    setError("");
-  };
-
-  const handleRememberMeChange = (e) => {
-    setRememberMe(e.target.checked);
-  };
+  const handleEmailChange = (e) => setEmail(e.target.value);
+  const handlePasswordChange = (e) => setPassword(e.target.value);
+  const handleRememberMeChange = (e) => setRememberMe(e.target.checked);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setError("");
 
     try {
-      const res = await fetch("http://localhost:5001/api/auth/signIn", {
+      const res = await fetch("http://localhost:5001/api/auth/signin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
 
-      if (!res.ok) {
-        const text = await res.text();
-        setError(text || "Login failed");
-        setLoading(false);
-        return;
-      }
-
       const data = await res.json();
-      const { token, user } = data;
 
-      
-      if (!token || !user) {
-        setError("Invalid server response");
-        setLoading(false);
-        return;
-      }
+      if (res.ok) {
+        const { token, user } = data;
+        localStorage.setItem("leoToken", token);
+        toast.success("Login successful!");
 
-      localStorage.setItem("leoToken", token);
+        onClose();
 
-      if (onClose) onClose();
-
-      // Safe check and redirect
-      if ((user.role || "").toLowerCase() === "member") {
-        console.log("Redirecting to /memberportal");
-        navigate("/memberportal");
+        if (user?.role === "member") {
+          navigate("/memberportal");
+        } else if (user?.role === "admin") {
+          navigate("/admin");
+        } else {
+          navigate("/newmemberpayment");
+        }
       } else {
-        console.log("Redirecting to admin dashboard");
-        navigate("/admin");
+        toast.error(data.message || "Login failed");
       }
-
     } catch (err) {
       console.error("Error logging in:", err);
-      setError("Server error");
+      toast.error("Network error. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -112,7 +91,6 @@ export default function Login({ onClose }) {
               placeholder="Email"
               value={email}
               onChange={handleEmailChange}
-              required
             />
 
             <Input
@@ -120,7 +98,6 @@ export default function Login({ onClose }) {
               placeholder="Password"
               value={password}
               onChange={handlePasswordChange}
-              required
             />
 
             <div className="flex items-center justify-between text-sm text-gray-600 mt-4">
@@ -145,10 +122,11 @@ export default function Login({ onClose }) {
               label={loading ? "Logging in..." : "Login"}
             />
 
-            {error && <p className="text-red-500 text-sm text-center">{error}</p>}
+           
           </form>
         </div>
       </div>
+      <ToastContainer position="top-right" autoClose={3000} />
     </div>
   );
 }
