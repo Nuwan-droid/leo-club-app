@@ -2,14 +2,16 @@ import User from '../models/User.js';
 import bcrypt from 'bcrypt';
 import generateToken from '../utils/generateToken.js';  
 
+
 // Signup Controller
+
+
 const signup = async (req, res) => {
   try {
     const {
       leo_Id,
       firstName,
       lastName,
-      enrollmentNo,
       address,
       birthday,
       email,
@@ -23,81 +25,74 @@ const signup = async (req, res) => {
 
     // ✅ Required field checks
     if (!email || !password) {
-      return res.status(400).json({ message: 'Email and password are required.' });
-    }
-
-    if (!firstName || !lastName || !address || !birthday || !mobile) {
-      return res.status(400).json({ message: 'All personal details (first name, last name, address, birthday, mobile) are required.' });
-    }
-
-    // ✅ Validate enrollmentNo
-    if (!enrollmentNo || enrollmentNo.trim() === '') {
-      return res.status(400).json({ message: 'Enrollment number is required.' });
-    }
-    const enrollmentNoRegex = /^[a-zA-Z0-9]{5,}$/;
-    if (!enrollmentNoRegex.test(enrollmentNo)) {
-      return res.status(400).json({ message: 'Enrollment number must be at least 5 alphanumeric characters.' });
+      return res
+        .status(400)
+        .json({ message: "Email and password are required." });
     }
 
     // ✅ Role-specific validation
-    const userRole = role || 'member'; // Default to member if not specified
+    const userRole = role || "member"; // Default to member if not specified
 
-    if (userRole === 'member' && (!leo_Id || leo_Id.trim() === '')) {
-      return res.status(400).json({ message: 'Leo ID is required for members.' });
+    if (userRole === "member" && (!leo_Id || leo_Id.trim() === "")) {
+      return res
+        .status(400)
+        .json({ message: "Leo ID is required for members." });
     }
 
-    if (userRole === 'admin') {
+    if (userRole === "admin") {
       if (!adminRole) {
-        return res.status(400).json({ message: 'Admin role is required for admin users.' });
+        return res
+          .status(400)
+          .json({ message: "Admin role is required for admin users." });
       }
+
       if (!admin_id) {
-        return res.status(400).json({ message: 'Admin ID is required for admin users.' });
+        return res
+          .status(400)
+          .json({ message: "Admin ID is required for admin users." });
       }
-      if (!position || position.trim() === '') {
-        return res.status(400).json({ message: 'Position is required for admin users.' });
+
+      if (!position || position.trim() === "") {
+        return res
+          .status(400)
+          .json({ message: "Position is required for admin users." });
       }
 
       // Validate admin role
       const validAdminRoles = [
-        'it_director',
-        'membership_admin',
-        'event_coordinator',
-        'chief_editor',
-        'treasurer',
+        "it_director",
+        "membership_admin",
+        "event_coordinator",
+        "chief_editor",
+        "treasurer",
       ];
       if (!validAdminRoles.includes(adminRole)) {
-        return res.status(400).json({ message: `Invalid admin role. Must be one of: ${validAdminRoles.join(', ')}.` });
+        return res
+          .status(400)
+          .json({ message: "Invalid admin role specified." });
       }
     }
 
     // ✅ Check duplicate email
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      return res.status(409).json({ message: 'Email already registered.' });
-    }
-
-    // ✅ Check duplicate leo_Id for members
-    if (userRole === 'member' && leo_Id) {
-      const existingMember = await User.findOne({ leo_Id });
-      if (existingMember) {
-        return res.status(409).json({ message: 'Leo ID already exists.' });
-      }
+      return res.status(409).json({ message: "Email already registered." });
     }
 
     // ✅ Check duplicate admin_id for admins
-    if (userRole === 'admin' && admin_id) {
+    if (userRole === "admin" && admin_id) {
       const existingAdmin = await User.findOne({ admin_id });
       if (existingAdmin) {
-        return res.status(409).json({ message: 'Admin ID already exists.' });
+        return res.status(409).json({ message: "Admin ID already exists." });
       }
     }
 
-    // ✅ Validate password strength
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
-    if (!passwordRegex.test(password)) {
-      return res.status(400).json({
-        message: 'Password must be at least 8 characters long and include uppercase, lowercase, number, and symbol.',
-      });
+    // ✅ Check duplicate leo_Id for members
+    if (userRole === "member" && leo_Id) {
+      const existingMember = await User.findOne({ leo_Id });
+      if (existingMember) {
+        return res.status(409).json({ message: "Leo ID already exists." });
+      }
     }
 
     // ✅ Hash password
@@ -105,32 +100,31 @@ const signup = async (req, res) => {
 
     // ✅ Create user object based on role
     const userData = {
-      firstName: firstName.trim(),
-      lastName: lastName.trim(),
-      email: email.trim().toLowerCase(),
-      mobile: mobile.trim(),
-      enrollmentNo: enrollmentNo.trim(),
-      address: address.trim(),
+      firstName,
+      lastName,
+      address,
       birthday,
+      email,
+      mobile,
       password: hashedPassword,
       role: userRole,
     };
 
     // Add role-specific fields
-    if (userRole === 'member') {
-      userData.leo_Id = leo_Id ? leo_Id.trim() : undefined;
-    } else if (userRole === 'admin') {
-      userData.admin_id = admin_id.trim();
+    if (userRole === "member") {
+      userData.leo_Id = leo_Id;
+    } else if (userRole === "admin") {
+      userData.admin_id = admin_id;
       userData.adminRole = adminRole;
-      userData.position = position.trim();
-      userData.name = `${firstName.trim()} ${lastName.trim()}`; // Set full name for admins
+      userData.position = position;
+      userData.name = `${firstName} ${lastName}`; // Set full name for admins
     }
 
     // ✅ Save user
     const user = new User(userData);
     await user.save();
 
-    // ✅ Generate token for auto-login
+    // ✅ Auto-login after signup (optional - you can remove this if you want manual login)
     const token = generateToken(user._id, res);
 
     // ✅ Prepare response data (exclude sensitive information)
@@ -140,21 +134,20 @@ const signup = async (req, res) => {
       role: user.role,
       firstName: user.firstName,
       lastName: user.lastName,
-      enrollmentNo: user.enrollmentNo,
     };
 
     // Add role-specific response data
-    if (userRole === 'member') {
+    if (userRole === "member") {
       responseUser.leo_Id = user.leo_Id;
-      responseUser.score = user.score || 0;
-      responseUser.eventsParticipated = user.eventsParticipated || [];
-      responseUser.newsletterParticipated = user.newsletterParticipated || [];
-    } else if (userRole === 'admin') {
+      responseUser.score = user.score;
+      responseUser.eventsParticipated = user.eventsParticipated;
+      responseUser.newsletterParticipated = user.newsletterParticipated;
+    } else if (userRole === "admin") {
       responseUser.admin_id = user.admin_id;
       responseUser.adminRole = user.adminRole;
       responseUser.position = user.position;
-      responseUser.permissions = user.permissions || [];
-      responseUser.is_active = user.is_active ?? true;
+      responseUser.permissions = user.permissions;
+      responseUser.is_active = user.is_active;
     }
 
     res.status(201).json({
@@ -165,13 +158,15 @@ const signup = async (req, res) => {
       user: responseUser,
     });
   } catch (error) {
-    console.error('Signup error:', error);
+    console.error("Signup error:", error);
 
-    // Handle validation errors from Mongoose
-    if (error.name === 'ValidationError') {
-      const validationErrors = Object.values(error.errors).map((err) => err.message);
+    // Handle validation errors
+    if (error.name === "ValidationError") {
+      const validationErrors = Object.values(error.errors).map(
+        (err) => err.message
+      );
       return res.status(400).json({
-        message: 'Validation error',
+        message: "Validation error",
         errors: validationErrors,
       });
     }
@@ -180,12 +175,11 @@ const signup = async (req, res) => {
     if (error.code === 11000) {
       const field = Object.keys(error.keyPattern)[0];
       return res.status(409).json({
-        message: `${field.charAt(0).toUpperCase() + field.slice(1)} already exists.`,
+        message: `${field} already exists.`,
       });
     }
 
-    // Generic server error
-    res.status(500).json({ message: 'Server error during signup.' });
+    res.status(500).json({ message: "Server error during signup." });
   }
 };
 

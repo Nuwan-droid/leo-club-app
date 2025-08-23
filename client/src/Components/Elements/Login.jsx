@@ -122,12 +122,7 @@ export default function Login({ onClose }) {
               label={loading ? "Logging in..." : "Login"}
             />
 
-            <p className="text-center text-sm text-gray-600">
-              Don't have an account?{" "}
-              <a href="#" className="text-blue-600 hover:underline">
-                Sign Up
-              </a>
-            </p>
+           
           </form>
         </div>
       </div>
