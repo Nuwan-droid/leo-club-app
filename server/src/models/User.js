@@ -1,3 +1,4 @@
+
 import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema({
@@ -184,6 +185,25 @@ const userSchema = new mongoose.Schema({
       message: 'Newsletter participated field is only applicable to members.'
     }
   },
+  enrollmentNo: {
+    type: String,
+    trim: true,
+    unique: true,
+    sparse: true, // Allows null/undefined values but maintains uniqueness when present
+    default: function() {
+      return this.role === 'member' ? undefined : null;
+    },
+    validate: {
+      validator: function(value) {
+        // Only allow enrollmentNo for members
+        if (this.role === 'admin') {
+          return value === undefined || value === null;
+        }
+        return true;
+      },
+      message: 'Enrollment number is only applicable to members.'
+    }
+  },
 }, { 
   timestamps: true,
   // Add discriminator key for potential future separation
@@ -279,3 +299,4 @@ userSchema.statics.findActiveAdmins = function() {
 
 const User = mongoose.model('User', userSchema);
 export default User;
+
