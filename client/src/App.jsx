@@ -1,4 +1,6 @@
 import { Routes, Route, useLocation } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; 
 import NavBar from "./Components/Elements/NavBar";
 import Footer from "./Components/Elements/Footer";
 import Landing from "./Components/Pages/Landing";
@@ -43,13 +45,21 @@ function App() {
         <Route path="/memberportal/learning-hub" element={<LearningHub />} />
         <Route path="/memberportal/join-newsletter" element={<NewsLetter />} />
         <Route path="/memberportal/event-volunteer" element={<EventVolunteerPage />} />
-        <Route path="/chatbot" element={<Chatbot/>} />
-        
+        <Route path="/chatbot" element={<Chatbot />} />
         {/* Admin routes - use wildcard to handle nested routing */}
         <Route path="/admin/*" element={<Admin />} />
       </Routes>
-      <Chatbot />
       {!isAdmin && <Footer />}
+      <ToastContainer
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        pauseOnHover
+        theme="light"
+      />
+      <Chatbot />
     </>
   );
 }
