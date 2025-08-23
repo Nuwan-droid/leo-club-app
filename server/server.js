@@ -11,6 +11,8 @@ import connectDB from "./src/config/database.js";
 import authRoutes from "./src/routes/authRoutes.js";
 import productRoutes from "./src/routes/productRoutes.js";
 import eventRoutes from "./src/routes/eventRoutes.js";
+import projectRoutes from "./src/routes/projectRoutes.js";  
+import commentRoutes from "./src/routes/commentRoutes.js";
 
 dotenv.config();
 connectDB();
@@ -36,6 +38,7 @@ app.use((req, res, next) => {
   console.log(`[${req.method}] ${req.url}`, safeBody);
   next();
 });
+app.use(express.urlencoded({ extended: true })); // 
 
 // Serve uploaded images (static route)
 app.use("/images", express.static(path.join(__dirname, "upload/images")));
@@ -46,6 +49,8 @@ app.use("/api/products", productRoutes);
 app.use("/api/executive-members", executiveMemberRoutes);
 app.use("/api/payment", paymentRoutes);
 app.use("/api", eventRoutes);
+app.use("/api/projects", projectRoutes);  
+app.use("/api/comments", commentRoutes);  
 
 // Root route
 app.get("/", (req, res) => {
