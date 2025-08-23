@@ -2,11 +2,9 @@ import { useState, useEffect } from "react";
 import Button from "./Button";
 import Input from "./Input";
 import logo from "../../assets/lion.svg";
-import { toast } from 'react-toastify';
-
 
 export default function SignUp({ onClose, onSwitchToLogin }) {
-  const [leoStatus, setLeoStatus] = useState("member");
+  const [leoStatus, setLeoStatus] = useState("member"); // 'member' or 'not-member'
   const [formData, setFormData] = useState({
     memberId: "",
     firstName: "",
@@ -35,134 +33,137 @@ export default function SignUp({ onClose, onSwitchToLogin }) {
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  setError("");
+    e.preventDefault();
+    setError("");
 
-  if (!leoStatus) {
-    setError("Please select your membership status");
-    return;
-  }
+    if (!leoStatus) return setError("Please select your membership status.");
+    if (leoStatus === "member" && !formData.memberId.trim())
+      return setError("Member ID is required for members.");
+    if (formData.password !== formData.confirmPassword)
+      return setError("Passwords do not match.");
+    if (!formData.email.trim() || !formData.password.trim())
+      return setError("Email and password are required.");
+    if (!validatePassword(formData.password))
+      return setError(
+        "Password must be 8+ chars with uppercase, lowercase, number & symbol."
+      );
 
-  if (leoStatus === "member" && !formData.memberId.trim()) {
-    setError("Member ID is required for members");
-    return;
-  }
+    // Correct payload for backend
+    const payload = {
+      role: "member", // backend expects 'member' for all normal users
+      leo_Id: leoStatus === "member" ? formData.memberId.trim() : undefined,
+      firstName: formData.firstName.trim(),
+      lastName: formData.lastName.trim(),
+      address: formData.address.trim(),
+      birthday: formData.birthday,
+      email: formData.email.trim().toLowerCase(),
+      mobile: formData.mobile.trim(),
+      password: formData.password.trim(),
+    };
 
-  if (formData.password !== formData.confirmPassword) {
-    setError("Passwords do not match");
-    return;
-  }
+    // Remove undefined leo_Id for non-members
+    if (!payload.leo_Id) delete payload.leo_Id;
 
-  if (!formData.email.trim() || !formData.password.trim()) {
-    setError("Email and password are required");
-    return;
-  }
+    try {
+      const res = await fetch("http://localhost:5001/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
 
-  if (!formData.password || !validatePassword(formData.password)) {
-    return setError(
-      "Password must be at least 8 characters long and include uppercase, lowercase, number, and symbol."
-    );
-  }
+      const data = await res.json();
+      console.log("Signup response:", data);
 
-  // Prepare payload with keys matching backend
-  const payload = {
-    role: leoStatus === "member" ? "member" : "not-member", // match backend role field
-    leo_Id: leoStatus === "member" ? formData.memberId.trim() : undefined, // send leo_Id only for members
-    firstName: formData.firstName.trim(),
-    lastName: formData.lastName.trim(),
-    address: formData.address.trim(),
-    birthday: formData.birthday,
-    email: formData.email.trim().toLowerCase(),
-    mobile: formData.mobile.trim(),
-    password: formData.password.trim(),
-  };
-
-  // Remove undefined fields (like leo_Id for non-members)
-  Object.keys(payload).forEach(
-    (key) => payload[key] === undefined && delete payload[key]
-  );
-
-  try {
-    const res = await fetch("http://localhost:5001/api/authRoutes/signup", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-
-    const data = await res.json();
-
-    if (res.ok) {
-      alert("🎉 Registered successfully! Please log in.");
-      onSwitchToLogin();
-    } else {
-      setError(data.message || "Sign up failed");
+      if (res.ok) {
+        alert("🎉 Registered successfully! Please log in.");
+        onSwitchToLogin();
+      } else {
+        setError(data.message || "Sign up failed.");
+      }
+    } catch (err) {
+      console.error("Signup error:", err);
+      setError("Server error");
     }
-  } catch (err) {
-    console.error("Signup error:", err);
-    setError("Server error");
-  }
-};
-
-const handleProceedToPay = () => {
-  setError(""); // Clear previous errors
-
-  // Basic required field validation
-  const requiredFields = ["firstName", "lastName", "address", "birthday", "email", "mobile", "password", "confirmPassword"];
-  const emptyFields = requiredFields.filter(field => !formData[field]?.trim());
-
-  if (emptyFields.length > 0) {
-    setError("Please fill in all required fields before proceeding to payment.");
-    return;
-  }
-
-  if (formData.password !== formData.confirmPassword) {
-    setError("Passwords do not match.");
-    return;
-  }
-
-  if (!validatePassword(formData.password)) {
-    setError(
-      "Password must be at least 8 characters long and include uppercase, lowercase, number, and symbol."
-    );
-    return;
-  }
-  
-
-  // If all checks pass → proceed to PayHere
-  const orderId = `LEO-${Date.now()}`;
-  const paymentData = {
-    merchant_id: 'YOUR_MERCHANT_ID',
-    return_url: 'https://your-site.com/payment-success',
-    cancel_url: 'https://your-site.com/payment-cancel',
-    notify_url: 'https://your-api.com/api/payment/payhere-notify',
-    order_id: orderId,
-    items: 'Leo Club Membership',
-    amount: '400.00',
-    currency: 'LKR',
-    first_name: formData.firstName,
-    last_name: formData.lastName,
-    email: formData.email,
-    phone: formData.mobile,
-    address: formData.address,
-    city: 'Colombo',
-    country: 'Sri Lanka',
   };
 
-  const form = document.createElement('form');
-  form.method = 'POST';
-  form.action = 'https://www.payhere.lk/pay/checkout';
+  const handleProceedToPay = async () => {
+    setError("");
 
-  Object.entries(paymentData).forEach(([key, value]) => {
-    const input = document.createElement('input');
-    input.type = 'hidden';
-    input.name = key;
-    input.value = value;
-    form.appendChild(input);
-  });
+    const requiredFields = [
+      "firstName",
+      "lastName",
+      "address",
+      "birthday",
+      "email",
+      "mobile",
+      "password",
+      "confirmPassword",
+    ];
+    const emptyFields = requiredFields.filter(
+      (field) => !formData[field]?.trim()
+    );
+    if (emptyFields.length > 0) {
+      setError("Please fill all required fields before payment.");
+      return;
+    }
 
-  document.body.appendChild(form);
-  form.submit();
-};
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords do not match.");
+      return;
+    }
+
+    if (!validatePassword(formData.password)) {
+      setError(
+        "Password must be 8+ chars with uppercase, lowercase, number & symbol."
+      );
+      return;
+    }
+
+    try {
+      const orderId = `LEO-${Date.now()}`;
+      const response = await fetch(
+        "http://localhost:5001/api/payment/payhere-init",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            order_id: orderId,
+            first_name: formData.firstName,
+            last_name: formData.lastName,
+            email: formData.email,
+            phone: formData.mobile,
+            address: formData.address,
+            amount: "400.00",
+          }),
+        }
+      );
+
+      const paymentData = await response.json();
+
+      if (!response.ok) {
+        setError(paymentData.message || "Payment initialization failed.");
+        return;
+      }
+
+      const form = document.createElement("form");
+      form.method = "POST";
+      form.action = "https://sandbox.payhere.lk/pay/checkout";
+
+      Object.entries(paymentData).forEach(([key, value]) => {
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = key;
+        input.value = value;
+        form.appendChild(input);
+      });
+
+      document.body.appendChild(form);
+      form.submit();
+    } catch (err) {
+      console.error("Payment error:", err);
+      setError("Failed to connect to payment server.");
+    }
+  };
 
   return (
     <div className="fixed inset-0 bg-black/10 z-50 flex items-center justify-center px-2 sm:px-0">
@@ -176,7 +177,11 @@ const handleProceedToPay = () => {
         </button>
 
         <div className="w-full md:w-1/2 h-40 md:h-auto">
-          <img src={logo} alt="Leo Club Logo" className="w-full h-full object-cover" />
+          <img
+            src={logo}
+            alt="Leo Club Logo"
+            className="w-full h-full object-cover"
+          />
         </div>
 
         <div className="w-full md:w-1/2 p-4 sm:p-8 mb-4 sm:mb-6">
@@ -184,7 +189,11 @@ const handleProceedToPay = () => {
             Get Membership
           </h2>
 
-          <form onSubmit={leoStatus === "member" ? handleSubmit : (e) => e.preventDefault()}>
+          <form
+            onSubmit={
+              leoStatus === "member" ? handleSubmit : (e) => e.preventDefault()
+            }
+          >
             <div className="grid grid-cols-1 gap-2 sm:gap-3 p-1 sm:p-2 mb-3 sm:mb-4 sm:grid-cols-2">
               <label className="flex items-center gap-2 text-gray-800 text-sm sm:text-base">
                 <input
@@ -224,14 +233,62 @@ const handleProceedToPay = () => {
             )}
 
             <div className="grid grid-cols-1 gap-3 sm:gap-6 sm:grid-cols-2 p-1">
-              <Input type="text" placeholder="First Name" name="firstName" value={formData.firstName} onChange={handleChange} />
-              <Input type="text" placeholder="Last Name" name="lastName" value={formData.lastName} onChange={handleChange} />
-              <Input type="text" placeholder="Address" name="address" value={formData.address} onChange={handleChange} />
-              <Input type="date" placeholder="Birthday" name="birthday" value={formData.birthday} onChange={handleChange} />
-              <Input type="email" placeholder="Email" name="email" value={formData.email} onChange={handleChange} />
-              <Input type="tel" placeholder="Mobile no" name="mobile" value={formData.mobile} onChange={handleChange} />
-              <Input type="password" placeholder="Password" name="password" value={formData.password} onChange={handleChange} />
-              <Input type="password" placeholder="Confirm Password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} />
+              <Input
+                type="text"
+                placeholder="First Name"
+                name="firstName"
+                value={formData.firstName}
+                onChange={handleChange}
+              />
+              <Input
+                type="text"
+                placeholder="Last Name"
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleChange}
+              />
+              <Input
+                type="text"
+                placeholder="Address"
+                name="address"
+                value={formData.address}
+                onChange={handleChange}
+              />
+              <Input
+                type="date"
+                placeholder="Birthday"
+                name="birthday"
+                value={formData.birthday}
+                onChange={handleChange}
+              />
+              <Input
+                type="email"
+                placeholder="Email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+              />
+              <Input
+                type="tel"
+                placeholder="Mobile no"
+                name="mobile"
+                value={formData.mobile}
+                onChange={handleChange}
+              />
+              <Input
+                type="password"
+                placeholder="Password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+              />
+              <Input
+                type="password"
+                placeholder="Confirm Password"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+              />
             </div>
 
             <p className="text-xs text-gray-500 mt-1 ml-1">
@@ -243,13 +300,26 @@ const handleProceedToPay = () => {
                 <>
                   <p className="text-black text-sm">Be a Member</p>
                   <p className="text-black text-sm">Membership Fee: Rs400.00</p>
-                  <Button type="button" className="login p-2 mt-2" label="Proceed to Pay" onClick={handleProceedToPay} />
-                  {error && <p className="text-red-500 text-sm text-center mt-2">{error}</p>}
+                  <Button
+                    type="button"
+                    className="login p-2 mt-2"
+                    label="Proceed to Pay"
+                    onClick={handleProceedToPay}
+                  />
+                  {error && (
+                    <p className="text-red-500 text-sm text-center mt-2">{error}</p>
+                  )}
                 </>
               ) : (
-                <Button type="submit" className="login p-2 mt-3 sm:mt-4" label="Sign Up" />
+                <Button
+                  type="submit"
+                  className="login p-2 mt-3 sm:mt-4"
+                  label="Sign Up"
+                />
               )}
-              {error && <p className="text-red-500 text-sm text-center mt-2">{error}</p>}
+              {error && (
+                <p className="text-red-500 text-sm text-center mt-2">{error}</p>
+              )}
             </div>
           </form>
         </div>

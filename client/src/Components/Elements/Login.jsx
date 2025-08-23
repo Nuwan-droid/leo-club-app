@@ -4,7 +4,7 @@ import Input from "./Input";
 import logo from "../../assets/lion.svg";
 import { useNavigate } from "react-router-dom";
 
-export default function Login({ onClose}) {
+export default function Login({ onClose }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
@@ -38,36 +38,45 @@ export default function Login({ onClose}) {
     setError("");
 
     try {
-      const res = await fetch("http://localhost:5001/api/auth/signin", {
+      const res = await fetch("http://localhost:5001/api/auth/signIn", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
 
-      const data = await res.json();
-
-      if (res.ok) {
-        const { token, user } = data;
-
-        localStorage.setItem("leoToken", token);
-
-        onClose();
-
-        // Optional: Redirect based on user role
-        if (user?.role === "member") {
-          navigate("/memberportal");
-        }else if(user?.role === "admin") {
-          navigate("/admin");
-        }
-        else {
-          navigate("/newmemberpayment");
-        }
-      } else {
-        setError(data.message || "Login failed");
+      if (!res.ok) {
+        const text = await res.text();
+        setError(text || "Login failed");
+        setLoading(false);
+        return;
       }
+
+      const data = await res.json();
+      const { token, user } = data;
+
+      
+      if (!token || !user) {
+        setError("Invalid server response");
+        setLoading(false);
+        return;
+      }
+
+      localStorage.setItem("leoToken", token);
+
+      if (onClose) onClose();
+
+      // Safe check and redirect
+      if ((user.role || "").toLowerCase() === "member") {
+        console.log("Redirecting to /memberportal");
+        navigate("/memberportal");
+      } else {
+        console.log("Redirecting to admin dashboard");
+        navigate("/admin");
+      }
+
     } catch (err) {
       console.error("Error logging in:", err);
-      setError(" Network error. Please try again.");
+      setError("Server error");
     } finally {
       setLoading(false);
     }
@@ -103,6 +112,7 @@ export default function Login({ onClose}) {
               placeholder="Email"
               value={email}
               onChange={handleEmailChange}
+              required
             />
 
             <Input
@@ -110,6 +120,7 @@ export default function Login({ onClose}) {
               placeholder="Password"
               value={password}
               onChange={handlePasswordChange}
+              required
             />
 
             <div className="flex items-center justify-between text-sm text-gray-600 mt-4">
@@ -135,14 +146,6 @@ export default function Login({ onClose}) {
             />
 
             {error && <p className="text-red-500 text-sm text-center">{error}</p>}
-
-
-            <p className="text-center text-sm text-gray-600">
-              Don't have an account?{" "}
-              <a href="#" className="text-blue-600 hover:underline">
-                Sign Up
-              </a>
-            </p>
           </form>
         </div>
       </div>
