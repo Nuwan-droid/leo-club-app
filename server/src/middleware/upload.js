@@ -16,7 +16,8 @@ const upload = multer({ storage });
 
 const multiUpload = upload.fields([
   { name: 'mainImage', maxCount: 1 },
-  { name: 'additionalImages', maxCount: 10 }
+  { name: 'additionalImages', maxCount: 10 },
+  { name: 'sliderImages', maxCount: 10 }
 ]);
 
 export { upload, multiUpload, uploadDir };

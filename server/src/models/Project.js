@@ -1,43 +1,47 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
-const projectSchema = new mongoose.Schema({
-  project_id: {
-    type: Number,
-    required: true,
-    unique: true
+const projectSchema = new mongoose.Schema(
+  {
+    id: {
+      type: Number,
+      required: true,
+      unique: true,
+    },
+    title: {
+      type: String,
+      required: true,
+    },
+    subtitle: {
+      type: String,
+      required: true,
+    },
+    description: {
+      type: String,
+      required: true,
+    },
+    date: {
+      type: String,
+      required: true,
+    },
+    location: {
+      type: String,
+      required: true,
+    },
+    year: {
+      type: Number,
+      required: true,
+    },
+    image: {
+      type: String,
+      required: true,
+    },
+    sliderImages: [String],
   },
-  title: {
-    type: String,
-    required: false
-  },
-  description: {
-    type: String,
-    required: false
-  },
-  location: {
-    type: String,
-    required: false
-  },
-  start_date: {
-    type: String,
-    required: false
-  },
-  end_date: {
-    type: String,
-    required: false
-  },
-  image_path: {
-    type: String,
-    required: false
-  },
-  creaed_at: {
-    type: Date,
-    default: Date.now
-  },
-  updated_at: {
-    type: Date,
-    default: Date.now
+  {
+    timestamps: true,
   }
-});
+);
 
-export default mongoose.model('Project', projectSchema);
+const Project = mongoose.model("Project", projectSchema);
+
+export default Project;
