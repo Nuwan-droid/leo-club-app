@@ -43,7 +43,7 @@ export default function ProjectDialog({ project, reviews, onClose, onAddReview, 
           <div className="flex justify-end mt-6">
             <button
               onClick={onClose}
-              className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm"
+              className="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm" 
             >
               Close
             </button>
