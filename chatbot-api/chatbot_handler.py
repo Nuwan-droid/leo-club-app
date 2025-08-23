@@ -1,216 +1,181 @@
-import json
+#!/usr/bin/env python3
+"""
+Fixed Leo Club Chatbot Handler
+Handles dialogue generation with fine-tuned DialoGPT model
+"""
+
 import os
-import pickle
-import random
-import re
-from datetime import datetime
+import logging
+import torch
+from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline
+
+# Set up logging
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 class LeoClubChatbot:
-    def __init__(self):
-        self.intents = None
-        self.pipeline = None
-        self.responses = {}
+    """Leo Club chatbot using fine-tuned DialoGPT model for conversational responses"""
+    
+    def __init__(self, model_path="fine_tuned_dialo_gpt"):
+        """Initialize chatbot with fine-tuned DialoGPT model"""
+        print("🤖 Initializing Leo Club Chatbot...")
+        
+        self.model_path = model_path
+        self.tokenizer = None
+        self.model = None
+        self.classifier = None  # Optional boundary classifier
+        self.is_ready = False
+        self.error_message = None
         
         try:
-            self.load_intents()
-            self.load_model()
-            print("✅ Chatbot initialized successfully")
+            self._check_dependencies()
+            self._load_model()
+            self._setup_boundary_classifier()  # Optional for runtime checks
+            self.is_ready = True
+            print("✅ Chatbot ready!")
+            
         except Exception as e:
-            print(f"⚠️  Chatbot initialization error: {e}")
-            self.setup_fallback_responses()
+            self.error_message = str(e)
+            print(f"❌ Chatbot initialization failed: {e}")
+            import traceback
+            print(f"Full error: {traceback.format_exc()}")
     
-    def load_intents(self):
-        """Load intents from JSON file"""
+    def _check_dependencies(self):
+        """Check if required libraries are available"""
         try:
-            if os.path.exists('leo_club_intents.json'):
-                with open('leo_club_intents.json', 'r', encoding='utf-8') as file:
-                    self.intents = json.load(file)
-                print("✅ Intents loaded successfully")
-            else:
-                raise FileNotFoundError("leo_club_intents.json not found")
-        except Exception as e:
-            print(f"❌ Error loading intents: {e}")
-            self.setup_default_intents()
+            global AutoTokenizer, AutoModelForCausalLM, pipeline
+            from transformers import AutoTokenizer, AutoModelForCausalLM, pipeline
+            print("✅ Transformers library loaded")
+        except ImportError:
+            raise Exception("Missing transformers library. Install with: pip install transformers torch")
     
-    def load_model(self):
-        """Load the trained model"""
+    def _load_model(self):
+        """Load the fine-tuned DialoGPT model"""
+        print(f"📂 Loading model from: {self.model_path}")
+        
+        if not os.path.exists(self.model_path):
+            raise Exception(f"Model directory not found: {self.model_path}")
+        
+        files = os.listdir(self.model_path)
+        print(f"📋 Model files: {files}")
+        
+        if 'config.json' not in files:
+            raise Exception("Missing config.json in model directory")
+        
+        has_weights = any(f in files for f in ['pytorch_model.bin', 'model.safetensors'])
+        if not has_weights:
+            raise Exception("Missing model weights (need pytorch_model.bin or model.safetensors)")
+        
         try:
-            if os.path.exists('leo_chatbot_model.pkl'):
-                with open('leo_chatbot_model.pkl', 'rb') as file:
-                    self.pipeline = pickle.load(file)
-                print("✅ Model loaded successfully")
-            else:
-                raise FileNotFoundError("leo_chatbot_model.pkl not found")
+            print("🔤 Loading tokenizer...")
+            self.tokenizer = AutoTokenizer.from_pretrained(self.model_path)
+            self.tokenizer.pad_token = self.tokenizer.eos_token  # DialoGPT uses EOS for padding
+            print("✅ Tokenizer loaded")
+            
+            print("🧠 Loading model...")
+            self.model = AutoModelForCausalLM.from_pretrained(self.model_path)
+            print(f"✅ Model loaded with {self.model.config.n_positions} max positions")
+            
         except Exception as e:
-            print(f"❌ Error loading model: {e}")
-            self.pipeline = None
+            raise Exception(f"Failed to load model: {e}")
     
-    def setup_default_intents(self):
-        """Setup basic intents if file is missing"""
-        self.intents = {
-            "intents": [
-                {
-                    "tag": "greeting",
-                    "patterns": ["hello", "hi", "hey", "good morning", "good afternoon"],
-                    "responses": ["Hello! I'm your Leo Club assistant. How can I help you today?"]
-                },
-                {
-                    "tag": "goodbye",
-                    "patterns": ["bye", "goodbye", "see you later", "thanks"],
-                    "responses": ["Goodbye! Feel free to ask if you need more information about Leo Club!"]
-                },
-                {
-                    "tag": "about_leo",
-                    "patterns": ["what is leo club", "about leo", "tell me about leo club"],
-                    "responses": ["Leo Club is a youth organization for ages 12-18 that focuses on community service, leadership development, and fellowship. We work on various service projects to help our community."]
-                },
-                {
-                    "tag": "membership",
-                    "patterns": ["how to join", "membership", "become a member", "join leo club"],
-                    "responses": ["To join Leo Club, you need to be between 12-18 years old and have a passion for community service. Contact your local Leo Club advisor for more information about membership requirements."]
-                },
-                {
-                    "tag": "activities",
-                    "patterns": ["what activities", "what do you do", "projects", "service"],
-                    "responses": ["Leo Clubs participate in various activities including community service projects, fundraising events, environmental initiatives, and leadership training. Each club has unique projects based on community needs."]
-                },
-                {
-                    "tag": "meetings",
-                    "patterns": ["when do you meet", "meeting schedule", "meeting times"],
-                    "responses": ["Meeting schedules vary by club. Most Leo Clubs meet weekly or bi-weekly. Contact your local Leo Club for specific meeting times and locations."]
-                }
-            ]
+    def _setup_boundary_classifier(self):
+        """Set up a classifier to enforce boundaries (optional)"""
+        print("⚙️ Setting up boundary classifier...")
+        try:
+            self.classifier = pipeline("text-classification", model="unitary/toxic-bert")
+            print("✅ Boundary classifier ready")
+        except Exception as e:
+            print(f"⚠️ Failed to load boundary classifier: {e}. Proceeding without it.")
+            self.classifier = None
+    
+    def get_response(self, prompt, session_id=None):
+        """Generate response based on user input and conversation history"""
+        if not self.is_ready:
+            return {
+                "response": f"Sorry, I'm having technical difficulties: {self.error_message}. Leo Club info: We're a youth leadership organization!",
+                "intent": "error",
+                "confidence": 0.0
+            }
+        
+        try:
+            # Generate response
+            inputs = self.tokenizer.encode(prompt, return_tensors="pt")
+            outputs = self.model.generate(
+                inputs,
+                max_length=150,
+                num_return_sequences=1,
+                no_repeat_ngram_size=2,
+                temperature=0.7,
+                top_p=0.9,
+                eos_token_id=self.tokenizer.eos_token_id,
+                pad_token_id=self.tokenizer.pad_token_id
+            )
+            
+            response = self.tokenizer.decode(outputs[0], skip_special_tokens=True)
+            response = response.replace(prompt, "").strip()  # Extract assistant part
+            
+            # Enforce boundaries if classifier is available
+            if self.classifier and not self._check_boundaries(response):
+                response = "Sorry, I can only provide responses about Leo Club UWU."
+            
+            return {
+                "response": response,
+                "intent": "generated",
+                "confidence": 1.0  # DialoGPT doesn’t provide confidence scores
+            }
+            
+        except Exception as e:
+            print(f"❌ Error in generation: {e}")
+            return {
+                "response": "I'm having technical issues, but Leo Club UWU is a great youth organization! Ask me again later.",
+                "intent": "error_recovery",
+                "confidence": 0.0
+            }
+    
+    def _check_boundaries(self, text):
+        """Check if response is within boundaries"""
+        if not self.classifier:
+            return True  # Skip if no classifier
+        toxicity = self.classifier(text)[0]['score']
+        allowed_keywords = ["leo", "club", "uwu", "leadership", "service", "membership", "event"]
+        return toxicity <= 0.5 and any(keyword in text.lower() for keyword in allowed_keywords)
+    
+    def get_status(self):
+        """Get chatbot status"""
+        return {
+            "is_ready": self.is_ready,
+            "model_loaded": self.model is not None,
+            "has_classifier": self.classifier is not None,
+            "error_message": self.error_message
         }
     
-    def setup_fallback_responses(self):
-        """Setup basic keyword-based responses"""
-        self.responses = {
-            'greeting': [
-                "Hello! I'm your Leo Club assistant. How can I help you today?",
-                "Hi there! I'm here to help with Leo Club information. What would you like to know?",
-                "Welcome! I can help you learn about Leo Club activities and membership."
-            ],
-            'goodbye': [
-                "Goodbye! Thanks for learning about Leo Club!",
-                "See you later! Feel free to ask if you need more Leo Club information.",
-                "Bye! Hope to see you at a Leo Club meeting soon!"
-            ],
-            'leo_club': [
-                "Leo Club is a youth organization for ages 12-18 focused on community service and leadership development.",
-                "Leo Clubs are part of Lions International, providing young people opportunities to serve their communities.",
-                "Leo Club members work together on service projects and develop leadership skills."
-            ],
-            'membership': [
-                "To join Leo Club, you need to be 12-18 years old with interest in community service.",
-                "Membership in Leo Club is open to youth who want to make a difference in their community.",
-                "Contact your local Leo Club advisor to learn about joining requirements."
-            ],
-            'activities': [
-                "Leo Clubs organize community service projects, fundraising events, and leadership activities.",
-                "Activities include environmental projects, helping elderly, youth programs, and more.",
-                "Each Leo Club focuses on projects that meet their community's specific needs."
-            ],
-            'meetings': [
-                "Meeting times vary by club - most meet weekly or bi-weekly.",
-                "Contact your local Leo Club for specific meeting schedule and location.",
-                "Meetings typically include planning service projects and club business."
-            ],
-            'default': [
-                "I'm here to help with Leo Club information. You can ask about membership, activities, meetings, or our mission.",
-                "I can provide information about Leo Club activities, how to join, and what we do in the community.",
-                "Feel free to ask about Leo Club membership requirements, service projects, or meeting schedules."
-            ]
-        }
-    
-    def get_intent_from_text(self, text):
-        """Simple keyword-based intent detection"""
-        text_lower = text.lower()
+    def test_prediction(self, message="hello"):
+        """Test the model with a message"""
+        if not self.is_ready:
+            return f"Chatbot not ready: {self.error_message}"
         
-        # Greeting patterns
-        greetings = ['hello', 'hi', 'hey', 'good morning', 'good afternoon', 'good evening']
-        if any(word in text_lower for word in greetings):
-            return 'greeting'
-        
-        # Goodbye patterns
-        goodbyes = ['bye', 'goodbye', 'see you', 'thanks', 'thank you']
-        if any(word in text_lower for word in goodbyes):
-            return 'goodbye'
-        
-        # Leo Club related
-        leo_keywords = ['leo club', 'leo', 'club']
-        if any(word in text_lower for word in leo_keywords):
-            return 'leo_club'
-        
-        # Membership related
-        membership_keywords = ['join', 'member', 'membership', 'become', 'sign up']
-        if any(word in text_lower for word in membership_keywords):
-            return 'membership'
-        
-        # Activities related
-        activity_keywords = ['activities', 'do', 'projects', 'service', 'volunteer', 'help']
-        if any(word in text_lower for word in activity_keywords):
-            return 'activities'
-        
-        # Meetings related
-        meeting_keywords = ['meet', 'meeting', 'when', 'schedule', 'time']
-        if any(word in text_lower for word in meeting_keywords):
-            return 'meetings'
-        
-        return 'default'
-    
-    def get_response(self, user_input):
-        """Get response for user input"""
         try:
-            if not user_input or not user_input.strip():
-                return "I didn't receive your message clearly. Could you please try again?"
-            
-            user_input = user_input.strip()
-            
-            # Try using the trained model first
-            if self.pipeline and self.intents:
-                try:
-                    predicted_intent = self.pipeline.predict([user_input])[0]
-                    
-                    # Find matching intent in intents data
-                    for intent in self.intents['intents']:
-                        if intent['tag'] == predicted_intent:
-                            return random.choice(intent['responses'])
-                except Exception as e:
-                    print(f"Model prediction error: {e}")
-                    # Fall through to keyword-based matching
-            
-            # Fallback to keyword-based responses
-            intent = self.get_intent_from_text(user_input)
-            
-            if intent in self.responses:
-                return random.choice(self.responses[intent])
-            else:
-                return random.choice(self.responses['default'])
-                
+            prompt = f"User: {message}<|endoftext|>Assistant:"
+            response = self.get_response(prompt)
+            return {
+                "input": message,
+                "response": response,
+                "status": self.get_status()
+            }
         except Exception as e:
-            print(f"Error generating response: {e}")
-            return "I'm sorry, I encountered an error processing your request. Please try again."
-    
-    def is_ready(self):
-        """Check if chatbot is ready to respond"""
-        return self.intents is not None or bool(self.responses)
+            return f"Test failed: {e}"
 
-# Test the chatbot if run directly
 if __name__ == "__main__":
-    print("Testing Leo Club Chatbot...")
+    print("🧪 Testing Leo Club Chatbot...")
     chatbot = LeoClubChatbot()
+    print(f"\n📊 Status: {chatbot.get_status()}")
     
-    test_messages = [
-        "Hello",
-        "What is Leo Club?",
-        "How can I join?",
-        "What activities do you do?",
-        "When do you meet?",
-        "Goodbye"
-    ]
-    
-    for message in test_messages:
-        response = chatbot.get_response(message)
-        print(f"User: {message}")
-        print(f"Bot: {response}")
-        print("-" * 40)
+    if chatbot.is_ready:
+        test_messages = ["hi", "what is leo club", "tell me a joke"]
+        for msg in test_messages:
+            result = chatbot.test_prediction(msg)
+            print(f"\n💬 '{result['input']}'")
+            print(f"   💭 Response: {result['response']['response']}")
+    else:
+        print(f"❌ Chatbot not ready: {chatbot.error_message}")
