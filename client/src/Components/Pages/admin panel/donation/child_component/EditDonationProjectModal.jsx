@@ -18,10 +18,26 @@ const EditDonationProjectModal = ({ isOpen, project, onSave, onCancel }) => {
 
   useEffect(() => {
     if (project) {
+      // Format dates for input fields (convert from display format to YYYY-MM-DD)
+      const formatDateForInput = (dateString) => {
+        if (!dateString) return '';
+        // Handle both backend ISO dates and display dates
+        try {
+          const date = new Date(dateString);
+          return date.toISOString().split('T')[0];
+        } catch {
+          return '';
+        }
+      };
+
       setFormData({
         name: project.name || '',
-        startDate: project.startDate || '',
-        endDate: project.endDate || '',
+        startDate: project._originalData ? 
+          formatDateForInput(project._originalData.start_date) : 
+          formatDateForInput(project.startDate),
+        endDate: project._originalData ? 
+          formatDateForInput(project._originalData.end_date) : 
+          formatDateForInput(project.endDate),
         location: project.location || '',
         city: project.city || '',
         description: project.description || '',
