@@ -13,15 +13,13 @@ import productRoutes from "./src/routes/productRoutes.js";
 import eventRoutes from "./src/routes/eventRoutes.js";
 import projectRoutes from "./src/routes/projectRoutes.js";  
 import commentRoutes from "./src/routes/commentRoutes.js";
-import donationRoutes from "./src/routes/donationRoutes.js";
-// import chatbotRoutes from "./src/routes/chatbotRoutes.js";
 
 
 dotenv.config();
 connectDB();
 
 const app = express();
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT || 5000;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -38,10 +36,8 @@ app.use("/api/products", productRoutes);
 app.use("/api/executive-members", executiveMemberRoutes);
 app.use("/api/payment", paymentRoutes);
 app.use("/api", eventRoutes);
-app.use("/api/projects", projectRoutes);
+app.use("/api/projects", projectRoutes);gi
 app.use("/api/comments", commentRoutes);
-app.use("/api/donation-projects", donationRoutes); 
-//app.use("/api/chatbot", chatbotRoutes);
 
 
 app.get("/", (req, res) => {
@@ -50,4 +46,5 @@ app.get("/", (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
+  console.log(`🤖 Chatbot API: http://localhost:${PORT}/api/chatbot`);
 });
