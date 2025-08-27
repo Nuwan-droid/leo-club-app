@@ -8,9 +8,9 @@ export default function SignUp({ onClose }) {
   const [leoStatus, setLeoStatus] = useState("member");
   const [formData, setFormData] = useState({
     leo_Id: "",
+    enrollmentNo: "",
     firstName: "",
     lastName: "",
-    enrollmentNo: "",
     address: "",
     birthday: "",
     email: "",
@@ -19,7 +19,7 @@ export default function SignUp({ onClose }) {
     confirmPassword: "",
   });
   const [error, setError] = useState("");
-  const [isLoading, setIsLoading] = useState(false); // Added loading state
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     document.body.classList.add("no-scroll");
@@ -35,119 +35,11 @@ export default function SignUp({ onClose }) {
     return regex.test(password);
   };
 
-  const validateEnrollmentNo = (enrollmentNo) => {
-    const regex = /^[a-zA-Z0-9]{5,}$/;
-    return regex.test(enrollmentNo);
-  };
+  const validateEnrollmentNo = (enrollmentNo) => /^[a-zA-Z0-9]{5,}$/.test(enrollmentNo);
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
-    if (isLoading) return; // Prevent multiple submissions
-    setIsLoading(true);
+  const validateMobile = (mobile) => /^[0-9]{10}$/.test(mobile);
 
-    if (!leoStatus) {
-      setError("Please select your membership status");
-      toast.error("Please select your membership status");
-      setIsLoading(false);
-      return;
-    }
-
-    if (leoStatus === "member" && !formData.leo_Id.trim()) {
-      setError("Leo ID is required for members");
-      toast.error("Leo ID is required for members");
-      setIsLoading(false);
-      return;
-    }
-
-    if (!formData.enrollmentNo.trim()) {
-      setError("Enrollment number is required");
-      toast.error("Enrollment number is required");
-      setIsLoading(false);
-      return;
-    }
-
-    if (!validateEnrollmentNo(formData.enrollmentNo)) {
-      setError("Enrollment number must be at least 5 alphanumeric characters");
-      toast.error("Enrollment number must be at least 5 alphanumeric characters");
-      setIsLoading(false);
-      return;
-    }
-
-    if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match");
-      toast.error("Passwords do not match");
-      setIsLoading(false);
-      return;
-    }
-
-    if (!formData.email.trim() || !formData.password.trim()) {
-      setError("Email and password are required");
-      toast.error("Email and password are required");
-      setIsLoading(false);
-      return;
-    }
-
-    if (!formData.password || !validatePassword(formData.password)) {
-      setError(
-        "Password must be at least 8 characters long and include uppercase, lowercase, number, and symbol."
-      );
-      toast.error(
-        "Password must be at least 8 characters long and include uppercase, lowercase, number, and symbol."
-      );
-      setIsLoading(false);
-      return;
-    }
-
-    const payload = {
-      leo_Id: formData.leo_Id.trim(),
-      firstName: formData.firstName.trim(),
-      lastName: formData.lastName.trim(),
-      enrollmentNo: formData.enrollmentNo.trim(),
-      address: formData.address.trim(),
-      birthday: formData.birthday,
-      email: formData.email.trim().toLowerCase(),
-      mobile: formData.mobile.trim(),
-      password: formData.password.trim(),
-      role: "member",
-    };
-
-    try {
-      const res = await fetch("http://localhost:5001/api/auth/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-
-      const data = await res.json();
-      console.log("API response:", data); // Debug API response
-
-
-      if (res.ok) {onClose(); // Close the popup immediately
-        toast.success("🎉 Your registration part done! You will receive Email after admin approval", {
-          position: "top-right",
-          autoClose: 3000,
-        });
-        onSwitchToLogin();
-
-      } else {
-        setError(data.message || "Sign up failed");
-        toast.error(data.message || "Sign up failed");
-      }
-    } catch (err) {
-      console.error("Signup error:", err);
-      setError("Server error");
-      toast.error("Server error during signup");
-    } finally {
-      setIsLoading(false); // Reset loading state
-    }
-  };
-
-  const handleProceedToPay = () => {
-    setError("");
-    if (isLoading) return; // Prevent multiple submissions
-    setIsLoading(true);
-
+  const validateForm = () => {
     const requiredFields = [
       "firstName",
       "lastName",
@@ -159,77 +51,142 @@ export default function SignUp({ onClose }) {
       "confirmPassword",
       "enrollmentNo",
     ];
-    const emptyFields = requiredFields.filter((field) => !formData[field]?.trim());
 
-    if (emptyFields.length > 0) {
-      setError("Please fill in all required fields before proceeding to payment.");
-      toast.error("Please fill in all required fields before proceeding to payment.");
+    for (let f of requiredFields) {
+      if (!formData[f]?.trim()) return `Field ${f} is required`;
+    }
+
+    if (!validateEnrollmentNo(formData.enrollmentNo))
+      return "Enrollment number must be at least 5 alphanumeric characters";
+
+    if (!validateMobile(formData.mobile))
+      return "Mobile number must be exactly 10 digits";
+
+    if (formData.password !== formData.confirmPassword)
+      return "Passwords do not match";
+
+    if (!validatePassword(formData.password))
+      return "Password must be 8+ chars with uppercase, lowercase, number & symbol.";
+
+    if (leoStatus === "member" && !formData.leo_Id.trim())
+      return "Leo ID is required for members";
+
+    return null;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (isLoading) return;
+    setError("");
+    setIsLoading(true);
+
+    const errorMsg = validateForm();
+    if (errorMsg) {
+      toast.error(errorMsg);
+      setError(errorMsg);
       setIsLoading(false);
       return;
     }
 
-    if (!validateEnrollmentNo(formData.enrollmentNo)) {
-      setError("Enrollment number must be at least 5 alphanumeric characters");
-      toast.error("Enrollment number must be at least 5 alphanumeric characters");
-      setIsLoading(false);
-      return;
-    }
-
-    if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match.");
-      toast.error("Passwords do not match.");
-      setIsLoading(false);
-      return;
-    }
-
-    if (!validatePassword(formData.password)) {
-      setError(
-        "Password must be at least 8 characters long and include uppercase, lowercase, number, and symbol."
-      );
-      toast.error(
-        "Password must be at least 8 characters long and include uppercase, lowercase, number, and symbol."
-      );
-      setIsLoading(false);
-      return;
-    }
-
-    // Note: After payment, you may need to call the signup API to save the user.
-    const orderId = `LEO-${Date.now()}`;
-    const paymentData = {
-      merchant_id: "YOUR_MERCHANT_ID",
-      return_url: "https://your-site.com/payment-success",
-      cancel_url: "https://your-site.com/payment-cancel",
-      notify_url: "https://your-api.com/api/payment/payhere-notify",
-      order_id: orderId,
-      items: "Leo Club Membership",
-      amount: "400.00",
-      currency: "LKR",
-      first_name: formData.firstName,
-      last_name: formData.lastName,
-      email: formData.email,
-      phone: formData.mobile,
-      address: formData.address,
-      city: "Colombo",
-      country: "Sri Lanka",
-      custom_1: formData.enrollmentNo,
-      custom_2: formData.birthday,
+    const payload = {
+      role: "member",
+      leo_Id: leoStatus === "member" ? formData.leo_Id.trim() : undefined,
+      enrollmentNo: formData.enrollmentNo.trim(),
+      firstName: formData.firstName.trim(),
+      lastName: formData.lastName.trim(),
+      address: formData.address.trim(),
+      birthday: formData.birthday,
+      email: formData.email.trim().toLowerCase(),
+      mobile: formData.mobile.trim(),
+      password: formData.password.trim(),
     };
+    if (!payload.leo_Id) delete payload.leo_Id;
 
-    const form = document.createElement("form");
-    form.method = "POST";
-    form.action = "https://www.payhere.lk/pay/checkout";
+    try {
+      const res = await fetch("http://localhost:5001/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
 
-    Object.entries(paymentData).forEach(([key, value]) => {
-      const input = document.createElement("input");
-      input.type = "hidden";
-      input.name = key;
-      input.value = value;
-      form.appendChild(input);
-    });
+      const data = await res.json();
+      console.log("Signup response:", data);
 
-    document.body.appendChild(form);
-    form.submit();
-    setIsLoading(false);
+      if (res.ok) {
+        onClose();
+        toast.success("🎉 Your registration is submitted! You will receive an email after admin approval", {
+          position: "top-right",
+          autoClose: 4000,
+        });
+      } else {
+        toast.error(data.message || "Sign up failed.");
+        setError(data.message || "Sign up failed.");
+      }
+    } catch (err) {
+      console.error("Signup error:", err);
+      toast.error("Server error during signup");
+      setError("Server error");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleProceedToPay = async () => {
+    if (isLoading) return;
+    setError("");
+    setIsLoading(true);
+
+    const errorMsg = validateForm();
+    if (errorMsg) {
+      toast.error(errorMsg);
+      setError(errorMsg);
+      setIsLoading(false);
+      return;
+    }
+
+    try {
+      const orderId = `LEO-${Date.now()}`;
+      const response = await fetch("http://localhost:5001/api/payment/payhere-init", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          order_id: orderId,
+          first_name: formData.firstName,
+          last_name: formData.lastName,
+          email: formData.email,
+          phone: formData.mobile,
+          address: formData.address,
+          amount: "400.00",
+        }),
+      });
+
+      const paymentData = await response.json();
+      if (!response.ok) {
+        toast.error(paymentData.message || "Payment initialization failed.");
+        setError(paymentData.message || "Payment initialization failed.");
+        setIsLoading(false);
+        return;
+      }
+
+      const form = document.createElement("form");
+      form.method = "POST";
+      form.action = "https://sandbox.payhere.lk/pay/checkout";
+      Object.entries(paymentData).forEach(([key, value]) => {
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = key;
+        input.value = value;
+        form.appendChild(input);
+      });
+      document.body.appendChild(form);
+      form.submit();
+    } catch (err) {
+      console.error("Payment error:", err);
+      toast.error("Failed to connect to payment server.");
+      setError("Failed to connect to payment server.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -252,7 +209,7 @@ export default function SignUp({ onClose }) {
             Get Membership
           </h2>
 
-          <form onSubmit={leoStatus === "member" ? handleSubmit : (e) => e.preventDefault()}>
+          <form onSubmit={leoStatus === "member" ? handleSubmit : (e) => e.preventDefault()} autoComplete="off">
             <div className="grid grid-cols-1 gap-2 sm:gap-3 p-1 sm:p-2 mb-3 sm:mb-4 sm:grid-cols-2">
               <label className="flex items-center gap-2 text-gray-800 text-sm sm:text-base">
                 <input
@@ -265,7 +222,6 @@ export default function SignUp({ onClose }) {
                 />
                 Already LEO Member
               </label>
-
               <label className="flex items-center gap-2 text-gray-800 text-sm sm:text-base">
                 <input
                   type="radio"
@@ -292,78 +248,15 @@ export default function SignUp({ onClose }) {
             )}
 
             <div className="grid grid-cols-1 gap-3 sm:gap-6 sm:grid-cols-2 p-1">
-              <Input
-                type="text"
-                placeholder="First Name *"
-                name="firstName"
-                value={formData.firstName}
-                onChange={handleChange}
-                required
-              />
-              <Input
-                type="text"
-                placeholder="Last Name *"
-                name="lastName"
-                value={formData.lastName}
-                onChange={handleChange}
-                required
-              />
-              <Input
-                type="text"
-                placeholder="Address *"
-                name="address"
-                value={formData.address}
-                onChange={handleChange}
-                required
-              />
-              <Input
-                type="text"
-                placeholder="Enrollment No *"
-                name="enrollmentNo"
-                value={formData.enrollmentNo}
-                onChange={handleChange}
-                required
-              />
-              <Input
-                type="date"
-                placeholder="Birthday *"
-                name="birthday"
-                value={formData.birthday}
-                onChange={handleChange}
-                required
-              />
-              <Input
-                type="email"
-                placeholder="Email *"
-                name="email"
-                value={formData.email}
-                onChange={handleChange}
-                required
-              />
-              <Input
-                type="tel"
-                placeholder="Mobile no *"
-                name="mobile"
-                value={formData.mobile}
-                onChange={handleChange}
-                required
-              />
-              <Input
-                type="password"
-                placeholder="Password *"
-                name="password"
-                value={formData.password}
-                onChange={handleChange}
-                required
-              />
-              <Input
-                type="password"
-                placeholder="Confirm Password *"
-                name="confirmPassword"
-                value={formData.confirmPassword}
-                onChange={handleChange}
-                required
-              />
+              <Input type="text" placeholder="First Name *" name="firstName" value={formData.firstName} onChange={handleChange} required />
+              <Input type="text" placeholder="Last Name *" name="lastName" value={formData.lastName} onChange={handleChange} required />
+              <Input type="text" placeholder="Address *" name="address" value={formData.address} onChange={handleChange} required />
+              <Input type="text" placeholder="Enrollment No *" name="enrollmentNo" value={formData.enrollmentNo} onChange={handleChange} required />
+              <Input type="date" placeholder="Birthday *" name="birthday" value={formData.birthday} onChange={handleChange} required />
+              <Input type="email" placeholder="Email *" name="email" value={formData.email} onChange={handleChange} required />
+              <Input type="tel" placeholder="Mobile no *" name="mobile" value={formData.mobile} onChange={handleChange} required />
+              <Input type="password" placeholder="Password *" name="password" value={formData.password} onChange={handleChange} required />
+              <Input type="password" placeholder="Confirm Password *" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} required />
             </div>
 
             <p className="text-xs text-gray-500 mt-1 ml-1">
@@ -382,7 +275,6 @@ export default function SignUp({ onClose }) {
                     disabled={isLoading}
                     onClick={handleProceedToPay}
                   />
-                  {error && <p className="text-red-500 text-sm text-center mt-2">{error}</p>}
                 </>
               ) : (
                 <Button
