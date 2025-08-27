@@ -20,8 +20,6 @@ import NewsLetter from "./Components/Pages/NewsLetter";
 import Chatbot from "./Components/Pages/chatbot/LeoChatbot";
 import Admin from "./Components/Pages/admin panel/main_admin";
 
-
-
 function App() {
   const location = useLocation();
 
@@ -61,12 +59,9 @@ function App() {
         pauseOnHover
         theme="light"
       />
-      {!isAdmin && <Chatbot/>}
+      <Chatbot />
     </>
   );
 }
 
 export default App;
-
-
-

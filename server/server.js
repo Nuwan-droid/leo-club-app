@@ -13,7 +13,6 @@ import productRoutes from "./src/routes/productRoutes.js";
 import eventRoutes from "./src/routes/eventRoutes.js";
 import projectRoutes from "./src/routes/projectRoutes.js";  
 import commentRoutes from "./src/routes/commentRoutes.js";
-import chatbotRoutes from "./src/routes/chatbotRoutes.js";
 
 dotenv.config();
 connectDB();
@@ -38,7 +37,6 @@ app.use("/api/payment", paymentRoutes);
 app.use("/api", eventRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/comments", commentRoutes);
-app.use("/api/chatbot", chatbotRoutes);
 
 app.get("/", (req, res) => {
   res.json({ message: "LEO Club API is running ✅" });

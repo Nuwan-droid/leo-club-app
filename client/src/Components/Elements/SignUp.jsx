@@ -113,11 +113,11 @@ export default function SignUp({ onClose, onSwitchToLogin }) {
       const data = await res.json();
       console.log("Signup response:", data);
 
-      if (res.ok) {
-        toast.success("🎉 Registered successfully! Please log in.", {
+      if (res.ok) {onClose(); // Close the popup immediately
+        toast.success("🎉 Your registration part done! You will receive Email after admin approval", {
           position: "top-right",
           autoClose: 3000,
-        });
+        });
         onSwitchToLogin();
       } else {
         toast.error(data.message || "Sign up failed.");
