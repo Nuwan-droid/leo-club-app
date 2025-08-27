@@ -14,6 +14,7 @@ import eventRoutes from "./src/routes/eventRoutes.js";
 import projectRoutes from "./src/routes/projectRoutes.js";  
 import commentRoutes from "./src/routes/commentRoutes.js";
 
+
 dotenv.config();
 connectDB();
 
@@ -37,6 +38,7 @@ app.use("/api/payment", paymentRoutes);
 app.use("/api", eventRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/comments", commentRoutes);
+
 
 app.get("/", (req, res) => {
   res.json({ message: "LEO Club API is running ✅" });
