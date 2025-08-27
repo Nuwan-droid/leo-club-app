@@ -122,12 +122,14 @@ export default function SignUp({ onClose }) {
       const data = await res.json();
       console.log("API response:", data); // Debug API response
 
-      if (res.ok) {
-        onClose(); // Close the popup immediately
+
+      if (res.ok) {onClose(); // Close the popup immediately
         toast.success("🎉 Your registration part done! You will receive Email after admin approval", {
           position: "top-right",
           autoClose: 3000,
-        });
+        });
+        onSwitchToLogin();
+
       } else {
         setError(data.message || "Sign up failed");
         toast.error(data.message || "Sign up failed");
