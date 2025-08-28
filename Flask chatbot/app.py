@@ -1,4 +1,6 @@
 import nltk
+nltk.download('punkt')
+nltk.download('punkt_tab')
 nltk.download('popular')
 from nltk.stem import WordNetLemmatizer
 lemmatizer = WordNetLemmatizer()

@@ -1,3 +1,4 @@
+
 import { Routes, Route, useLocation } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css"; 
@@ -19,8 +20,6 @@ import EventVolunteerPage from "./Components/Pages/event_volunteer/EventVoluntee
 import NewsLetter from "./Components/Pages/NewsLetter";
 import Chatbot from "./Components/Pages/chatbot/LeoChatbot";
 import Admin from "./Components/Pages/admin panel/main_admin";
-
-
 
 function App() {
   const location = useLocation();
@@ -61,12 +60,11 @@ function App() {
         pauseOnHover
         theme="light"
       />
-      {!isAdmin && <Chatbot/>}
+      <Chatbot />
     </>
   );
 }
 
+
 export default App;
-
-
 

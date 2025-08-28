@@ -4,7 +4,7 @@ import Input from "./Input";
 import logo from "../../assets/lion.svg";
 import { toast } from "react-toastify";
 
-export default function SignUp({ onClose, onSwitchToLogin }) {
+export default function SignUp({ onClose }) {
   const [leoStatus, setLeoStatus] = useState("member");
   const [formData, setFormData] = useState({
     leo_Id: "",
@@ -35,9 +35,43 @@ export default function SignUp({ onClose, onSwitchToLogin }) {
     return regex.test(password);
   };
 
-  const validateEnrollmentNo = (enrollmentNo) => {
-    const regex = /^[a-zA-Z0-9]{5,}$/;
-    return regex.test(enrollmentNo);
+  const validateEnrollmentNo = (enrollmentNo) => /^[a-zA-Z0-9]{5,}$/.test(enrollmentNo);
+
+  const validateMobile = (mobile) => /^[0-9]{10}$/.test(mobile);
+
+  const validateForm = () => {
+    const requiredFields = [
+      "firstName",
+      "lastName",
+      "address",
+      "birthday",
+      "email",
+      "mobile",
+      "password",
+      "confirmPassword",
+      "enrollmentNo",
+    ];
+
+    for (let f of requiredFields) {
+      if (!formData[f]?.trim()) return `Field ${f} is required`;
+    }
+
+    if (!validateEnrollmentNo(formData.enrollmentNo))
+      return "Enrollment number must be at least 5 alphanumeric characters";
+
+    if (!validateMobile(formData.mobile))
+      return "Mobile number must be exactly 10 digits";
+
+    if (formData.password !== formData.confirmPassword)
+      return "Passwords do not match";
+
+    if (!validatePassword(formData.password))
+      return "Password must be 8+ chars with uppercase, lowercase, number & symbol.";
+
+    if (leoStatus === "member" && !formData.leo_Id.trim())
+      return "Leo ID is required for members";
+
+    return null;
   };
 
   const handleSubmit = async (e) => {
@@ -46,50 +80,14 @@ export default function SignUp({ onClose, onSwitchToLogin }) {
     setError("");
     setIsLoading(true);
 
-    // Validation
-    if (!leoStatus) {
-      toast.error("Please select your membership status");
-      setError("Please select your membership status");
+    const errorMsg = validateForm();
+    if (errorMsg) {
+      toast.error(errorMsg);
+      setError(errorMsg);
       setIsLoading(false);
       return;
     }
 
-    if (leoStatus === "member" && !formData.leo_Id.trim()) {
-      toast.error("Leo ID is required for members");
-      setError("Leo ID is required for members");
-      setIsLoading(false);
-      return;
-    }
-
-    if (!formData.enrollmentNo.trim() || !validateEnrollmentNo(formData.enrollmentNo)) {
-      toast.error("Enrollment number must be at least 5 alphanumeric characters");
-      setError("Enrollment number must be at least 5 alphanumeric characters");
-      setIsLoading(false);
-      return;
-    }
-
-    if (!formData.email.trim() || !formData.password.trim()) {
-      toast.error("Email and password are required");
-      setError("Email and password are required");
-      setIsLoading(false);
-      return;
-    }
-
-    if (formData.password !== formData.confirmPassword) {
-      toast.error("Passwords do not match");
-      setError("Passwords do not match");
-      setIsLoading(false);
-      return;
-    }
-
-    if (!validatePassword(formData.password)) {
-      toast.error("Password must be 8+ chars with uppercase, lowercase, number & symbol.");
-      setError("Password must be 8+ chars with uppercase, lowercase, number & symbol.");
-      setIsLoading(false);
-      return;
-    }
-
-    // Payload
     const payload = {
       role: "member",
       leo_Id: leoStatus === "member" ? formData.leo_Id.trim() : undefined,
@@ -110,15 +108,16 @@ export default function SignUp({ onClose, onSwitchToLogin }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
+
       const data = await res.json();
       console.log("Signup response:", data);
 
       if (res.ok) {
-        toast.success("🎉 Registered successfully! Please log in.", {
+        onClose();
+        toast.success("🎉 Your registration is submitted! You will receive an email after admin approval", {
           position: "top-right",
-          autoClose: 3000,
+          autoClose: 4000,
         });
-        onSwitchToLogin();
       } else {
         toast.error(data.message || "Sign up failed.");
         setError(data.message || "Sign up failed.");
@@ -137,47 +136,14 @@ export default function SignUp({ onClose, onSwitchToLogin }) {
     setError("");
     setIsLoading(true);
 
-    const requiredFields = [
-      "firstName",
-      "lastName",
-      "address",
-      "birthday",
-      "email",
-      "mobile",
-      "password",
-      "confirmPassword",
-      "enrollmentNo",
-    ];
-    const emptyFields = requiredFields.filter((f) => !formData[f]?.trim());
-    if (emptyFields.length > 0) {
-      toast.error("Please fill all required fields before payment.");
-      setError("Please fill all required fields before payment.");
+    const errorMsg = validateForm();
+    if (errorMsg) {
+      toast.error(errorMsg);
+      setError(errorMsg);
       setIsLoading(false);
       return;
     }
 
-    if (!validateEnrollmentNo(formData.enrollmentNo)) {
-      toast.error("Enrollment number must be at least 5 alphanumeric characters");
-      setError("Enrollment number must be at least 5 alphanumeric characters");
-      setIsLoading(false);
-      return;
-    }
-
-    if (formData.password !== formData.confirmPassword) {
-      toast.error("Passwords do not match.");
-      setError("Passwords do not match.");
-      setIsLoading(false);
-      return;
-    }
-
-    if (!validatePassword(formData.password)) {
-      toast.error("Password must be 8+ chars with uppercase, lowercase, number & symbol.");
-      setError("Password must be 8+ chars with uppercase, lowercase, number & symbol.");
-      setIsLoading(false);
-      return;
-    }
-
-    // Payment request
     try {
       const orderId = `LEO-${Date.now()}`;
       const response = await fetch("http://localhost:5001/api/payment/payhere-init", {
@@ -243,8 +209,7 @@ export default function SignUp({ onClose, onSwitchToLogin }) {
             Get Membership
           </h2>
 
-          <form onSubmit={leoStatus === "member" ? handleSubmit : (e) => e.preventDefault()}>
-            {/* Radio Buttons */}
+          <form onSubmit={leoStatus === "member" ? handleSubmit : (e) => e.preventDefault()} autoComplete="off">
             <div className="grid grid-cols-1 gap-2 sm:gap-3 p-1 sm:p-2 mb-3 sm:mb-4 sm:grid-cols-2">
               <label className="flex items-center gap-2 text-gray-800 text-sm sm:text-base">
                 <input
@@ -282,7 +247,6 @@ export default function SignUp({ onClose, onSwitchToLogin }) {
               />
             )}
 
-            {/* Inputs */}
             <div className="grid grid-cols-1 gap-3 sm:gap-6 sm:grid-cols-2 p-1">
               <Input type="text" placeholder="First Name *" name="firstName" value={formData.firstName} onChange={handleChange} required />
               <Input type="text" placeholder="Last Name *" name="lastName" value={formData.lastName} onChange={handleChange} required />
