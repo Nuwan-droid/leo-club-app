@@ -13,6 +13,7 @@ import productRoutes from "./src/routes/productRoutes.js";
 import eventRoutes from "./src/routes/eventRoutes.js";
 import projectRoutes from "./src/routes/projectRoutes.js";  
 import commentRoutes from "./src/routes/commentRoutes.js";
+import donationRoutes from "./src/routes/donationRoutes.js";
 
 
 dotenv.config();
@@ -38,6 +39,8 @@ app.use("/api/payment", paymentRoutes);
 app.use("/api", eventRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/comments", commentRoutes);
+app.use("/api/donation-projects", donationRoutes); 
+
 
 
 app.get("/", (req, res) => {
