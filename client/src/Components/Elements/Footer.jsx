@@ -1,5 +1,6 @@
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import Header from "./Header";
+import { Link } from "react-router-dom";
 
 export default function Footer() {
   return (
@@ -32,8 +33,12 @@ export default function Footer() {
               </div>
 
               <div className="flex gap-8 mt-4">
-                <a href="/terms" className="text-[gray] text-lg hover:text-white">Terms</a>
-                <a href="/privacy-policy" className="text-[gray] text-lg hover:text-white">Privacy</a>
+                <Link to="/terms" className="text-[gray] text-lg hover:text-white">
+                  Terms
+                </Link>
+                <Link to="/privacy-policy" className="text-[gray] text-lg hover:text-white">
+                  Privacy
+                </Link>
               </div>
             </div>
           </div>
@@ -45,24 +50,22 @@ export default function Footer() {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 text-center lg:w-1/2">
             <div>
               <ul className="space-y-1 text-sm text-gray-400">
-                <li><a href="#" className="shortlink">Member Portal</a></li>
-                <li><a href="#" className="shortlink">Learnin Hub</a></li>
-                <li><a href="#" className="shortlink">News Letter</a></li>
-                <li><a href="#" className="shortlink">Event Volunteer</a></li>
+                <li><Link to="/memberportal" className="shortlink">Member Portal</Link></li>
+                <li><Link to="/learninghub" className="shortlink">Learning Hub</Link></li>
+                <li><Link to="/newsletter" className="shortlink">Newsletter</Link></li>
+                <li><Link to="/event-volunteer" className="shortlink">Event Volunteer</Link></li>
               </ul>
             </div>
             <div>
               <ul className="space-y-1 text-sm text-gray-400">
-                <li><a href="#" className="shortlink">Project</a></li>
-                <li><a href="#" className="shortlink">Calander</a></li>
-                <li><a href="#" className="shortlink">Shop</a></li>
-                <li><a href="#" className="shortlink">About</a></li>
+                <li><Link to="/project" className="shortlink">Projects</Link></li>
+                <li><Link to="/calander" className="shortlink">Calendar</Link></li>
+                <li><Link to="/shop" className="shortlink">Shop</Link></li>
+                <li><Link to="/about" className="shortlink">About</Link></li>
               </ul>
             </div>
             <div>
-              <ul className="space-y-1 text-sm text-gray-400">
-                <li><a href="#" className="shortlink">LEO AI</a></li>
-              </ul>
+              {/* You can add more sections here if needed */}
             </div>
           </div>
         </div>

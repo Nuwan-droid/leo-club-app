@@ -62,10 +62,15 @@ const userSchema = new mongoose.Schema({
     required: [true, 'Password is required.'],
   },
   userImage: {
-    type: String,
-    trim: true,
-    default: 'https://randomuser.me/api/portraits',
+  type: String,
+  trim: true,
+  default: function () {
+    const gender = Math.random() < 0.5 ? "men" : "women"; 
+    const number = Math.floor(Math.random() * 50) + 1; 
+    return `https://randomuser.me/api/portraits/${gender}/${number}.jpg`;
   },
+},
+
   // Admin image path (different from userImage)
   image_path: {
     type: String,
@@ -170,21 +175,24 @@ const userSchema = new mongoose.Schema({
     }
   },
   newsletterParticipated: {
-    type: Boolean,
-    default: function() {
-      return this.role === 'member' ? false : undefined;
-    },
-    validate: {
-      validator: function(value) {
-        // Only allow newsletterParticipated for members
-        if (this.role === 'admin') {
-          return value === undefined || value === null;
-        }
-        return true;
-      },
-      message: 'Newsletter participated field is only applicable to members.'
-    }
+   type: Number,
+  default: function () {
+    // For members start at 0, admins don’t need this field
+    return this.role === "member" ? 0 : undefined;
   },
+  validate: {
+    validator: function (value) {
+      // Only members can have a number (>= 0), admins should have undefined/null
+      if (this.role === "admin") {
+        return value === undefined || value === null;
+      }
+      // For members, only allow non-negative integers
+      return Number.isInteger(value) && value >= 0;
+    },
+    message:
+      "Newsletter participated count must be a non-negative number (and only applicable to members).",
+  },
+},
   enrollmentNo: {
     type: String,
     trim: true,

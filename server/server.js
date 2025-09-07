@@ -13,7 +13,10 @@ import productRoutes from "./src/routes/productRoutes.js";
 import eventRoutes from "./src/routes/eventRoutes.js";
 import projectRoutes from "./src/routes/projectRoutes.js";  
 import commentRoutes from "./src/routes/commentRoutes.js";
+import userRoutes from "./src/routes/userRoutes.js";
+import awardRoutes from "./src/routes/awardRoutes.js";
 import donationRoutes from "./src/routes/donationRoutes.js";
+
 
 
 dotenv.config();
@@ -31,7 +34,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use("/images", express.static(path.join(__dirname, "upload/images")));
-
+app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/executive-members", executiveMemberRoutes);
@@ -39,7 +42,11 @@ app.use("/api/payment", paymentRoutes);
 app.use("/api", eventRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/comments", commentRoutes);
+
+app.use("/api/awards", awardRoutes);
 app.use("/api/donation-projects", donationRoutes); 
+app.use("/api/user",userRoutes);
+
 
 
 

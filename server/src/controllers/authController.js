@@ -215,7 +215,7 @@ const signIn = async (req, res) => {
     }
 
     // ✅ Create JWT token
-    const token = generateToken(user._id, res);
+    const token = generateToken(user._id,res);
 
     // ✅ Prepare response data based on user role
     const responseUser = {

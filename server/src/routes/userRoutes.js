@@ -1,23 +1,16 @@
-// routes/userRoutes.js or inside user.controller.js
 import express from 'express';
-import User from '../models/User.js';
 import { protect } from '../middleware/authMiddleware.js';
+import UserController from "../controllers/usercontroller.js";
 
 const router = express.Router();
 
-router.get('/me', protect, async (req, res) => {
-  try {
-    const user = await User.findById(req.user._id).select('-password');
-    if (!user) return res.status(404).json({ message: 'User not found' });
 
-    if (user.status !== 'approved') {
-      return res.status(403).json({ message: 'Awaiting admin approval' });
-    }
+//---------------------------get e---------------
+router.get('/me', protect,UserController.me);
 
-    res.json(user);
-  } catch (error) {
-    res.status(500).json({ message: 'Server error' });
-  }
-});
+//---------------------------get User profile---------------
+router.get("/profile",UserController.getUserProfile);
+router.get("/members/count", UserController.getMemberCount);
 
 export default router;
+
