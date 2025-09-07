@@ -1,7 +1,60 @@
-
-// ProductDetail.jsx
-import React from 'react';
+import React, { useState } from 'react';
 import { ShoppingCart, Plus, Minus, ArrowLeft } from 'lucide-react';
+import { toast } from 'react-toastify';
+
+function VisitorForm({ visitorInfo, setVisitorInfo, onProceed, isProcessing }) {
+  return (
+    <div className="mb-4 text-black">
+      <h3 className="font-bold text-gray-800 mb-2">Enter your details for checkout</h3>
+      <div className="grid grid-cols-1 gap-2">
+        <input
+          type="text"
+          placeholder="First Name"
+          value={visitorInfo.firstName}
+          onChange={e => setVisitorInfo({ ...visitorInfo, firstName: e.target.value })}
+          className="border p-2 rounded mb-2"
+        />
+        <input
+          type="text"
+          placeholder="Last Name"
+          value={visitorInfo.lastName}
+          onChange={e => setVisitorInfo({ ...visitorInfo, lastName: e.target.value })}
+          className="border p-2 rounded mb-2"
+        />
+        <input
+          type="email"
+          placeholder="Email"
+          value={visitorInfo.email}
+          onChange={e => setVisitorInfo({ ...visitorInfo, email: e.target.value })}
+          className="border p-2 rounded mb-2"
+        />
+        <input
+          type="tel"
+          placeholder="Mobile"
+          value={visitorInfo.mobile}
+          onChange={e => setVisitorInfo({ ...visitorInfo, mobile: e.target.value })}
+          className="border p-2 rounded mb-2"
+        />
+        <input
+          type="text"
+          placeholder="Address"
+          value={visitorInfo.address}
+          onChange={e => setVisitorInfo({ ...visitorInfo, address: e.target.value })}
+          className="border p-2 rounded mb-2"
+        />
+      </div>
+      <button
+        className={`w-full bg-yellow-400 text-black font-bold py-2 rounded-xl mt-2 hover:bg-yellow-500 transition ${
+          isProcessing ? "opacity-60 cursor-not-allowed" : ""
+        }`}
+        disabled={isProcessing}
+        onClick={onProceed}
+      >
+        {isProcessing ? "Processing..." : "Proceed to Pay"}
+      </button>
+    </div>
+  );
+}
 
 const ProductDetail = ({
   product,
@@ -14,8 +67,19 @@ const ProductDetail = ({
   selectedImage,
   setSelectedImage,
   handleBackClick,
-  addToCart
+  addToCart,
+  userInfo
 }) => {
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+  const [showVisitorForm, setShowVisitorForm] = useState(false);
+  const [visitorInfo, setVisitorInfo] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    mobile: "",
+    address: ""
+  });
+
   const colorMap = {
     'Black': '#000000',
     'White': '#FFFFFF',
@@ -34,6 +98,32 @@ const ProductDetail = ({
     'Maroon': '#7F1D1D',
   };
 
+  const validateSelection = () => {
+    if (!selectedSize) {
+      toast.error("Please select a size");
+      return false;
+    }
+    if (product.colors && product.colors.length > 0 && !selectedColor) {
+      toast.error("Please select a color");
+      return false;
+    }
+    return true;
+  };
+
+  const validateVisitorInfo = (info) => {
+    if (!info.firstName.trim() || !info.lastName.trim() || !info.email.trim() ||
+        !info.mobile.trim() || !info.address.trim()) {
+      return "All fields are required";
+    }
+    if (!/^[0-9]{10}$/.test(info.mobile)) {
+      return "Mobile number must be exactly 10 digits";
+    }
+    if (!/^[^@]+@[^@]+\.[^@]+$/.test(info.email)) {
+      return "Invalid email address";
+    }
+    return null;
+  };
+
   const handleAddToCart = () => {
     const cartItem = {
       id: `${product.id}-${selectedSize}-${selectedColor}`,
@@ -46,6 +136,87 @@ const ProductDetail = ({
       quantity: quantity
     };
     addToCart(cartItem);
+  };
+
+  const handleBuyNow = async () => {
+    if (!validateSelection()) return;
+    if (isProcessingPayment) return;
+    if (!userInfo) {
+      setShowVisitorForm(true);
+      return;
+    }
+    await proceedToPay(userInfo);
+  };
+
+  const proceedToPay = async (info) => {
+    setIsProcessingPayment(true);
+    try {
+      const totalAmount = (product.price * quantity).toFixed(2);
+      const orderId = `PRODUCT-${product.id}-${Date.now()}`;
+      const paymentPayload = {
+        order_id: orderId,
+        first_name: info.firstName,
+        last_name: info.lastName,
+        email: info.email,
+        phone: info.mobile,
+        address: info.address,
+        amount: totalAmount,
+        items: `${product.name} x${quantity}`,
+        currency: "LKR",
+        productId: product.id,
+        productName: product.name,
+        size: selectedSize,
+        color: selectedColor,
+        quantity: quantity,
+        unitPrice: product.price,
+        totalAmount: totalAmount
+      };
+
+      const response = await fetch("http://localhost:5001/api/payment/payhere-init", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(paymentPayload),
+      });
+
+      const paymentData = await response.json();
+
+      if (!response.ok) {
+        toast.error(paymentData.message || "Payment initialization failed.");
+        setIsProcessingPayment(false);
+        return;
+      }
+
+      // Create and submit PayHere form
+      const form = document.createElement("form");
+      form.method = "POST";
+      form.action = "https://sandbox.payhere.lk/pay/checkout";
+
+      Object.entries(paymentData).forEach(([key, value]) => {
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = key;
+        input.value = value;
+        form.appendChild(input);
+      });
+
+      document.body.appendChild(form);
+      form.submit();
+
+    } catch (err) {
+      console.error("Payment error:", err);
+      toast.error("Failed to connect to payment server.");
+    } finally {
+      setIsProcessingPayment(false);
+    }
+  };
+
+  const handleVisitorProceed = async () => {
+    const error = validateVisitorInfo(visitorInfo);
+    if (error) {
+      toast.error(error);
+      return;
+    }
+    await proceedToPay(visitorInfo);
   };
 
   const images = Array.isArray(product.additionalImages) ? [product.image, ...product.additionalImages] : [product.image];
@@ -110,24 +281,24 @@ const ProductDetail = ({
             </div>
           </div>
 
-{product.colors && product.colors.length > 0 && (
-  <div>
-    <h3 className="font-bold text-gray-800 mb-3">SELECT COLOR</h3>
-    <div className="flex space-x-3">
-      {(Array.isArray(product.colors) ? product.colors : []).map((color) => (
-        <button
-          key={color}
-          onClick={() => setSelectedColor(color)}
-          style={{ backgroundColor: colorMap[color] || '#000000' }}
-          className={`w-10 h-10 rounded-full border-2 ${
-            selectedColor === color ? 'ring-2 ring-yellow-400' : ''
-          } border-gray-300 hover:scale-110 transition-transform`}
-          title={color}
-        />
-      ))}
-    </div>
-  </div>
-)}
+          {product.colors && product.colors.length > 0 && (
+            <div>
+              <h3 className="font-bold text-gray-800 mb-3">SELECT COLOR</h3>
+              <div className="flex space-x-3">
+                {(Array.isArray(product.colors) ? product.colors : []).map((color) => (
+                  <button
+                    key={color}
+                    onClick={() => setSelectedColor(color)}
+                    style={{ backgroundColor: colorMap[color] || '#000000' }}
+                    className={`w-10 h-10 rounded-full border-2 ${
+                      selectedColor === color ? 'ring-2 ring-yellow-400' : ''
+                    } border-gray-300 hover:scale-110 transition-transform`}
+                    title={color}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
 
           <div>
             <h3 className="font-bold text-gray-800 mb-3">Quantity</h3>
@@ -148,18 +319,45 @@ const ProductDetail = ({
             </div>
           </div>
 
+          {/* Total Amount Display */}
+          <div className="bg-blue-50 p-4 rounded-lg">
+            <div className="flex justify-between items-center">
+              <span className="text-gray-700 font-medium">Total Amount:</span>
+              <span className="text-2xl font-bold text-blue-800">
+                Rs {(product.price * quantity).toFixed(2)}
+              </span>
+            </div>
+          </div>
+
           <div className="flex space-x-4">
             <button 
               onClick={handleAddToCart}
-              className="flex-1 font-bold py-3 px-6 rounded-lg bg-white text-black border-2 border-gray-300 hover:bg-gray-100 transition-colors flex items-center justify-center space-x-2"
+              className="flex-1 font-bold h-fit py-3 px-6 rounded-lg bg-white text-black border-2 border-gray-300 hover:bg-gray-100 transition-colors flex items-center justify-center space-x-2"
             >
               <ShoppingCart size={20} />
               <span>Add to cart</span>
             </button>
-            <button className="flex-1 font-bold py-3 px-6 rounded-lg bg-yellow-400 text-black hover:bg-yellow-500 transition-colors flex items-center justify-center space-x-2">
-              <ShoppingCart size={20} />
-              <span>Buy Now</span>
-            </button>
+            {showVisitorForm && !userInfo ? (
+              <VisitorForm
+                visitorInfo={visitorInfo}
+                setVisitorInfo={setVisitorInfo}
+                onProceed={handleVisitorProceed}
+                isProcessing={isProcessingPayment}
+              />
+            ) : (
+              <button 
+                onClick={handleBuyNow}
+                disabled={isProcessingPayment}
+                className={`flex-1 font-bold py-3 px-6 rounded-lg transition-colors flex items-center justify-center space-x-2 ${
+                  isProcessingPayment 
+                    ? 'bg-gray-400 text-gray-600 cursor-not-allowed' 
+                    : 'bg-yellow-400 text-black hover:bg-yellow-500'
+                }`}
+              >
+                <ShoppingCart size={20} />
+                <span>{isProcessingPayment ? 'Processing...' : 'Buy Now'}</span>
+              </button>
+            )}
           </div>
 
           {product.material && (

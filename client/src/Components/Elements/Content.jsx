@@ -4,30 +4,31 @@ import AwardImage from "../../assets/LandingImage/AwardImage.png";
 import vision from "../../assets/LandingImage/vision.png"; 
 import mission from "../../assets/LandingImage/mission.png";
 import { motion } from "framer-motion";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-
-const awards = [
-  {
-    title: "Most Outstanding Zone Director",
-    subtitle: " Leo Erandini Ambalampitiya",
-    year: "2024"
-  },
-  {
-    title: "Most Outstanding Bulletin Editor",
-    subtitle: "Leo Abishek Haththakage",
-    year: "2024"
-  },
-  {
-    title: "Most Outstanding Bulletin Editor",
-    subtitle: "Leo Abishek Haththakage",
-    year: "2025"
-  },
-];
 
 
 function Content() {
   const [hovered, setHovered] = useState(null);
+  const [awards, setAwards] = useState([]); // ✅ dynamic awards state
+
+  // Fetch awards from backend
+  useEffect(() => {
+    const fetchAwards = async () => {
+      try {
+        const res = await fetch("http://localhost:5001/api/awards"); // Your awards API
+        const data = await res.json();
+        setAwards(data);
+      } catch (error) {
+        console.error("Error fetching awards:", error);
+      }
+    };
+
+    fetchAwards();
+  }, []);
+
+
+
   return (
     <div className="bg-[#E0ECFF] py-10 px-4 md:px-16 transition-all duration-500 ease-in-out">
       {/* Heading */}
@@ -98,69 +99,51 @@ function Content() {
 
 
 {/* Awards Section */}
-    <div className="relative  flex justify-center mt-16">
-      <div className="w-full max-w-5xl bg-blue-700 rounded-[60px] shadow-lg px-6 py-10 flex flex-col items-center">
-        <h2 className="text-3xl md:text-4xl font-bold text-center text-white mb-8">
-          Awards
-        </h2>
-        <div className="flex flex-col md:flex-row justify-center items-center gap-7 md:gap-16 transition-all duration-500">
-          {awards.map((award, i) => (
-            <motion.div
-              key={i}
-              className="flex flex-col items-center text-center mx-4"
-              onMouseEnter={() => setHovered(i)}
-              onMouseLeave={() => setHovered(null)}
-              layout
-              transition={{ layout: { duration: 0.5, type: "spring" } }}
-              animate={
-                hovered === i
-                  ? {
-                      scale: 1.2,
-                      zIndex: 10,
-                      y: -20,
-                      boxShadow: "0 8px 32px 4px  bg-blue-700",
-                    }
-                  : {
-                      scale: 1,
-                      zIndex: 1,
-                      y: 0,
-                      boxShadow: "0 2px 12px  bg-blue-700",
-                    }
-              }
-              style={{
-                cursor: "pointer",
-                position: hovered === i ? "relative" : "static",
-              }}
-            >
-              <motion.img
-                src={AwardImage}
-                alt="Award Icon"
-                className="w-28 h-28 md:w-32 md:h-32 mb-2 drop-shadow-lg rounded-full bg-white/10"
-                transition={{ type: "spring", stiffness: 300 }}
+      <div className="relative flex justify-center mt-16">
+        <div className="w-full max-w-5xl bg-blue-700 rounded-[60px] shadow-lg px-6 py-10 flex flex-col items-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-center text-white mb-8">
+            Awards
+          </h2>
+
+          <div className="flex flex-col md:flex-row justify-center items-center gap-7 md:gap-16 transition-all duration-500">
+            {awards.map((award, i) => (
+              <motion.div
+                key={award._id || i}
+                className="flex flex-col items-center text-center mx-4"
+                onMouseEnter={() => setHovered(i)}
+                onMouseLeave={() => setHovered(null)}
+                layout
+                transition={{ layout: { duration: 0.5, type: "spring" } }}
                 animate={
                   hovered === i
-                    ? { scale: 1.13, rotate: 2 }
-                    : { scale: 1, rotate: 0 }
+                    ? { scale: 1.2, zIndex: 10, y: -20, boxShadow: "0 8px 32px 4px rgba(0,0,0,0.2)" }
+                    : { scale: 1, zIndex: 1, y: 0, boxShadow: "0 2px 12px rgba(0,0,0,0.1)" }
                 }
-              />
-              <div className="flex flex-col items-center justify-center px-2 -mt-2">
-                <div className="text-[0.9rem] md:text-base font-semibold text-[#FFD700] tracking-wide drop-shadow" style={{ letterSpacing: 1 }}>
-                  {award.title}
+                style={{ cursor: "pointer", position: hovered === i ? "relative" : "static" }}
+              >
+                <motion.img
+                  src={AwardImage}
+                  alt="Award Icon"
+                  className="w-28 h-28 md:w-32 md:h-32 mb-2 drop-shadow-lg rounded-full bg-white/10"
+                  transition={{ type: "spring", stiffness: 300 }}
+                  animate={hovered === i ? { scale: 1.13, rotate: 2 } : { scale: 1, rotate: 0 }}
+                />
+                <div className="flex flex-col items-center justify-center px-2 -mt-2">
+                  <div className="text-[0.9rem] md:text-base font-semibold text-[#FFD700] tracking-wide drop-shadow" style={{ letterSpacing: 1 }}>
+                    {award.title}
+                  </div>
+                  <div className="text-xs md:text-sm text-[#FFD700] mt-2 font-light tracking-wider" style={{ letterSpacing: 1 }}>
+                    {award.winner}
+                  </div>
+                  <div className="text-lg md:text-xl font-bold text-[#FFD700] mt-1 drop-shadow">
+                    {award.year}
+                  </div>
                 </div>
-                <div className="text-xs md:text-sm text-[#FFD700] mt-2 font-light tracking-wider" style={{ letterSpacing: 1 }}>
-                  {award.subtitle}
-                </div>
-                <div className="text-lg md:text-xl font-bold text-[#FFD700] mt-1 drop-shadow">
-                  {award.year}
-                </div>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            ))}
+          </div>
         </div>
       </div>
-    </div>
-
-
     </div>
   );
 }
