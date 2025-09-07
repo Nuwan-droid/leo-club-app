@@ -19,6 +19,7 @@ const AddAward = ({ closeModal }) => {
     }
   };
 
+  
   useEffect(() => {
     fetchAwards();
   }, []);
