@@ -11,6 +11,7 @@ import Terms from "./Components/Pages/Terms";
 import Donation from "./Components/Pages/Donation";
 import DonateMoney from "./Components/Pages/DonateMoney";
 import DonateBooks from "./Components/Pages/DonateBook";
+import DonateItems from "./Components/Pages/DonateItems";
 import EventCalendar from "./Components/Pages/EventCalendar";
 import Shop from "./Components/Pages/LeoShop";
 import ProjectShowcasePage from "./Components/Pages/ProjectShowcasePage";
@@ -20,6 +21,7 @@ import EventVolunteerPage from "./Components/Pages/event_volunteer/EventVoluntee
 import NewsLetter from "./Components/Pages/NewsLetter";
 import Chatbot from "./Components/Pages/chatbot/LeoChatbot";
 import Admin from "./Components/Pages/admin panel/main_admin";
+
 
 function App() {
   const location = useLocation();
@@ -39,6 +41,7 @@ function App() {
         <Route path="/donation" element={<Donation />} />
         <Route path="/donatemoney" element={<DonateMoney />} />
         <Route path="/donatebook" element={<DonateBooks />} />
+        <Route path="/donateitems/:projectId" element={<DonateItems />} />
         <Route path="/calander" element={<EventCalendar />} />
         <Route path="/shop" element={<Shop />} />
         <Route path="/project" element={<ProjectShowcasePage />} />

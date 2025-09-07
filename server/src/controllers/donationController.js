@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import DonationProject from "../models/DonationProject.js";
+import DonationItem from "../models/DonationItem.js";
 
 // Get all donation projects
 export const getAllDonationProjects = async (req, res) => {
@@ -316,6 +317,276 @@ export const uploadDonationProjectImages = (req, res) => {
     return res.status(500).json({
       success: false,
       message: error.message || 'Upload failed'
+    });
+  }
+};
+
+// ======================== DONATION ITEMS FUNCTIONALITY ========================
+
+// Add new donation item
+export const addDonationItem = async (req, res) => {
+  try {
+    const { 
+      project_id, 
+      donor_info, 
+      donated_items, 
+      estimated_value, 
+      collection_details, 
+      user_id, 
+      notes 
+    } = req.body;
+
+    // Validate required fields
+    if (!project_id || !donor_info || !donated_items) {
+      return res.status(400).json({ 
+        success: false, 
+        message: "Project ID, donor info, and donated items are required" 
+      });
+    }
+
+    // Check if project exists
+    const project = await DonationProject.findById(project_id);
+    if (!project) {
+      return res.status(404).json({ 
+        success: false, 
+        message: "Donation project not found" 
+      });
+    }
+
+    // Create new donation item
+    const donationItem = new DonationItem({
+      project_id,
+      donor_info,
+      donated_items,
+      estimated_value: estimated_value || 0,
+      collection_details,
+      user_id: user_id || null,
+      notes
+    });
+
+    await donationItem.save();
+
+    // Update the project's received quantities
+    if (donated_items.books > 0) {
+      project.donation_items.books.received += donated_items.books;
+    }
+    if (donated_items.pens > 0) {
+      project.donation_items.pens.received += donated_items.pens;
+    }
+    if (donated_items.clothes > 0) {
+      project.donation_items.clothes.received += donated_items.clothes;
+    }
+
+    // Ensure received doesn't exceed required
+    Object.keys(project.donation_items).forEach(key => {
+      if (project.donation_items[key].received > project.donation_items[key].required) {
+        project.donation_items[key].received = project.donation_items[key].required;
+      }
+    });
+
+    await project.save();
+
+    console.log("New donation item created:", donationItem.donation_id);
+    
+    res.status(201).json({
+      success: true,
+      message: "Thank you for your donation! Your items have been recorded successfully.",
+      data: {
+        donation: donationItem,
+        updated_project: project
+      }
+    });
+
+  } catch (error) {
+    console.error("Error adding donation item:", error);
+    res.status(500).json({ 
+      success: false, 
+      message: error.message 
+    });
+  }
+};
+
+// Get all donation items
+export const getAllDonationItems = async (req, res) => {
+  try {
+    const { project_id, status, page = 1, limit = 10 } = req.query;
+    
+    const query = {};
+    if (project_id) query.project_id = project_id;
+    if (status) query.status = status;
+
+    const donations = await DonationItem.find(query)
+      .populate('project_id', 'title description location city')
+      .populate('user_id', 'name email')
+      .sort({ createdAt: -1 })
+      .limit(limit * 1)
+      .skip((page - 1) * limit);
+
+    const total = await DonationItem.countDocuments(query);
+
+    res.json({
+      success: true,
+      data: donations,
+      pagination: {
+        current_page: parseInt(page),
+        total_pages: Math.ceil(total / limit),
+        total_items: total,
+        items_per_page: parseInt(limit)
+      }
+    });
+
+  } catch (error) {
+    console.error("Error fetching donation items:", error);
+    res.status(500).json({ 
+      success: false, 
+      message: error.message 
+    });
+  }
+};
+
+// Get donation items by project
+export const getDonationItemsByProject = async (req, res) => {
+  try {
+    const { projectId } = req.params;
+    
+    // First, find the project using either MongoDB _id or custom donation_project_id
+    let project = null;
+    
+    if (mongoose.Types.ObjectId.isValid(projectId) && projectId.length === 24) {
+      // It's a MongoDB ObjectId
+      project = await DonationProject.findById(projectId);
+    } else {
+      // Try to parse as a number for custom donation_project_id field
+      const numericId = parseInt(projectId);
+      if (!isNaN(numericId)) {
+        project = await DonationProject.findOne({ donation_project_id: numericId });
+      }
+    }
+    
+    if (!project) {
+      return res.status(404).json({
+        success: false,
+        message: "Project not found"
+      });
+    }
+    
+    // Now query donation items using the MongoDB _id
+    const donations = await DonationItem.find({ project_id: project._id })
+      .populate('project_id', 'title description location city donation_project_id')
+      .populate('user_id', 'name email')
+      .sort({ createdAt: -1 });
+
+    res.json({
+      success: true,
+      data: donations,
+      total: donations.length,
+      project: {
+        id: project.donation_project_id,
+        title: project.title,
+        description: project.description,
+        location: project.location,
+        city: project.city,
+        donation_items: project.donation_items
+      }
+    });
+
+  } catch (error) {
+    console.error("Error fetching donation items by project:", error);
+    res.status(500).json({ 
+      success: false, 
+      message: error.message 
+    });
+  }
+};
+
+// Update donation item status
+export const updateDonationItemStatus = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status, notes } = req.body;
+
+    if (!['pending', 'confirmed', 'received', 'distributed'].includes(status)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid status. Must be 'pending', 'confirmed', 'received', or 'distributed'"
+      });
+    }
+
+    const donation = await DonationItem.findById(id);
+    if (!donation) {
+      return res.status(404).json({
+        success: false,
+        message: "Donation item not found"
+      });
+    }
+
+    donation.status = status;
+    if (notes) donation.notes = notes;
+    
+    await donation.save();
+
+    res.json({
+      success: true,
+      message: "Donation status updated successfully",
+      data: donation
+    });
+
+  } catch (error) {
+    console.error("Error updating donation item status:", error);
+    res.status(500).json({ 
+      success: false, 
+      message: error.message 
+    });
+  }
+};
+
+// Delete donation item
+export const deleteDonationItem = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const donation = await DonationItem.findById(id);
+    if (!donation) {
+      return res.status(404).json({
+        success: false,
+        message: "Donation item not found"
+      });
+    }
+
+    // If deleting, we might want to reduce the project's received quantities
+    // This is optional - you can remove this if you don't want to reverse the counts
+    const project = await DonationProject.findById(donation.project_id);
+    if (project) {
+      if (donation.donated_items.books > 0) {
+        project.donation_items.books.received = Math.max(0, 
+          project.donation_items.books.received - donation.donated_items.books
+        );
+      }
+      if (donation.donated_items.pens > 0) {
+        project.donation_items.pens.received = Math.max(0, 
+          project.donation_items.pens.received - donation.donated_items.pens
+        );
+      }
+      if (donation.donated_items.clothes > 0) {
+        project.donation_items.clothes.received = Math.max(0, 
+          project.donation_items.clothes.received - donation.donated_items.clothes
+        );
+      }
+      await project.save();
+    }
+
+    await DonationItem.findByIdAndDelete(id);
+
+    res.json({
+      success: true,
+      message: "Donation item deleted successfully"
+    });
+
+  } catch (error) {
+    console.error("Error deleting donation item:", error);
+    res.status(500).json({ 
+      success: false, 
+      message: error.message 
     });
   }
 };
