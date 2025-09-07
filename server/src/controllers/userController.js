@@ -51,5 +51,15 @@ const getUserProfile = async (req, res) => {
     return res.status(401).json({ message: "Invalid or expired token" });
   }
 };
+// ✅ New method to get total members count
+const getMemberCount = async (req, res) => {
+  try {
+    const count = await User.countDocuments({ role: "member" });
+    res.status(200).json({ count });
+  } catch (error) {
+    console.error("Error fetching member count:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
 
-export default { me, getUserProfile };
+export default { me, getUserProfile,getMemberCount };
