@@ -15,6 +15,9 @@ import projectRoutes from "./src/routes/projectRoutes.js";
 import commentRoutes from "./src/routes/commentRoutes.js";
 import userRoutes from "./src/routes/userRoutes.js";
 import awardRoutes from "./src/routes/awardRoutes.js";
+import donationRoutes from "./src/routes/donationRoutes.js";
+
+
 
 dotenv.config();
 connectDB();
@@ -39,7 +42,12 @@ app.use("/api/payment", paymentRoutes);
 app.use("/api", eventRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/comments", commentRoutes);
+
 app.use("/api/awards", awardRoutes);
+app.use("/api/donation-projects", donationRoutes); 
+app.use("/api/user",userRoutes);
+
+
 
 
 app.get("/", (req, res) => {
