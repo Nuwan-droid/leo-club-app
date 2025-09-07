@@ -1,4 +1,3 @@
-// Shop.jsx
 import React, { useState, useEffect } from 'react';
 import { ShoppingCart } from 'lucide-react';
 
@@ -17,12 +16,21 @@ const Shop = () => {
   const [cartItems, setCartItems] = useState([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
 
+  // User info state, auto-filled from localStorage if exists, null for visitors
+  const [userInfo, setUserInfo] = useState(null);
+
   useEffect(() => {
+    // Load user info from localStorage if logged in
+    const storedUser = localStorage.getItem('leoUserInfo');
+    if (storedUser) {
+      setUserInfo(JSON.parse(storedUser));
+    }
+
+    // Fetch products
     const fetchProducts = async () => {
       try {
         const res = await fetch('http://localhost:5001/api/products/allproducts');
         const data = await res.json();
-        console.log('Fetched products:', data);
         const transformedProducts = data.map(product => ({
           ...product,
           id: product._id || product.id,
@@ -38,9 +46,6 @@ const Shop = () => {
   }, []);
 
   const handleProductClick = (product) => {
-    console.log('Selected product:', product);
-    console.log('Product colors:', product.colors);
-    console.log('Product mainImage:', product.mainImage);
     setSelectedProduct(product);
     setSelectedSize(product.sizes?.[0] || '');
     if (Array.isArray(product.colors) && product.colors.length > 0) {
@@ -117,6 +122,7 @@ const Shop = () => {
           setSelectedImage={setSelectedImage}
           handleBackClick={handleBackClick}
           addToCart={addToCart}
+          userInfo={userInfo}
         />
       ) : (
         <ProductGrid
@@ -131,6 +137,7 @@ const Shop = () => {
         cartItems={cartItems}
         updateQuantity={updateQuantity}
         removeFromCart={removeFromCart}
+        userInfo={userInfo}
       />
     </div>
   );

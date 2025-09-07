@@ -10,5 +10,7 @@ router.get('/me', protect,UserController.me);
 
 //---------------------------get User profile---------------
 router.get("/profile",UserController.getUserProfile);
+router.get("/members/count", UserController.getMemberCount);
 
 export default router;
+

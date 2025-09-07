@@ -1,15 +1,183 @@
-// CartSidebar.jsx
-import React from 'react';
+import React, { useState } from 'react';
 import { ShoppingCart, Plus, Minus, X, Trash2 } from 'lucide-react';
+import { toast } from 'react-toastify';
 
-const CartSidebar = ({ isOpen, onClose, cartItems, updateQuantity, removeFromCart }) => {
+// Simple visitor info form
+function VisitorForm({ visitorInfo, setVisitorInfo, onProceed, isProcessing }) {
+  return (
+    <div className="mb-4 text-black">
+      <h3 className="font-bold text-gray-800 mb-2">Enter your details for checkout</h3>
+      <div className="grid grid-cols-1 gap-2">
+        <input
+          type="text"
+          placeholder="First Name"
+          value={visitorInfo.firstName}
+          onChange={e => setVisitorInfo({ ...visitorInfo, firstName: e.target.value })}
+          className="border p-2 rounded mb-2"
+        />
+        <input
+          type="text"
+          placeholder="Last Name"
+          value={visitorInfo.lastName}
+          onChange={e => setVisitorInfo({ ...visitorInfo, lastName: e.target.value })}
+          className="border p-2 rounded mb-2"
+        />
+        <input
+          type="email"
+          placeholder="Email"
+          value={visitorInfo.email}
+          onChange={e => setVisitorInfo({ ...visitorInfo, email: e.target.value })}
+          className="border p-2 rounded mb-2"
+        />
+        <input
+          type="tel"
+          placeholder="Mobile"
+          value={visitorInfo.mobile}
+          onChange={e => setVisitorInfo({ ...visitorInfo, mobile: e.target.value })}
+          className="border p-2 rounded mb-2"
+        />
+        <input
+          type="text"
+          placeholder="Address"
+          value={visitorInfo.address}
+          onChange={e => setVisitorInfo({ ...visitorInfo, address: e.target.value })}
+          className="border p-2 rounded mb-2"
+        />
+      </div>
+      <button
+        className={`w-full bg-yellow-400 text-black font-bold py-2 rounded-xl mt-2 hover:bg-yellow-500 transition ${
+          isProcessing ? "opacity-60 cursor-not-allowed" : ""
+        }`}
+        disabled={isProcessing}
+        onClick={onProceed}
+      >
+        {isProcessing ? "Processing..." : "Proceed to Pay"}
+      </button>
+    </div>
+  );
+}
+
+const CartSidebar = ({ isOpen, onClose, cartItems, updateQuantity, removeFromCart, userInfo }) => {
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+  const [showVisitorForm, setShowVisitorForm] = useState(false);
+  const [visitorInfo, setVisitorInfo] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    mobile: "",
+    address: ""
+  });
+
   const totalAmount = cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
+
+  const validateVisitorInfo = (info) => {
+    if (!info.firstName.trim() || !info.lastName.trim() || !info.email.trim() ||
+        !info.mobile.trim() || !info.address.trim()) {
+      return "All fields are required";
+    }
+    if (!/^[0-9]{10}$/.test(info.mobile)) {
+      return "Mobile number must be exactly 10 digits";
+    }
+    if (!/^[^@]+@[^@]+\.[^@]+$/.test(info.email)) {
+      return "Invalid email address";
+    }
+    return null;
+  };
+
+  const handleCartBuyNow = async () => {
+    if (cartItems.length === 0) {
+      toast.error("No items in cart to purchase.");
+      return;
+    }
+    if (isProcessingPayment) return;
+    if (!userInfo) {
+      setShowVisitorForm(true);
+      return;
+    }
+    await proceedToPay(userInfo);
+  };
+
+  const proceedToPay = async (info) => {
+    setIsProcessingPayment(true);
+    try {
+      const itemsSummary = cartItems.map(item => (
+        `${item.name} (Size: ${item.size}${item.color ? `, Color: ${item.color}` : ""}) x${item.quantity}`
+      )).join(", ");
+
+      const orderId = `CART-${Date.now()}`;
+      const paymentPayload = {
+        order_id: orderId,
+        first_name: info.firstName,
+        last_name: info.lastName,
+        email: info.email,
+        phone: info.mobile,
+        address: info.address,
+        amount: totalAmount,
+        items: itemsSummary,
+        currency: "LKR",
+        cart: cartItems.map(item => ({
+          productId: item.productId,
+          name: item.name,
+          size: item.size,
+          color: item.color,
+          quantity: item.quantity,
+          price: item.price,
+        })),
+      };
+
+      const response = await fetch("http://localhost:5001/api/payment/payhere-init", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(paymentPayload),
+      });
+
+      const paymentData = await response.json();
+
+      if (!response.ok) {
+        toast.error(paymentData.message || "Payment initialization failed.");
+        setIsProcessingPayment(false);
+        return;
+      }
+
+      // Create and submit PayHere form
+      const form = document.createElement("form");
+      form.method = "POST";
+      form.action = "https://sandbox.payhere.lk/pay/checkout";
+
+      Object.entries(paymentData).forEach(([key, value]) => {
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = key;
+        input.value = value;
+        form.appendChild(input);
+      });
+
+      document.body.appendChild(form);
+      form.submit();
+
+    } catch (err) {
+      console.error("Payment error:", err);
+      toast.error("Failed to connect to payment server.");
+    } finally {
+      setIsProcessingPayment(false);
+    }
+  };
+
+  // When visitor submits their info
+  const handleVisitorProceed = async () => {
+    const error = validateVisitorInfo(visitorInfo);
+    if (error) {
+      toast.error(error);
+      return;
+    }
+    await proceedToPay(visitorInfo);
+  };
 
   return (
     <>
       {isOpen && (
         <div 
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 transition-all duration-300" 
+          className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 transition-all text-black duration-300" 
           onClick={onClose} 
         />
       )}
@@ -104,12 +272,25 @@ const CartSidebar = ({ isOpen, onClose, cartItems, updateQuantity, removeFromCar
                 <span className="text-xl text-blue-800">Rs {totalAmount}.00</span>
               </div>
             </div>
-            <button className="w-full bg-yellow-400 text-black font-bold py-4 rounded-xl hover:bg-yellow-500 transition transform hover:scale-105 active:scale-95">
-              <span className="flex items-center justify-center space-x-2">
+            {showVisitorForm && !userInfo ? (
+              <VisitorForm
+                visitorInfo={visitorInfo}
+                setVisitorInfo={setVisitorInfo}
+                onProceed={handleVisitorProceed}
+                isProcessing={isProcessingPayment}
+              />
+            ) : (
+              <button
+                className={`w-full bg-yellow-400 text-black font-bold py-4 rounded-xl hover:bg-yellow-500 transition transform hover:scale-105 active:scale-95 flex items-center justify-center space-x-2 ${
+                  isProcessingPayment ? "opacity-60 cursor-not-allowed" : ""
+                }`}
+                onClick={handleCartBuyNow}
+                disabled={isProcessingPayment}
+              >
                 <ShoppingCart size={20} />
-                <span>Buy Now</span>
-              </span>
-            </button>
+                <span>{isProcessingPayment ? "Processing..." : "Buy Now"}</span>
+              </button>
+            )}
           </div>
         )}
       </div>
