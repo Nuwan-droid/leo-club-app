@@ -1,10 +1,8 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import ProjectHeader from "../Elements/ProjectShowcase/ProjectHeader";
 import ProjectFilter from "../Elements/ProjectShowcase/ProjectFilter";
 import ProjectGrid from "../Elements/ProjectShowcase/ProjectGrid";
 import ProjectDialog from "../Elements/ProjectShowcase/ProjectDialog";
-// Import your AuthContext or wherever you store user authentication state
-// import { AuthContext } from "../context/AuthContext";
 
 export default function ProjectShowcasePage() {
   const [allProjects, setAllProjects] = useState([]);
@@ -12,22 +10,50 @@ export default function ProjectShowcasePage() {
   const [selectedProject, setSelectedProject] = useState(null);
   const [reviews, setReviews] = useState({});
   const [hoveredCard, setHoveredCard] = useState(null);
-  
-  // Get user authentication state - adjust this based on your auth implementation
-  // const { user, token } = useContext(AuthContext);
-  // For now, you can get this from localStorage or your auth context
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(null);
+  const [loadingAuth, setLoadingAuth] = useState(true);
 
   // Check authentication status on component mount
   useEffect(() => {
-    const storedToken = localStorage.getItem('token');
-    const storedUser = localStorage.getItem('user');
-    
-    if (storedToken && storedUser) {
-      setToken(storedToken);
-      setUser(JSON.parse(storedUser));
-    }
+    const fetchUserDetails = async () => {
+      try {
+        const storedToken = localStorage.getItem('leoToken'); // Use consistent key
+        
+        if (!storedToken) {
+          setLoadingAuth(false);
+          return;
+        }
+
+        // Verify token by fetching user profile
+        const res = await fetch("http://localhost:5001/api/user/profile", {
+          headers: {
+            Authorization: `Bearer ${storedToken}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (res.ok) {
+          const userData = await res.json();
+          setUser(userData);
+          setToken(storedToken);
+        } else {
+          // Token is invalid, remove it
+          localStorage.removeItem('leoToken');
+          setUser(null);
+          setToken(null);
+        }
+      } catch (error) {
+        console.error("Error fetching user profile:", error);
+        localStorage.removeItem('leoToken');
+        setUser(null);
+        setToken(null);
+      } finally {
+        setLoadingAuth(false);
+      }
+    };
+
+    fetchUserDetails();
   }, []);
 
   // Fetch all projects
@@ -49,7 +75,7 @@ export default function ProjectShowcasePage() {
     .sort((a, b) => new Date(b.date) - new Date(a.date));
 
   const handleAddReview = async (projectId, review) => {
-    if (!token) {
+    if (!token || !user) {
       alert("Please login to add a comment");
       return;
     }
@@ -63,16 +89,29 @@ export default function ProjectShowcasePage() {
         },
         body: JSON.stringify({ 
           projectId, 
-          comment: review.comment // Only send comment text, name will be auto-added from user
+          comment: review.comment
         }),
       });
       
       const data = await res.json();
       
-      if (data.success) {
-        fetchProjectComments(projectId);
+      if (res.ok && data.success) {
+        // Update reviews immediately
+        setReviews((prev) => ({
+          ...prev,
+          [projectId]: [data.comment, ...(prev[projectId] || [])]
+        }));
+        return data.comment;
       } else {
-        alert(data.message || "Failed to add comment");
+        if (res.status === 401) {
+          // Token expired or invalid
+          localStorage.removeItem('leoToken');
+          setUser(null);
+          setToken(null);
+          alert("Your session has expired. Please login again.");
+        } else {
+          alert(data.message || "Failed to add comment");
+        }
       }
     } catch (err) {
       console.error("Error adding comment:", err);
@@ -96,6 +135,14 @@ export default function ProjectShowcasePage() {
     setSelectedProject(project);
     await fetchProjectComments(project.id);
   };
+
+  if (loadingAuth) {
+    return (
+      <div className="p-6 bg-gray-50 min-h-screen font-sans mt-20 flex items-center justify-center">
+        <div className="text-lg text-gray-600">Loading...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen font-sans mt-20">

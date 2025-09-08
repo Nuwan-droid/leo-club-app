@@ -21,6 +21,7 @@ import EventVolunteerPage from "./Components/Pages/event_volunteer/EventVoluntee
 import NewsLetter from "./Components/Pages/NewsLetter";
 import Chatbot from "./Components/Pages/chatbot/LeoChatbot";
 import Admin from "./Components/Pages/admin panel/main_admin";
+import AccountManage from "./Components/Pages/memberportal/accountManagement/account";
 
 
 function App() {
@@ -49,6 +50,7 @@ function App() {
         <Route path="/memberportal/learning-hub" element={<LearningHub />} />
         <Route path="/memberportal/join-newsletter" element={<NewsLetter />} />
         <Route path="/memberportal/event-volunteer" element={<EventVolunteerPage />} />
+        <Route path="/memberportal/account-manage" element={<AccountManage/>} />
         <Route path="/chatbot" element={<Chatbot />} />
         {/* Admin routes - use wildcard to handle nested routing */}
         <Route path="/admin/*" element={<Admin />} />

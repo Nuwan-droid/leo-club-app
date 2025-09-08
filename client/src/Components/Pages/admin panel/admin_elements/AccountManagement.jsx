@@ -6,9 +6,10 @@ const AccountManagement = () => {
   const navigate = useNavigate();
   
   const [formData, setFormData] = useState({
-    fullName: 'Moni Roy',
-    email: 'moni.roy@leoclub.com',
-    phone: '+91 9876543210',
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
     currentPassword: '',
     newPassword: '',
     confirmPassword: ''
@@ -68,15 +69,7 @@ const AccountManagement = () => {
     navigate('/admin');
   };
 
-  const handleTwoFactorAuth = () => {
-    // Add two-factor authentication logic here
-    alert('Two-factor authentication setup coming soon!');
-  };
-
-  const handleDownloadAccountData = () => {
-    // Add download account data logic here
-    alert('Account data download will start shortly!');
-  };
+ 
 
   return (
     <div className="min-h-screen bg-gray-50 py-8">
@@ -137,12 +130,24 @@ const AccountManagement = () => {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Full Name
+                    First Name
                   </label>
                   <input
                     type="text"
                     name="fullName"
-                    value={formData.fullName}
+                    value={formData.firstName}
+                    onChange={handleInputChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">
+                    Last Name
+                  </label>
+                  <input
+                    type="text"
+                    name="fullName"
+                    value={formData.lastName}
                     onChange={handleInputChange}
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
@@ -159,7 +164,7 @@ const AccountManagement = () => {
                     className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </div>
-                <div className="md:col-span-2">
+                <div >
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Phone Number
                   </label>
@@ -232,41 +237,6 @@ const AccountManagement = () => {
                   className="bg-green-500 text-white px-6 py-2 rounded-md hover:bg-green-600 transition-colors"
                 >
                   Change Password
-                </button>
-              </div>
-            </div>
-
-            {/* Account Actions */}
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <h2 className="text-lg font-semibold mb-4">Account Actions</h2>
-              <div className="space-y-3">
-                <button 
-                  onClick={handleTwoFactorAuth}
-                  className="w-full text-left px-4 py-3 bg-gray-50 rounded-md hover:bg-gray-100 transition-colors"
-                >
-                  <div className="flex items-center space-x-3">
-                    <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                    </svg>
-                    <div>
-                      <p className="font-medium">Two-Factor Authentication</p>
-                      <p className="text-sm text-gray-500">Add an extra layer of security</p>
-                    </div>
-                  </div>
-                </button>
-                <button 
-                  onClick={handleDownloadAccountData}
-                  className="w-full text-left px-4 py-3 bg-gray-50 rounded-md hover:bg-gray-100 transition-colors"
-                >
-                  <div className="flex items-center space-x-3">
-                    <svg className="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                    </svg>
-                    <div>
-                      <p className="font-medium">Download Account Data</p>
-                      <p className="text-sm text-gray-500">Export your account information</p>
-                    </div>
-                  </div>
                 </button>
               </div>
             </div>
