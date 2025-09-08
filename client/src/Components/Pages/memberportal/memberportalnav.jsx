@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { FaBell, FaUserCircle } from 'react-icons/fa'; // Import icons
 import leoLogo from '../../../assets/LEO-Logo.png';
+import AccountSettings from './accountSettings';
 
 const MemberPortalNav = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -71,13 +72,7 @@ const MemberPortalNav = () => {
               >
                 <FaBell className="h-5 w-5" />
               </Link>
-              <Link
-                to="/memberportal/account"
-                aria-label="Account"
-                className="p-2 rounded-full text-gray-600 hover:text-blue-600 hover:bg-gray-100 transition-colors"
-              >
-                <FaUserCircle className="h-6 w-6" />
-              </Link>
+              <AccountSettings/>
             </div>
           </div>
 
