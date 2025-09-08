@@ -1,5 +1,5 @@
-import React from 'react';
-import ActionButtons from './ActionButtons';
+import React from "react";
+import ActionButtons from "./ActionButtons";
 
 const UserTableRow = ({ user, isSelected, onSelect, onEdit, onDelete }) => {
   return (
@@ -17,17 +17,17 @@ const UserTableRow = ({ user, isSelected, onSelect, onEdit, onDelete }) => {
           <div className="flex-shrink-0 h-10 w-10">
             <img
               className="h-10 w-10 rounded-full"
-              src={user.avatar}
+              src={user.userImage}
               alt={user.name}
             />
           </div>
         </div>
       </td>
-       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-        {user.first_name}
+      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+        {user.firstName}
       </td>
-       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-        {user.last_name}
+      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+        {user.lastName}
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
         {user.email}
