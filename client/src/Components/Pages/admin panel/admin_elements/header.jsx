@@ -41,11 +41,6 @@ const Header = () => {
     <header className="bg-white shadow-sm border-b border-gray-200 px-6 py-4">
       <div className="flex justify-end items-center">
         <div className="flex items-center space-x-4">
-          <div className="relative">
-            <span className="bg-blue-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-              9
-            </span>
-          </div>
           <div className="relative" ref={dropdownRef}>
             <div className="flex items-center space-x-2">
               <button
