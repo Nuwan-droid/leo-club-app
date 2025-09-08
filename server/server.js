@@ -48,8 +48,6 @@ app.use("/api/donation-projects", donationRoutes);
 app.use("/api/user",userRoutes);
 
 
-
-
 app.get("/", (req, res) => {
   res.json({ message: "LEO Club API is running ✅" });
 });

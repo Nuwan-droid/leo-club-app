@@ -40,7 +40,7 @@ const DashboardContent = () => {
   ];
 
   return (
-    <div className="flex-1 bg-gray-50 p-6">
+    <div className="flex-1 bg-transparent p-6">
       <div className="max-w-7xl mx-auto">
         {/* Page Title + Add Award Button */}
         <div className="mb-8 flex justify-between items-center">

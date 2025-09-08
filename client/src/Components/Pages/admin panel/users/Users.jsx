@@ -1,138 +1,59 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import UserTable from './child_components/UserTable';
 import UsersPagination from './child_components/UsersPagination';
 
 const Users = () => {
-  const [users, setUsers] = useState([
-    {
-      id: 1,
-      first_name: 'charith',
-      last_name: 'jayasinghe',
-      email: 'charith26@gmail.com',
-      role: 'Admin',
-      avatar: 'https://randomuser.me/api/portraits/men/1.jpg'
-    },
-    {
-      id: 2,
-      first_name: 'thilina',
-      last_name: 'adikari',
-      email: 'thilina@gmail.com',
-      role: 'member',
-      avatar: 'https://randomuser.me/api/portraits/men/2.jpg'
-    },
-    {
-      id: 3,
-      name: 'Daniel Warren',
-      email: 'dwarren3@gmail.com',
-      username: 'dwarren3',
-      status: 'Banned',
-      role: 'Member',
-      avatar: 'https://randomuser.me/api/portraits/men/3.jpg'
-    },
-    {
-      id: 4,
-      name: 'Chloe Hayes',
-      email: 'chloelhye@gmail.com',
-      username: 'chloehh',
-      status: 'Pending',
-      role: 'Member',
-      avatar: 'https://randomuser.me/api/portraits/women/4.jpg'
-    },
-    {
-      id: 5,
-      name: 'Marcus Reed',
-      email: 'reeds777@gmail.com',
-      username: 'reeds7',
-      status: 'Suspended',
-      role: 'Member',
-      avatar: 'https://randomuser.me/api/portraits/men/5.jpg'
-    },
-    {
-      id: 6,
-      name: 'Isabelle Clark',
-      email: 'belleclark@gmail.com',
-      username: 'bellecl',
-      status: 'Active',
-      role: 'Member',
-      avatar: 'https://randomuser.me/api/portraits/women/6.jpg'
-    },
-    {
-      id: 7,
-      name: 'Lucas Mitchell',
-      email: 'lucamich@gmail.com',
-      username: 'lucamich',
-      status: 'Active',
-      role: 'Member',
-      avatar: 'https://randomuser.me/api/portraits/men/7.jpg'
-    },
-    {
-      id: 8,
-      name: 'Mark Wilburg',
-      email: 'markwill32@gmail.com',
-      username: 'markwill32',
-      status: 'Banned',
-      role: 'Member',
-      avatar: 'https://randomuser.me/api/portraits/men/8.jpg'
-    },
-    {
-      id: 9,
-      name: 'Nicholas Agenn',
-      email: 'nicolass009@gmail.com',
-      username: 'nicolass009',
-      status: 'Suspended',
-      role: 'Member',
-      avatar: 'https://randomuser.me/api/portraits/men/9.jpg'
-    },
-    {
-      id: 10,
-      name: 'Mia Nadinn',
-      email: 'mianadinn@gmail.com',
-      username: 'mianadinn',
-      status: 'Inactive',
-      role: 'Member',
-      avatar: 'https://randomuser.me/api/portraits/women/10.jpg'
-    },
-    {
-      id: 11,
-      name: 'Noemi Villan',
-      email: 'noemivill99@gmail.com',
-      username: 'noemi',
-      status: 'Active',
-      role: 'Admin',
-      avatar: 'https://randomuser.me/api/portraits/women/11.jpg'
-    }
-  ]);
-
+  const [users, setUsers] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [selectedUsers, setSelectedUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // 🔹 Fetch users from API
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const res = await axios.get("http://localhost:5001/api/user/getAllUsers"); 
+        setUsers(res.data.users);
+
+      } catch (err) {
+        console.error("Error fetching users:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUsers();
+  }, []);
 
   const totalRows = users.length;
   const totalPages = Math.ceil(totalRows / rowsPerPage);
 
   const handleSelectAll = (checked) => {
-    if (checked) {
-      setSelectedUsers(users.map(user => user.id));
-    } else {
-      setSelectedUsers([]);
-    }
+    setSelectedUsers(checked ? users.map(user => user.id) : []);
   };
 
   const handleSelectUser = (userId, checked) => {
-    if (checked) {
-      setSelectedUsers([...selectedUsers, userId]);
-    } else {
-      setSelectedUsers(selectedUsers.filter(id => id !== userId));
-    }
+    setSelectedUsers(
+      checked
+        ? [...selectedUsers, userId]
+        : selectedUsers.filter(id => id !== userId)
+    );
   };
 
   const handleEdit = (userId) => {
-    console.log('Edit user:', userId);
+    console.log("Edit user:", userId);
   };
 
-  const handleDelete = (userId) => {
-    if (window.confirm('Are you sure you want to delete this user?')) {
-      setUsers(users.filter(user => user.id !== userId));
+  const handleDelete = async (userId) => {
+    if (window.confirm("Are you sure you want to delete this user?")) {
+      try {
+        await axios.delete(`http://localhost:5001/api/users/${userId}`);
+        setUsers(users.filter(user => user.id !== userId));
+      } catch (err) {
+        console.error("Error deleting user:", err);
+      }
     }
   };
 
@@ -145,29 +66,33 @@ const Users = () => {
     <div className="p-6 bg-gray-50 min-h-screen">
       <div className="max-w-7xl mx-auto">
         <h1 className="text-3xl font-bold text-gray-900 mb-8">User Management</h1>
-        
-        <div className="bg-white rounded-lg shadow overflow-hidden">
-          <UserTable
-            users={currentUsers}
-            selectedUsers={selectedUsers}
-            onSelectAll={handleSelectAll}
-            onSelectUser={handleSelectUser}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-          />
-          
-          <UsersPagination
-            currentPage={currentPage}
-            totalPages={totalPages}
-            rowsPerPage={rowsPerPage}
-            totalRows={totalRows}
-            onPageChange={setCurrentPage}
-            onRowsPerPageChange={(rows) => {
-              setRowsPerPage(rows);
-              setCurrentPage(1);
-            }}
-          />
-        </div>
+
+        {loading ? (
+          <p className="text-gray-600">Loading users...</p>
+        ) : (
+          <div className="bg-white rounded-lg shadow overflow-hidden">
+            <UserTable
+              users={currentUsers}
+              selectedUsers={selectedUsers}
+              onSelectAll={handleSelectAll}
+              onSelectUser={handleSelectUser}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+            />
+
+            <UsersPagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              rowsPerPage={rowsPerPage}
+              totalRows={totalRows}
+              onPageChange={setCurrentPage}
+              onRowsPerPageChange={(rows) => {
+                setRowsPerPage(rows);
+                setCurrentPage(1);
+              }}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
