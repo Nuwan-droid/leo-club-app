@@ -8,12 +8,13 @@ import AuthPopup from "./AuthPop";
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [showHamburger, setShowHamburger] = useState(false);
-  const [showAuthPopup, setShowAuthPopup] = useState(false);
-  const [showAuthPopup1, setShowAuthPopup1] = useState(false);
+  const [showAuthPopup, setShowAuthPopup] = useState(false); // Register popup
+  const [showAuthPopup1, setShowAuthPopup1] = useState(false); // Login popup
   const [hasToken, setHasToken] = useState(false);
 
   const navigate = useNavigate();
 
+  // ✅ Check if token exists in localStorage
   useEffect(() => {
     const checkToken = () => {
       const token = localStorage.getItem("leoToken");
@@ -25,6 +26,7 @@ export default function Navbar() {
     return () => window.removeEventListener("storage", checkToken);
   }, []);
 
+  // ✅ Handle screen resize (hamburger toggle)
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
@@ -37,7 +39,7 @@ export default function Navbar() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // Close mobile nav on scroll
+  // ✅ Close mobile nav on scroll
   useEffect(() => {
     const handleScroll = () => {
       if (isOpen && showHamburger) {
@@ -62,14 +64,12 @@ export default function Navbar() {
 
   return (
     <>
-      {/* Popup for Register (opens SignUp as member) */}
+      {/* Popup for Register (SignUp as member) */}
       {showAuthPopup && (
-               memberportal
         <AuthPopup
           onClose={() => setShowAuthPopup(false)}
           defaultMode="signup"
         />
-
       )}
 
       {/* Popup for Login */}
@@ -98,7 +98,6 @@ export default function Navbar() {
             {/* Desktop Menu */}
             <div className="hidden xl:flex items-center space-x-6 ml-auto">
               <div className="flex space-x-6">
-
                 {/* ✅ Protected Member Portal */}
                 <Link
                   to="/memberportal"
@@ -164,7 +163,7 @@ export default function Navbar() {
                 ))}
 
                 <div className="flex flex-col items-center space-y-2 p-4">
-                  {!hasToken &&  (
+                  {!hasToken && (
                     <>
                       <Button
                         label="Register"
