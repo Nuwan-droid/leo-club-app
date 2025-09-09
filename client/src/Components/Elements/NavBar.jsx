@@ -23,7 +23,7 @@ export default function Navbar() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  //  Close mobile nav on scroll
+  // Close mobile nav on scroll
   useEffect(() => {
     const handleScroll = () => {
       if (isOpen && showHamburger) {
@@ -37,9 +37,12 @@ export default function Navbar() {
 
   return (
     <>
+      {/* Popup for Register (opens SignUp as member) */}
       {showAuthPopup && (
-        <AuthPopup onClose={() => setShowAuthPopup(false)} defaultMode="signup" />
+        <AuthPopup onClose={() => setShowAuthPopup(false)} defaultMode="member" />
       )}
+
+      {/* Popup for Login */}
       {showAuthPopup1 && (
         <AuthPopup onClose={() => setShowAuthPopup1(false)} defaultMode="login" />
       )}
@@ -61,7 +64,7 @@ export default function Navbar() {
 
             <div className="hidden xl:flex items-center space-x-6 ml-auto">
               <div className="flex space-x-6">
-                <Link to="/memberportal" className="link" > Member Portal </Link>
+                <Link to="/memberportal" className="link">Member Portal</Link>
                 <Link to="/project" className="link">Projects</Link>
                 <Link to="/calander" className="link">Calendar</Link>
                 <Link to="/shop" className="link">Shop</Link>
