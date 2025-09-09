@@ -1,12 +1,16 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Adminlogo from '../../../../../public/profile.png';
+import React, { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import Adminlogo from "../../../../../public/profile.png";
 
 const Header = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [user, setUser] = useState(null); // store fetched user
+  const [loading, setLoading] = useState(true);
+
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
 
+  // Handle click outside dropdown
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -14,10 +18,37 @@ const Header = () => {
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
+  }, []);
+
+  // Fetch user profile
+  useEffect(() => {
+    (async () => {
+      try {
+        const token = localStorage.getItem("leoToken");
+        if (!token) {
+          console.error("No token found, redirect to login");
+          setLoading(false);
+          return;
+        }
+
+        const res = await fetch("http://localhost:5001/api/user/profile", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+
+        if (!res.ok) throw new Error("Failed to fetch profile");
+
+        const data = await res.json();
+        setUser(data);
+        setLoading(false);
+      } catch (err) {
+        console.error("Error fetching user profile:", err);
+        setLoading(false);
+      }
+    })();
   }, []);
 
   const toggleDropdown = () => {
@@ -26,15 +57,13 @@ const Header = () => {
 
   const handleAccountClick = () => {
     setIsDropdownOpen(false);
-    // Navigate to account settings page
-    navigate('/admin/account-settings');
+    navigate("/admin/account-settings");
   };
 
   const handleLogoutClick = () => {
     setIsDropdownOpen(false);
-    // Handle logout logic here (clear tokens, etc.)
-    // Then navigate to home or login page
-    navigate('/');
+    localStorage.removeItem("leoToken");
+    navigate("/");
   };
 
   return (
@@ -48,14 +77,20 @@ const Header = () => {
                 className="focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 rounded-full transition-all duration-200 hover:shadow-md"
               >
                 <img
-                  src={Adminlogo}
+                  src={user?.profilePic || Adminlogo}
                   alt="admin logo"
                   className="w-8 h-8 rounded-full object-cover cursor-pointer"
                 />
               </button>
               <div>
-                <p className="text-sm font-medium">Moni Roy</p>
-                <p className="text-xs text-gray-500">Admin</p>
+                {!loading ? (
+                  <>
+                    <p className="text-sm font-medium">{user?.name || "Unknown"}</p>
+                    <p className="text-xs text-gray-500">{user?.role || "User"}</p>
+                  </>
+                ) : (
+                  <p className="text-sm text-gray-400">Loading...</p>
+                )}
               </div>
             </div>
 
@@ -65,13 +100,15 @@ const Header = () => {
                   <div className="px-4 py-3 border-b border-gray-100">
                     <div className="flex items-center space-x-3">
                       <img
-                        src={Adminlogo}
+                        src={user?.profilePic || Adminlogo}
                         alt="admin logo"
                         className="w-10 h-10 rounded-full object-cover"
                       />
                       <div>
-                        <p className="text-sm font-medium text-gray-900">Moni Roy</p>
-                        <p className="text-xs text-gray-500">Admin</p>
+                        <p className="text-sm font-medium text-gray-900">
+                          {user?.name || "Unknown"}
+                        </p>
+                        <p className="text-xs text-gray-500">{user?.role || "User"}</p>
                       </div>
                     </div>
                   </div>
@@ -81,8 +118,18 @@ const Header = () => {
                     className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors duration-150 flex items-center space-x-2"
                     role="menuitem"
                   >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                      />
                     </svg>
                     <span>Account Settings</span>
                   </button>
@@ -92,8 +139,18 @@ const Header = () => {
                     className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 hover:text-red-700 transition-colors duration-150 flex items-center space-x-2"
                     role="menuitem"
                   >
-                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+                    <svg
+                      className="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                      />
                     </svg>
                     <span>Logout</span>
                   </button>

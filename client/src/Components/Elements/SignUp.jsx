@@ -207,13 +207,16 @@ export default function SignUp({ onClose, onSwitchToAdmin }) {
           &#x2715;
         </button>
 
-        <div className="w-full md:w-1/2 h-40 md:h-auto ">
+
+        <div className="w-full md:w-1/2 h-40 md:h-auto">
+
           <img
             src={logo}
             alt="Leo Club Logo"
             className="w-full h-full object-cover"
           />
         </div>
+
 
         <div className="w-100 md:w-1/2 p-4 sm:p-8 mb-4 sm:mb-6">
   <Button
@@ -230,6 +233,7 @@ export default function SignUp({ onClose, onSwitchToAdmin }) {
           <h2 className="text-lg sm:text-xl font-bold text-center text-gray-800 mb-6 sm:mb-10 mt-10">
             Get Membership
           </h2>
+
 
           <form
             onSubmit={
