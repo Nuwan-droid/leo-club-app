@@ -1,0 +1,35 @@
+import express from 'express';
+import {
+  getCart,
+  addToCart,
+  updateCartItem,
+  removeFromCart,
+  clearCart,
+  syncCart
+} from '../controllers/cartController.js';
+import { protect } from '../middleware/authMiddleware.js';
+
+const router = express.Router();
+
+// All cart routes require authentication (only for logged-in users)
+router.use(protect);
+
+// Get user's cart
+router.get('/', getCart);
+
+// Add item to cart
+router.post('/add', addToCart);
+
+// Update cart item quantity
+router.put('/update', updateCartItem);
+
+// Remove item from cart
+router.delete('/remove', removeFromCart);
+
+// Clear entire cart
+router.delete('/clear', clearCart);
+
+// Sync local cart with database cart (when user logs in)
+router.post('/sync', syncCart);
+
+export default router;

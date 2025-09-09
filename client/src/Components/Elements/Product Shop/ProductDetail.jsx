@@ -68,7 +68,8 @@ const ProductDetail = ({
   setSelectedImage,
   handleBackClick,
   addToCart,
-  userInfo
+  userInfo,
+  token  // Make sure token is passed as prop
 }) => {
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
   const [showVisitorForm, setShowVisitorForm] = useState(false);
@@ -153,15 +154,10 @@ const ProductDetail = ({
     try {
       const totalAmount = (product.price * quantity).toFixed(2);
       const orderId = `PRODUCT-${product.id}-${Date.now()}`;
+      
       const paymentPayload = {
         order_id: orderId,
-        first_name: info.firstName,
-        last_name: info.lastName,
-        email: info.email,
-        phone: info.mobile,
-        address: info.address,
         amount: totalAmount,
-        items: `${product.name} x${quantity}`,
         currency: "LKR",
         productId: product.id,
         productName: product.name,
@@ -172,9 +168,30 @@ const ProductDetail = ({
         totalAmount: totalAmount
       };
 
+      // Add visitor info only if not a member
+      if (!userInfo) {
+        paymentPayload.first_name = info.firstName;
+        paymentPayload.last_name = info.lastName;
+        paymentPayload.email = info.email;
+        paymentPayload.phone = info.mobile;
+        paymentPayload.address = info.address;
+      }
+
+      // Prepare headers - include token if user is logged in (member)
+      const headers = {
+        "Content-Type": "application/json"
+      };
+
+      if (token && userInfo) {
+        headers.Authorization = `Bearer ${token}`;
+        console.log(`Making payment request as member: ${userInfo.email}`);
+      } else {
+        console.log('Making payment request as visitor');
+      }
+
       const response = await fetch("http://localhost:5001/api/payment/payhere-init", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers,
         body: JSON.stringify(paymentPayload),
       });
 
