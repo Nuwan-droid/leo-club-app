@@ -62,12 +62,17 @@ export default function Navbar() {
 
   return (
     <>
+      {/* Popup for Register (opens SignUp as member) */}
       {showAuthPopup && (
+               memberportal
         <AuthPopup
           onClose={() => setShowAuthPopup(false)}
           defaultMode="signup"
         />
+
       )}
+
+      {/* Popup for Login */}
       {showAuthPopup1 && (
         <AuthPopup
           onClose={() => setShowAuthPopup1(false)}
@@ -93,6 +98,7 @@ export default function Navbar() {
             {/* Desktop Menu */}
             <div className="hidden xl:flex items-center space-x-6 ml-auto">
               <div className="flex space-x-6">
+
                 {/* ✅ Protected Member Portal */}
                 <Link
                   to="/memberportal"
@@ -101,6 +107,7 @@ export default function Navbar() {
                 >
                   Member Portal
                 </Link>
+
                 <Link to="/project" className="link">Projects</Link>
                 <Link to="/calander" className="link">Calendar</Link>
                 <Link to="/shop" className="link">Shop</Link>

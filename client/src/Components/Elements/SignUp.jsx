@@ -4,7 +4,7 @@ import Input from "./Input";
 import logo from "../../assets/lion.svg";
 import { toast } from "react-toastify";
 
-export default function SignUp({ onClose }) {
+export default function SignUp({ onClose, onSwitchToAdmin }) {
   const [leoStatus, setLeoStatus] = useState("member");
   const [formData, setFormData] = useState({
     leo_Id: "",
@@ -207,7 +207,9 @@ export default function SignUp({ onClose }) {
           &#x2715;
         </button>
 
+
         <div className="w-full md:w-1/2 h-40 md:h-auto">
+
           <img
             src={logo}
             alt="Leo Club Logo"
@@ -215,7 +217,24 @@ export default function SignUp({ onClose }) {
           />
         </div>
 
-        <div className="w-full md:w-1/2 p-4 sm:p-8 mb-4 sm:mb-6">
+
+        <div className="w-100 md:w-1/2 p-4 sm:p-8 mb-4 sm:mb-6">
+  <Button
+    type="button"
+    className="login p-2 font-bold rounded-tl-lg rounded-br-lg  top-2 sm:top-4  sticky"
+    label={isLoading ? "Switching..." : "Create an Admin Account"}
+    disabled={isLoading}
+    onClick={() => {
+      if (!isLoading) onSwitchToAdmin();
+    }}
+  />
+
+
+          <h2 className="text-lg sm:text-xl font-bold text-center text-gray-800 mb-6 sm:mb-10 mt-10">
+            Get Membership
+          </h2>
+
+
           <form
             onSubmit={
               leoStatus === "member" ? handleSubmit : (e) => e.preventDefault()
