@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { ShoppingCart, Plus, Minus, X, Trash2 } from 'lucide-react';
 import { toast } from 'react-toastify';
 
-// Visitor form for guest checkout
 function VisitorForm({ visitorInfo, setVisitorInfo, onProceed, isProcessing }) {
   return (
     <div className="mb-4 text-black">
@@ -57,9 +56,7 @@ function VisitorForm({ visitorInfo, setVisitorInfo, onProceed, isProcessing }) {
   );
 }
 
-// Utility for unique cart item id (fixes duplicate key bug)
 function getCartItemKey(item) {
-  // Convert productId to string (if it's an object, use _id)
   let prodId = typeof item.productId === 'object' && item.productId !== null
     ? item.productId._id || item.productId.id || JSON.stringify(item.productId)
     : item.productId;
@@ -95,39 +92,50 @@ const CartSidebar = ({
     return null;
   };
 
-  const proceedToPay = async (info) => {
-    setIsProcessingPayment(true);
-    try {
-      const itemsSummary = cartItems.map(item =>
-        `${item.name} (Size: ${item.size}${item.color ? `, Color: ${item.color}` : ""}) x${item.quantity}`
-      ).join(", ");
+const proceedToPay = async (info) => {
+  setIsProcessingPayment(true);
+  try {
+    const itemsSummary = cartItems.map(item =>
+      `${item.name} (Size: ${item.size}${item.color ? `, Color: ${item.color}` : ""}) x${item.quantity}`
+    ).join(", ");
 
-      const orderId = `CART-${Date.now()}`;
-      const paymentPayload = {
-        order_id: orderId,
-        first_name: info.firstName,
-        last_name: info.lastName,
-        email: info.email,
-        phone: info.mobile,
-        address: info.address,
-        amount: totalAmount,
-        items: itemsSummary,
-        currency: "LKR",
-        cart: cartItems.map(item => ({
-          productId: typeof item.productId === 'object' ? item.productId._id : item.productId,
-          name: item.name,
-          size: item.size,
-          color: item.color,
-          quantity: item.quantity,
-          price: item.price,
-        })),
-      };
+    const orderId = `CART-${Date.now()}`;
+    const paymentPayload = {
+      order_id: orderId,
+      amount: totalAmount,
+      items: itemsSummary,
+      currency: "LKR",
+      cart: cartItems.map(item => ({
+        productId: typeof item.productId === 'object' ? item.productId._id : item.productId,
+        name: item.name,
+        size: item.size,
+        color: item.color,
+        quantity: item.quantity,
+        price: item.price,
+      })),
+    };
 
-      const response = await fetch("http://localhost:5001/api/payment/payhere-init", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(paymentPayload),
-      });
+    // Only for visitors
+    if (!userInfo) {
+      paymentPayload.first_name = info.firstName;
+      paymentPayload.last_name = info.lastName;
+      paymentPayload.email = info.email;
+      paymentPayload.phone = info.mobile;
+      paymentPayload.address = info.address;
+    }
+
+    // Add Authorization header for members
+    const headers = { "Content-Type": "application/json" };
+    if (token && userInfo) {
+      headers.Authorization = `Bearer ${token}`;
+    }
+
+    const response = await fetch("http://localhost:5001/api/payment/payhere-init", {
+      method: "POST",
+      headers,
+      body: JSON.stringify(paymentPayload),
+    });
+    
       const paymentData = await response.json();
 
       if (!response.ok) {
@@ -170,7 +178,6 @@ const CartSidebar = ({
     await proceedToPay(userInfo);
   };
 
-  // FIX: Always use getCartItemKey for item id
   const handleQuantityUpdate = (itemId, newQuantity) => {
     if (newQuantity < 1) {
       handleRemoveItem(itemId);
@@ -202,7 +209,8 @@ const CartSidebar = ({
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-6 bg-white">
+        {/* Middle section is scrollable */}
+        <div className="flex-1 overflow-y-auto p-6 bg-white" style={{ maxHeight: "calc(100vh - 184px)" }}>
           {cartItems.length === 0 ? (
             <div className="text-center mt-16 text-black">
               <div className="w-24 h-24 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
@@ -255,35 +263,41 @@ const CartSidebar = ({
                   </div>
                 );
               })}
+              {/* Render visitor form in scroll area so you can scroll to it */}
+              {cartItems.length > 0 && showVisitorForm && !userInfo && (
+                <VisitorForm
+                  visitorInfo={visitorInfo}
+                  setVisitorInfo={setVisitorInfo}
+                  onProceed={handleVisitorProceed}
+                  isProcessing={isProcessingPayment}
+                />
+              )}
             </div>
           )}
         </div>
 
+        {/* Sticky footer */}
         {cartItems.length > 0 && (
-          <div className="p-6 border-t border-gray-200 bg-white">
-            <div className="p-4 mb-4 bg-blue-50 rounded flex justify-between font-semibold text-black">
-              <span>Total Amount:</span>
-              <span className="text-xl text-blue-800">Rs {totalAmount}.00</span>
+          <div className="bg-white border-t border-gray-200 sticky bottom-0 w-full" style={{ zIndex: 51 }}>
+            <div className="p-6">
+              <div className="p-4 mb-4 bg-blue-50 rounded flex justify-between font-semibold text-black">
+                <span>Total Amount:</span>
+                <span className="text-xl text-blue-800">Rs {totalAmount}.00</span>
+              </div>
+              {/* Buy Now always visible at bottom */}
+              {!showVisitorForm || userInfo ? (
+                <button
+                  className={`w-full bg-yellow-400 text-black font-bold py-4 rounded-xl hover:bg-yellow-500 transition transform hover:scale-105 active:scale-95 flex items-center justify-center space-x-2 ${
+                    isProcessingPayment ? "opacity-60 cursor-not-allowed" : ""
+                  }`}
+                  onClick={handleCartBuyNow}
+                  disabled={isProcessingPayment}
+                >
+                  <ShoppingCart size={20} />
+                  <span>{isProcessingPayment ? "Processing..." : "Buy Now"}</span>
+                </button>
+              ) : null}
             </div>
-            {showVisitorForm && !userInfo ? (
-              <VisitorForm
-                visitorInfo={visitorInfo}
-                setVisitorInfo={setVisitorInfo}
-                onProceed={handleVisitorProceed}
-                isProcessing={isProcessingPayment}
-              />
-            ) : (
-              <button
-                className={`w-full bg-yellow-400 text-black font-bold py-4 rounded-xl hover:bg-yellow-500 transition transform hover:scale-105 active:scale-95 flex items-center justify-center space-x-2 ${
-                  isProcessingPayment ? "opacity-60 cursor-not-allowed" : ""
-                }`}
-                onClick={handleCartBuyNow}
-                disabled={isProcessingPayment}
-              >
-                <ShoppingCart size={20} />
-                <span>{isProcessingPayment ? "Processing..." : "Buy Now"}</span>
-              </button>
-            )}
           </div>
         )}
       </div>
