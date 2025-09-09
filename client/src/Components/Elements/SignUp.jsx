@@ -231,7 +231,7 @@ export default function SignUp({ onClose, onSwitchToAdmin }) {
 
 
           <h2 className="text-lg sm:text-xl font-bold text-center text-gray-800 mb-6 sm:mb-10 mt-10">
-            Get Membership
+            Member Registration
           </h2>
 
 

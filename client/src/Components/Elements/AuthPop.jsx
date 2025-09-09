@@ -4,8 +4,10 @@ import SignUp from "./SignUp";
 import AdminSignUp from "./AdminSignUp";
 
 function AuthPop({ onClose, defaultMode = "login" }) {
-  // Modes: "login" | "member" | "admin"
-  const [mode, setMode] = useState(defaultMode);
+  // Allow "signup" as alias for "member"
+  const [mode, setMode] = useState(
+    defaultMode === "signup" ? "member" : defaultMode
+  );
 
   return (
     <div className="fixed inset-0 bg-black/30 z-50 flex items-center justify-center">
@@ -17,7 +19,7 @@ function AuthPop({ onClose, defaultMode = "login" }) {
           />
         )}
 
-        {mode === "member" && (
+        {(mode === "member" || mode === "signup") && (
           <SignUp
             onClose={onClose}
             onSwitchToLogin={() => setMode("login")}
