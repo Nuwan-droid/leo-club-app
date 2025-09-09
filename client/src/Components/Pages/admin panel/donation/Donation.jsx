@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import DonationProjectList from './child_component/DonationProjectList';
 import AddDonationProjectModal from './child_component/AddDonationProjectModal';
 import EditDonationProjectModal from './child_component/EditDonationProjectModal';
+import DonationDetails from './child_component/DonationDetails';
 
 const API_BASE_URL = 'http://localhost:5001/api/donation-projects';
 
@@ -12,6 +13,8 @@ const Donation = () => {
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [editingProject, setEditingProject] = useState(null);
+  const [isDonationDetailsOpen, setIsDonationDetailsOpen] = useState(false);
+  const [selectedProjectForDetails, setSelectedProjectForDetails] = useState(null);
 
   const fetchProjects = async () => {
     try {
@@ -83,6 +86,16 @@ const Donation = () => {
         alert('Failed to delete project. Please try again.');
       }
     }
+  };
+
+  const handleViewDonations = (projectId, projectTitle) => {
+    setSelectedProjectForDetails({ id: projectId, title: projectTitle });
+    setIsDonationDetailsOpen(true);
+  };
+
+  const handleCloseDonationDetails = () => {
+    setIsDonationDetailsOpen(false);
+    setSelectedProjectForDetails(null);
   };
 
   const handleSaveNewProject = async (projectData) => {
@@ -257,6 +270,7 @@ const Donation = () => {
                   projects={projects}
                   onEdit={handleEditProject}
                   onDelete={handleDeleteProject}
+                  onViewDonations={handleViewDonations}
                 />
               )}
             </div>
@@ -276,6 +290,14 @@ const Donation = () => {
         onSave={handleSaveEditedProject}
         onCancel={handleCancelEdit}
       />
+
+      {isDonationDetailsOpen && selectedProjectForDetails && (
+        <DonationDetails
+          projectId={selectedProjectForDetails.id}
+          projectTitle={selectedProjectForDetails.title}
+          onClose={handleCloseDonationDetails}
+        />
+      )}
     </div>
   );
 };

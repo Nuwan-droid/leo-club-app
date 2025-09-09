@@ -198,7 +198,7 @@ const DonateBooks = () => {
                 className="btn btn-donate p-3 rounded bg-yellow-400 text-gray-800 hover:bg-yellow-500"
                 onClick={handleSubmit}
               >
-                Donate Books
+                Donate items
               </button>
               <button
                 type="button"

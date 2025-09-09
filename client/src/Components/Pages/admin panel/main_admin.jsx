@@ -20,6 +20,9 @@ import Orders from './orders/Orders';
 import Donation from './donation/Donation';
 import ManageAbout from './manageabout/ManageAbout';
 import AccountManagement from './admin_elements/AccountManagement';
+import ManageExecutiveMembers from './manage-executive-members/ManageExecutiveMembers';
+
+
 
 const Adminmain = () => {
   return (
@@ -45,6 +48,7 @@ const Adminmain = () => {
             <Route path="/account-settings" element={<AccountManagement />} />
             {/* Redirect any unknown admin routes to dashboard */}
             <Route path="*" element={<Navigate to="/admin" replace />} />
+            <Route path="/manage-executive-members" element={<ManageExecutiveMembers />} />
           </Routes>
         </div>
       </div>

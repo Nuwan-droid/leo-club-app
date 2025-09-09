@@ -220,7 +220,7 @@ const Donation = () => {
                     <div className="action-buttons flex gap-1 mb-2">
                       <button
                         className="btn btn-blue btn-small text-xs p-1.5 flex-1 bg-blue-500 text-white rounded hover:bg-blue-600"
-                        onClick={() => navigate('/donatebook')}
+                        onClick={() => navigate(`/donateitems/${project._id}`)}
                       >
                         Donate Items
                       </button>

@@ -3,7 +3,7 @@ import React, { useEffect } from 'react';
 const LogoutPage = ({ onRedirectHome }) => {
   useEffect(() => {
     // Clear any stored authentication data
-    localStorage.removeItem('authToken');
+    localStorage.removeItem('leoToken');
     sessionStorage.clear();
     
     // Redirect to home after 3 seconds

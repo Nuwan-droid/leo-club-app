@@ -76,3 +76,8 @@ body {
 .no-scroll {
   overflow: hidden;
 }
+
+/* Global input text color fix */
+input, textarea, select {
+  color: #1f2937; /* Tailwind gray-800 */
+}

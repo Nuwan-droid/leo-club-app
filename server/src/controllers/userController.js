@@ -62,4 +62,18 @@ const getMemberCount = async (req, res) => {
   }
 };
 
-export default { me, getUserProfile,getMemberCount };
+
+const getAllUsers = async (req, res) => {
+  try {
+    const users = await User.find();
+  res.status(200).json({
+  message: "Users extracted successfully",
+  users:users
+});
+  } catch (error) {
+    res.status(500).json({ message: 'Error fetching userssss', error });
+  }
+};
+
+
+export default { me, getUserProfile,getMemberCount,getAllUsers };

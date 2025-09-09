@@ -11,11 +11,6 @@ const Dashboard = () => {
 
 export default Dashboard;
 
-         // const [selectedMessages, setSelectedMessages] = useState([]);
-         //<InboxContent 
-         // selectedMessages={selectedMessages} 
-         // setSelectedMessages={setSelectedMessages} 
-         // />
-
+     
 
          
