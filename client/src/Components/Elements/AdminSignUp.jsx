@@ -1,10 +1,13 @@
 import { useState, useEffect } from "react";
-import Button from "../../../Elements/Button";
-import Input from "../../../Elements/Input";
-import logo from "../../../../assets/lion.svg";
+// import Button from "../../../Elements/Button";
+// import Input from "../../../Elements/Input";
+// import logo from "../../../../assets/lion.svg";
+import Button from "./Button";
+import Input from "./Input";
+import logo from "../../assets/lion.svg";
 import { toast } from "react-toastify";
 
-export default function AdminSignUp({ onClose }) {
+export default function AdminSignUp({ onClose, onSwitchToMember }) {
   // Local state to manage modal visibility if parent doesn't provide onClose
   const [visible, setVisible] = useState(true);
 
@@ -115,14 +118,11 @@ export default function AdminSignUp({ onClose }) {
     };
 
     try {
-      const res = await fetch(
-        "http://localhost:5001/api/auth/admin-signup",
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        }
-      );
+      const res = await fetch("http://localhost:5001/api/auth/admin-signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
 
       const data = await res.json();
       console.log("Admin signup response:", data);
@@ -149,7 +149,7 @@ export default function AdminSignUp({ onClose }) {
   if (!visible) return null; // hide modal if not visible
 
   return (
-    <div className="fixed inset-0 bg-black/10 z-50 flex items-center justify-center px-2 sm:px-0">
+    <div className="fixed inset-0 bg-black/10 z-50 flex items-center justify-center px-2 sm:px-0">  
       <div className="relative top-[10px] rounded-xl shadow-2xl w-full max-w-6xl flex flex-col md:flex-row overflow-hidden bg-white">
         {/* Close Button */}
         <button
@@ -169,6 +169,20 @@ export default function AdminSignUp({ onClose }) {
         </div>
 
         <div className="w-full md:w-1/2 p-4 sm:p-8 mb-4 sm:mb-6">
+        <Button
+           type="button"
+           className="login p-2 font-bold rounded-tl-lg rounded-br-lg  top-2 sm:top-4  sticky"
+           label={isLoading ? "Switching..." : "Create a Member Account"}
+           disabled={isLoading}
+           onClick={() => {
+             if (!isLoading) onSwitchToMember();
+           }}
+         />
+
+          <h2 className="text-lg sm:text-xl font-bold text-center text-gray-800 mb-6 sm:mb-10 mt-10">
+            Admin Registration
+          </h2>
+
           <form onSubmit={handleSubmit} autoComplete="off">
             {/* Dropdown inside form, above heading */}
             <div className="mb-4">
@@ -187,10 +201,6 @@ export default function AdminSignUp({ onClose }) {
                 <option value="treasurer">Treasurer</option>
               </select>
             </div>
-
-            <h2 className="text-lg sm:text-xl font-bold text-center text-gray-800 mb-6 sm:mb-10">
-              Admin Registration
-            </h2>
 
             <div className="grid grid-cols-1 gap-3 sm:gap-6 sm:grid-cols-2 p-1">
               <Input
