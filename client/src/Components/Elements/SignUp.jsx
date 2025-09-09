@@ -35,7 +35,8 @@ export default function SignUp({ onClose }) {
     return regex.test(password);
   };
 
-  const validateEnrollmentNo = (enrollmentNo) => /^[a-zA-Z0-9]{5,}$/.test(enrollmentNo);
+  const validateEnrollmentNo = (enrollmentNo) =>
+    /^[a-zA-Z0-9]{5,}$/.test(enrollmentNo);
 
   const validateMobile = (mobile) => /^[0-9]{10}$/.test(mobile);
 
@@ -114,10 +115,13 @@ export default function SignUp({ onClose }) {
 
       if (res.ok) {
         onClose();
-        toast.success("🎉 Your registration is submitted! You will receive an email after admin approval", {
-          position: "top-right",
-          autoClose: 4000,
-        });
+        toast.success(
+          "🎉 Your registration is submitted! You will receive an email after admin approval",
+          {
+            position: "top-right",
+            autoClose: 4000,
+          }
+        );
       } else {
         toast.error(data.message || "Sign up failed.");
         setError(data.message || "Sign up failed.");
@@ -146,19 +150,22 @@ export default function SignUp({ onClose }) {
 
     try {
       const orderId = `LEO-${Date.now()}`;
-      const response = await fetch("http://localhost:5001/api/payment/payhere-init", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          order_id: orderId,
-          first_name: formData.firstName,
-          last_name: formData.lastName,
-          email: formData.email,
-          phone: formData.mobile,
-          address: formData.address,
-          amount: "400.00",
-        }),
-      });
+      const response = await fetch(
+        "http://localhost:5001/api/payment/payhere-init",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            order_id: orderId,
+            first_name: formData.firstName,
+            last_name: formData.lastName,
+            email: formData.email,
+            phone: formData.mobile,
+            address: formData.address,
+            amount: "400.00",
+          }),
+        }
+      );
 
       const paymentData = await response.json();
       if (!response.ok) {
@@ -201,15 +208,20 @@ export default function SignUp({ onClose }) {
         </button>
 
         <div className="w-full md:w-1/2 h-40 md:h-auto">
-          <img src={logo} alt="Leo Club Logo" className="w-full h-full object-cover" />
+          <img
+            src={logo}
+            alt="Leo Club Logo"
+            className="w-full h-full object-cover"
+          />
         </div>
 
         <div className="w-full md:w-1/2 p-4 sm:p-8 mb-4 sm:mb-6">
-          <h2 className="text-lg sm:text-xl font-bold text-center text-gray-800 mb-6 sm:mb-10">
-            Get Membership
-          </h2>
-
-          <form onSubmit={leoStatus === "member" ? handleSubmit : (e) => e.preventDefault()} autoComplete="off">
+          <form
+            onSubmit={
+              leoStatus === "member" ? handleSubmit : (e) => e.preventDefault()
+            }
+            autoComplete="off"
+          >
             <div className="grid grid-cols-1 gap-2 sm:gap-3 p-1 sm:p-2 mb-3 sm:mb-4 sm:grid-cols-2">
               <label className="flex items-center gap-2 text-gray-800 text-sm sm:text-base">
                 <input
@@ -248,19 +260,83 @@ export default function SignUp({ onClose }) {
             )}
 
             <div className="grid grid-cols-1 gap-3 sm:gap-6 sm:grid-cols-2 p-1">
-              <Input type="text" placeholder="First Name *" name="firstName" value={formData.firstName} onChange={handleChange} required />
-              <Input type="text" placeholder="Last Name *" name="lastName" value={formData.lastName} onChange={handleChange} required />
-              <Input type="text" placeholder="Address *" name="address" value={formData.address} onChange={handleChange} required />
-              <Input type="text" placeholder="Enrollment No *" name="enrollmentNo" value={formData.enrollmentNo} onChange={handleChange} required />
-              <Input type="date" placeholder="Birthday *" name="birthday" value={formData.birthday} onChange={handleChange} required />
-              <Input type="email" placeholder="Email *" name="email" value={formData.email} onChange={handleChange} required />
-              <Input type="tel" placeholder="Mobile no *" name="mobile" value={formData.mobile} onChange={handleChange} required />
-              <Input type="password" placeholder="Password *" name="password" value={formData.password} onChange={handleChange} required />
-              <Input type="password" placeholder="Confirm Password *" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} required />
+              <Input
+                type="text"
+                placeholder="First Name *"
+                name="firstName"
+                value={formData.firstName}
+                onChange={handleChange}
+                required
+              />
+              <Input
+                type="text"
+                placeholder="Last Name *"
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleChange}
+                required
+              />
+              <Input
+                type="text"
+                placeholder="Address *"
+                name="address"
+                value={formData.address}
+                onChange={handleChange}
+                required
+              />
+              <Input
+                type="text"
+                placeholder="Enrollment No *"
+                name="enrollmentNo"
+                value={formData.enrollmentNo}
+                onChange={handleChange}
+                required
+              />
+              <Input
+                type="date"
+                placeholder="Birthday *"
+                name="birthday"
+                value={formData.birthday}
+                onChange={handleChange}
+                required
+              />
+              <Input
+                type="email"
+                placeholder="Email *"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                required
+              />
+              <Input
+                type="tel"
+                placeholder="Mobile no *"
+                name="mobile"
+                value={formData.mobile}
+                onChange={handleChange}
+                required
+              />
+              <Input
+                type="password"
+                placeholder="Password *"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                required
+              />
+              <Input
+                type="password"
+                placeholder="Confirm Password *"
+                name="confirmPassword"
+                value={formData.confirmPassword}
+                onChange={handleChange}
+                required
+              />
             </div>
 
             <p className="text-xs text-gray-500 mt-1 ml-1">
-              Password must be 8+ characters with uppercase, lowercase, number, and symbol.
+              Password must be 8+ characters with uppercase, lowercase, number,
+              and symbol.
             </p>
 
             <div className="flex flex-col gap-2 mt-3 sm:mt-4 ml-2 sm:ml-4">
@@ -284,7 +360,9 @@ export default function SignUp({ onClose }) {
                   disabled={isLoading}
                 />
               )}
-              {error && <p className="text-red-500 text-sm text-center mt-2">{error}</p>}
+              {error && (
+                <p className="text-red-500 text-sm text-center mt-2">{error}</p>
+              )}
             </div>
           </form>
         </div>

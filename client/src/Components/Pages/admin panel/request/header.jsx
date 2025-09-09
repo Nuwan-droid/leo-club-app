@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom'; // ✅ useNavigate added
+import { Link, useLocation } from 'react-router-dom';
 import { FaBell } from 'react-icons/fa'; 
 import leoLogo from '../../../assets/LEO-Logo.png';
 import AccountSettings from './accountSettings';
@@ -7,23 +7,9 @@ import AccountSettings from './accountSettings';
 const MemberPortalNav = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
-  const navigate = useNavigate(); // ✅ navigation hook
 
-  // ✅ Logout handler
-  const handleLogout = () => {
-    localStorage.removeItem("leoToken"); // remove token
-    navigate("/"); // redirect to home (or login page)
-  };
-
-  const mainNavItems = [
-    { name: 'Home', path: '/memberportal' },
-    { name: 'Learning Hub', path: '/memberportal/learning-hub' },
-    { name: 'Event Volunteer', path: '/memberportal/event-volunteer' },
-    { name: 'Join Newsletter', path: '/memberportal/join-newsletter' },
-  ];
-
+  // ✅ Keep only Notifications and Account
   const allNavItems = [
-    ...mainNavItems,
     { name: 'Notifications', path: '/memberportal/notifications' },
     { name: 'Account', path: '/memberportal/account' }
   ];
@@ -42,33 +28,21 @@ const MemberPortalNav = () => {
               alt="LEO Club Logo" 
               className="w-12 h-12 object-contain"
             />
-            <span className="text-xl font-semibold text-gray-900 hidden sm:block">Member Portal</span>
+            <span className="text-xl font-semibold text-gray-900 hidden sm:block">
+              Member Portal
+            </span>
           </Link>
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center justify-end flex-1">
-            <div className="flex items-center space-x-6">
-              {mainNavItems.map((item) => (
-                <Link
-                  key={item.name}
-                  to={item.path}
-                  className={`px-3 py-2 text-sm font-medium transition-colors duration-200 ${
-                    isActive(item.path)
-                      ? 'text-blue-600 border-b-2 border-blue-600'
-                      : 'text-gray-700 hover:text-blue-600'
-                  }`}
-                >
-                  {item.name}
-                </Link>
-              ))} 
-            </div>
-
             {/* Divider and Icon-based Links */}
             <div className="flex items-center space-x-4 ml-6 pl-6 border-l border-gray-200">
               <Link
                 to="/memberportal/notifications"
                 aria-label="Notifications"
-                className="p-2 rounded-full text-gray-600 hover:text-blue-600 hover:bg-gray-100 transition-colors"
+                className={`p-2 rounded-full text-gray-600 hover:text-blue-600 hover:bg-gray-100 transition-colors ${
+                  isActive('/memberportal/notifications') ? 'text-blue-600 bg-blue-50' : ''
+                }`}
               >
                 <FaBell className="h-5 w-5" />
               </Link>
@@ -115,12 +89,7 @@ const MemberPortalNav = () => {
                 {item.name}
               </Link>
             ))}
-
-            {/* ✅ Now logout works */}
-            <button
-              onClick={handleLogout}
-              className="w-full text-left bg-red-500 text-white px-3 py-2 rounded-md text-base font-medium hover:bg-red-600 transition-colors duration-200 mt-2"
-            >
+            <button className="w-full text-left bg-red-500 text-white px-3 py-2 rounded-md text-base font-medium hover:bg-red-600 transition-colors duration-200 mt-2">
               Log Out
             </button>
           </div>

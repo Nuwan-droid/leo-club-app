@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Menu } from "lucide-react";
 import Button from "./Button";
 import Header from "./Header";
@@ -10,6 +10,20 @@ export default function Navbar() {
   const [showHamburger, setShowHamburger] = useState(false);
   const [showAuthPopup, setShowAuthPopup] = useState(false);
   const [showAuthPopup1, setShowAuthPopup1] = useState(false);
+  const [hasToken, setHasToken] = useState(false);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const checkToken = () => {
+      const token = localStorage.getItem("leoToken");
+      setHasToken(!!token);
+    };
+
+    checkToken(); // run at mount
+    window.addEventListener("storage", checkToken); // update if storage changes
+    return () => window.removeEventListener("storage", checkToken);
+  }, []);
 
   useEffect(() => {
     const handleResize = () => {
@@ -23,7 +37,7 @@ export default function Navbar() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  //  Close mobile nav on scroll
+  // Close mobile nav on scroll
   useEffect(() => {
     const handleScroll = () => {
       if (isOpen && showHamburger) {
@@ -35,13 +49,30 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [isOpen, showHamburger]);
 
+  // ✅ Handler for Member Portal
+  const handleMemberPortalClick = (e) => {
+    const token = localStorage.getItem("leoToken");
+    if (!token) {
+      e.preventDefault(); // stop navigation
+      setShowAuthPopup1(true); // show Login popup
+    } else {
+      navigate("/memberportal"); // allow navigation
+    }
+  };
+
   return (
     <>
       {showAuthPopup && (
-        <AuthPopup onClose={() => setShowAuthPopup(false)} defaultMode="signup" />
+        <AuthPopup
+          onClose={() => setShowAuthPopup(false)}
+          defaultMode="signup"
+        />
       )}
       {showAuthPopup1 && (
-        <AuthPopup onClose={() => setShowAuthPopup1(false)} defaultMode="login" />
+        <AuthPopup
+          onClose={() => setShowAuthPopup1(false)}
+          defaultMode="login"
+        />
       )}
 
       <nav className="w-full bg-white shadow-md hover:bg-blue-50 transition duration-300 rounded-sm fixed top-0 z-40">
@@ -59,9 +90,17 @@ export default function Navbar() {
               </button>
             )}
 
+            {/* Desktop Menu */}
             <div className="hidden xl:flex items-center space-x-6 ml-auto">
               <div className="flex space-x-6">
-                <Link to="/memberportal" className="link" > Member Portal </Link>
+                {/* ✅ Protected Member Portal */}
+                <Link
+                  to="/memberportal"
+                  className="link"
+                  onClick={handleMemberPortalClick}
+                >
+                  Member Portal
+                </Link>
                 <Link to="/project" className="link">Projects</Link>
                 <Link to="/calander" className="link">Calendar</Link>
                 <Link to="/shop" className="link">Shop</Link>
@@ -69,8 +108,20 @@ export default function Navbar() {
               </div>
 
               <div className="flex items-center space-x-4">
-                <Button label="Register" className="login" onClick={() => setShowAuthPopup(true)} />
-                <Button label="Login" className="login" onClick={() => setShowAuthPopup1(true)} />
+                {!hasToken && (
+                  <>
+                    <Button
+                      label="Register"
+                      className="login"
+                      onClick={() => setShowAuthPopup(true)}
+                    />
+                    <Button
+                      label="Login"
+                      className="login"
+                      onClick={() => setShowAuthPopup1(true)}
+                    />
+                  </>
+                )}
                 <Link to="/donation">
                   <Button label="Donate" className="donate" />
                 </Link>
@@ -78,29 +129,48 @@ export default function Navbar() {
             </div>
           </div>
 
+          {/* Mobile Menu */}
           {isOpen && showHamburger && (
             <div className="w-full bg-white rounded-md shadow-md mt-2 z-10">
               <div className="flex flex-col divide-y divide-gray-200">
                 {[
-                  { label: "Member Portal", to: "/memberportal" },
+                  { label: "Member Portal", to: "/memberportal", protected: true },
                   { label: "Project", to: "/project" },
                   { label: "Calendar", to: "/calander" },
                   { label: "Shop", to: "/shop" },
                   { label: "About", to: "/about" },
-                ].map(({ label, to }) => (
+                ].map(({ label, to, protected: isProtected }) => (
                   <Link
                     key={to}
                     to={to}
                     className="link w-full px-4 py-3 text-center hover:bg-blue-100"
-                    onClick={() => setIsOpen(false)}
+                    onClick={(e) => {
+                      if (isProtected) {
+                        handleMemberPortalClick(e);
+                      } else {
+                        setIsOpen(false);
+                      }
+                    }}
                   >
                     {label}
                   </Link>
                 ))}
 
                 <div className="flex flex-col items-center space-y-2 p-4">
-                  <Button label="Register" className="login w-full" onClick={() => setShowAuthPopup(true)} />
-                  <Button label="Login" className="login w-full" onClick={() => setShowAuthPopup1(true)} />
+                  {!hasToken &&  (
+                    <>
+                      <Button
+                        label="Register"
+                        className="login w-full"
+                        onClick={() => setShowAuthPopup(true)}
+                      />
+                      <Button
+                        label="Login"
+                        className="login w-full"
+                        onClick={() => setShowAuthPopup1(true)}
+                      />
+                    </>
+                  )}
                   <Link to="/donation" className="donate w-full text-center">
                     <Button label="Donate" />
                   </Link>
