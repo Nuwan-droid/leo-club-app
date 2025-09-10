@@ -283,7 +283,7 @@ export const updateOrderStatus = async (req, res) => {
   }
 };
 
-// Get all orders (for admin use)
+// Get all orders (for admin use) - FIXED VERSION
 export const getAllOrders = async (req, res) => {
   try {
     const { page = 1, limit = 10, status, customer_type } = req.query;
@@ -299,6 +299,11 @@ export const getAllOrders = async (req, res) => {
 
     const totalOrders = await Order.countDocuments(filter);
 
+    // Debug: Log the first order to see the structure
+    if (orders.length > 0) {
+      console.log('Sample order structure:', JSON.stringify(orders[0], null, 2));
+    }
+
     res.json({
       success: true,
       orders: orders.map(order => ({
@@ -306,15 +311,20 @@ export const getAllOrders = async (req, res) => {
         order_id: order.order_id,
         customer: {
           type: order.customer.type,
-          name: `${order.customer.firstName} ${order.customer.lastName}`,
+          firstName: order.customer.firstName,  // Keep separate fields
+          lastName: order.customer.lastName,    // Keep separate fields
+          name: `${order.customer.firstName || ''} ${order.customer.lastName || ''}`.trim(),
           email: order.customer.email,
-          mobile: order.customer.mobile
+          mobile: order.customer.mobile,
+          address: order.customer.address  // Make sure address is included
         },
-        items_count: order.items.length,
+        items: order.items || [],  // Include full items array
+        items_count: order.items ? order.items.length : 0,
         total_amount: order.payment.amount,
         payment_status: order.payment.status,
         order_status: order.orderStatus,
-        created_date: order.createdAt
+        created_date: order.createdAt,
+        createdAt: order.createdAt  // Include both for compatibility
       })),
       pagination: {
         current_page: parseInt(page),
@@ -333,7 +343,6 @@ export const getAllOrders = async (req, res) => {
     });
   }
 };
-
 // Get order details by ID
 export const getOrderById = async (req, res) => {
   try {
