@@ -1,12 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import OrderTable from './child-component/OrderTable';
-import OrderStats from './child-component/OrderStats';
+
+
+
+import StatusBadgeBoxes from './child-component/StatusBadge'; // Updated import
 
 const Orders = () => {
   const [memberOrders, setMemberOrders] = useState([]);
   const [visitorOrders, setVisitorOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  // Filter states for member and visitor orders
+  const [memberFilter, setMemberFilter] = useState('all');
+  const [visitorFilter, setVisitorFilter] = useState('all');
 
   const [memberPage, setMemberPage] = useState(1);
   const [visitorPage, setVisitorPage] = useState(1);
@@ -18,7 +25,6 @@ const Orders = () => {
         setLoading(true);
         setError(null);
 
-        // Get the admin token from localStorage
         const token = localStorage.getItem('leoToken');
         if (!token) {
           setError('Admin token missing. Please login as admin.');
@@ -26,7 +32,6 @@ const Orders = () => {
           return;
         }
 
-        // Add Authorization header
         const headers = {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
@@ -43,7 +48,6 @@ const Orders = () => {
         }
 
         const memberData = await memberRes.json();
-        console.log('Member orders response:', memberData);
 
         // Fetch visitor orders
         const visitorRes = await fetch('http://localhost:5001/api/orders/all?customer_type=visitor', {
@@ -56,9 +60,7 @@ const Orders = () => {
         }
 
         const visitorData = await visitorRes.json();
-        console.log('Visitor orders response:', visitorData);
 
-        // Set orders with proper error checking
         setMemberOrders(memberData.success && Array.isArray(memberData.orders) ? memberData.orders : []);
         setVisitorOrders(visitorData.success && Array.isArray(visitorData.orders) ? visitorData.orders : []);
 
@@ -75,12 +77,50 @@ const Orders = () => {
     fetchOrders();
   }, []);
 
-  // Pagination
-  const pagedMemberOrders = memberOrders.slice(
+  // Filter orders based on status
+  const filterOrders = (orders, filter) => {
+    if (filter === 'all') return orders;
+    
+    if (filter === 'completed') {
+      return orders.filter(order => 
+        order.order_status === 'delivered' || 
+        order.order_status === 'completed' ||
+        order.payment_status === 'completed'
+      );
+    }
+    
+    if (filter === 'processing') {
+      return orders.filter(order => 
+        order.order_status === 'processing' || 
+        order.order_status === 'confirmed' ||
+        order.order_status === 'pending'
+      );
+    }
+    
+    return orders;
+  };
+
+  // Handle filter changes from status badge clicks
+  const handleMemberFilterChange = (filterType) => {
+    setMemberFilter(filterType);
+    setMemberPage(1); // Reset to first page when filter changes
+  };
+
+  const handleVisitorFilterChange = (filterType) => {
+    setVisitorFilter(filterType);
+    setVisitorPage(1); // Reset to first page when filter changes
+  };
+
+  // Get filtered orders
+  const filteredMemberOrders = filterOrders(memberOrders, memberFilter);
+  const filteredVisitorOrders = filterOrders(visitorOrders, visitorFilter);
+
+  // Pagination for filtered orders
+  const pagedMemberOrders = filteredMemberOrders.slice(
     (memberPage - 1) * rowsPerPage,
     memberPage * rowsPerPage
   );
-  const pagedVisitorOrders = visitorOrders.slice(
+  const pagedVisitorOrders = filteredVisitorOrders.slice(
     (visitorPage - 1) * rowsPerPage,
     visitorPage * rowsPerPage
   );
@@ -134,23 +174,37 @@ const Orders = () => {
       <div className="max-w-7xl mx-auto">
         <h1 className="text-3xl font-bold text-gray-900 mb-8">Order Management</h1>
 
-        {/* Debug info */}
-        <div className="mb-4 text-sm text-gray-600">
-          <p>Member Orders: {memberOrders.length}</p>
-          <p>Visitor Orders: {visitorOrders.length}</p>
-        </div>
-
         {/* Member Orders */}
         <div className="mb-10">
-          <h2 className="text-2xl font-bold text-blue-900 mb-3">Member Orders</h2>
-          <OrderStats stats={memberStats} />
+          <h2 className="text-2xl font-bold text-blue-900 mb-4">Member Orders</h2>
+          
+          {/* Clickable Status Badge Boxes for Member Orders */}
+          <StatusBadgeBoxes 
+            stats={memberStats} 
+            onFilterChange={handleMemberFilterChange}
+            activeFilter={memberFilter}
+          />
+          
           <div className="bg-white rounded-lg shadow overflow-hidden">
+            <div className="px-6 py-4 bg-gray-50 border-b border-gray-200">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-medium text-gray-900">
+                  {memberFilter === 'all' ? 'All Member Orders' : 
+                   memberFilter === 'completed' ? 'Completed Member Orders' : 
+                   'Processing Member Orders'}
+                </h3>
+                <span className="text-sm text-gray-500">
+                  Showing {filteredMemberOrders.length} of {memberOrders.length} orders
+                </span>
+              </div>
+            </div>
+            
             <OrderTable
               orders={pagedMemberOrders}
               currentPage={memberPage}
-              totalPages={Math.ceil(memberOrders.length / rowsPerPage)}
+              totalPages={Math.ceil(filteredMemberOrders.length / rowsPerPage)}
               rowsPerPage={rowsPerPage}
-              totalRows={memberOrders.length}
+              totalRows={filteredMemberOrders.length}
               onPageChange={setMemberPage}
               adminView={true}
             />
@@ -159,15 +213,35 @@ const Orders = () => {
 
         {/* Visitor Orders */}
         <div>
-          <h2 className="text-2xl font-bold text-purple-900 mb-3">Visitor Orders</h2>
-          <OrderStats stats={visitorStats} />
+          <h2 className="text-2xl font-bold text-purple-900 mb-4">Visitor Orders</h2>
+          
+          {/* Clickable Status Badge Boxes for Visitor Orders */}
+          <StatusBadgeBoxes 
+            stats={visitorStats} 
+            onFilterChange={handleVisitorFilterChange}
+            activeFilter={visitorFilter}
+          />
+          
           <div className="bg-white rounded-lg shadow overflow-hidden">
+            <div className="px-6 py-4 bg-gray-50 border-b border-gray-200">
+              <div className="flex items-center justify-between">
+                <h3 className="text-lg font-medium text-gray-900">
+                  {visitorFilter === 'all' ? 'All Visitor Orders' : 
+                   visitorFilter === 'completed' ? 'Completed Visitor Orders' : 
+                   'Processing Visitor Orders'}
+                </h3>
+                <span className="text-sm text-gray-500">
+                  Showing {filteredVisitorOrders.length} of {visitorOrders.length} orders
+                </span>
+              </div>
+            </div>
+            
             <OrderTable
               orders={pagedVisitorOrders}
               currentPage={visitorPage}
-              totalPages={Math.ceil(visitorOrders.length / rowsPerPage)}
+              totalPages={Math.ceil(filteredVisitorOrders.length / rowsPerPage)}
               rowsPerPage={rowsPerPage}
-              totalRows={visitorOrders.length}
+              totalRows={filteredVisitorOrders.length}
               onPageChange={setVisitorPage}
               adminView={true}
             />
