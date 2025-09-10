@@ -1,5 +1,8 @@
 {
   "dependencies": {
     "gh-pages": "^6.3.0"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.8.0"
   }
 }
