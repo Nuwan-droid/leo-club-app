@@ -66,7 +66,7 @@ const StatsSection = () => {
           {/* Newsletters (static) */}
           <div className="bg-white shadow-xl rounded-2xl p-4 hover:scale-[1.03] transition duration-300">
             <Stat
-              end={78}
+              end={10}
               label="News Letters"
               Icon={() => (
                 <div className="bg-green-100 text-green-600 p-3 rounded-full">
