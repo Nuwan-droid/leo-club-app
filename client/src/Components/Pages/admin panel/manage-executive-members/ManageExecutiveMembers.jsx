@@ -22,7 +22,7 @@ const ManageExecutiveMembers = () => {
   });
   const [imagePreview, setImagePreview] = useState('');
 
-  // Fetch all executive members
+
   const fetchMembers = async () => {
     try {
       setLoading(true);
@@ -43,7 +43,7 @@ const ManageExecutiveMembers = () => {
     fetchMembers();
   }, []);
 
-  // Search functionality
+
   useEffect(() => {
     if (searchTerm.trim() === '') {
       setFilteredMembers(members);
@@ -59,7 +59,7 @@ const ManageExecutiveMembers = () => {
     }
   }, [searchTerm, members]);
 
-  // Handle form input changes
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({
@@ -68,7 +68,7 @@ const ManageExecutiveMembers = () => {
     }));
   };
 
-  // Handle file input change
+
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -77,7 +77,7 @@ const ManageExecutiveMembers = () => {
         image: file
       }));
       
-      // Create preview
+    
       const reader = new FileReader();
       reader.onloadend = () => {
         setImagePreview(reader.result);
@@ -86,7 +86,7 @@ const ManageExecutiveMembers = () => {
     }
   };
 
-  // Reset form
+
   const resetForm = () => {
     setFormData({
       first_name: '',
@@ -101,7 +101,7 @@ const ManageExecutiveMembers = () => {
     setSelectedMember(null);
   };
 
-  // Open modal for different modes
+ 
   const openModal = (mode, member = null) => {
     setModalMode(mode);
     setSelectedMember(member);
@@ -124,13 +124,13 @@ const ManageExecutiveMembers = () => {
     setShowModal(true);
   };
 
-  // Close modal
+
   const closeModal = () => {
     setShowModal(false);
     resetForm();
   };
 
-  // Handle form submit (Add/Edit)
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -175,7 +175,7 @@ const ManageExecutiveMembers = () => {
     }
   };
 
-  // Handle delete
+  
   const handleDelete = async (memberId, memberName) => {
     if (window.confirm(`Are you sure you want to delete ${memberName}?`)) {
       try {
@@ -198,7 +198,7 @@ const ManageExecutiveMembers = () => {
   return (
     <div className="p-6">
       <div className="bg-white rounded-lg shadow-md p-6">
-        {/* Header */}
+        
         <div className="flex flex-col sm:flex-row justify-between items-center mb-6">
           <h1 className="text-2xl font-bold text-gray-800 mb-4 sm:mb-0">
             Manage Executive Members
@@ -211,7 +211,7 @@ const ManageExecutiveMembers = () => {
           </button>
         </div>
 
-        {/* Search Bar */}
+       
         <div className="mb-6">
           <div className="relative">
             <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
@@ -225,14 +225,14 @@ const ManageExecutiveMembers = () => {
           </div>
         </div>
 
-        {/* Loading */}
+   
         {loading && (
           <div className="flex justify-center items-center py-8">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
           </div>
         )}
 
-        {/* Members Table */}
+    
         {!loading && (
           <div className="overflow-x-auto">
             <table className="min-w-full bg-white">
@@ -321,7 +321,7 @@ const ManageExecutiveMembers = () => {
               </tbody>
             </table>
 
-            {/* No results */}
+          
             {filteredMembers.length === 0 && !loading && (
               <div className="text-center py-8">
                 <p className="text-gray-500">No executive members found.</p>
@@ -331,11 +331,11 @@ const ManageExecutiveMembers = () => {
         )}
       </div>
 
-      {/* Modal */}
+  
       {showModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-lg shadow-xl max-w-md w-full max-h-[90vh] overflow-y-auto">
-            {/* Modal Header */}
+          
             <div className="flex justify-between items-center p-6 border-b">
               <h2 className="text-xl font-semibold text-gray-800">
                 {modalMode === 'add' ? 'Add New Member' : 
@@ -349,10 +349,10 @@ const ManageExecutiveMembers = () => {
               </button>
             </div>
 
-            {/* Modal Content */}
+          
             <div className="p-6">
               {modalMode === 'view' && selectedMember ? (
-                // View Mode
+              
                 <div className="space-y-4">
                   <div className="text-center">
                     <img
@@ -388,7 +388,7 @@ const ManageExecutiveMembers = () => {
               ) : (
                 // Add/Edit Form
                 <form onSubmit={handleSubmit} className="space-y-4">
-                  {/* Image Preview */}
+                  
                   {imagePreview && (
                     <div className="text-center">
                       <img
@@ -498,7 +498,7 @@ const ManageExecutiveMembers = () => {
                     />
                   </div>
 
-                  {/* Form Actions */}
+                 
                   <div className="flex justify-end space-x-3 pt-4">
                     <button
                       type="button"

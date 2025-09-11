@@ -40,7 +40,6 @@ const AccountManagement = () => {
 
   const handleSaveProfile = () => {
     console.log('Saving profile:', formData);
-    // Add your profile save logic here
     alert('Profile saved successfully!');
   };
 
@@ -54,9 +53,9 @@ const AccountManagement = () => {
       return;
     }
     console.log('Changing password');
-    // Add your password change logic here
+
     alert('Password changed successfully!');
-    // Clear password fields
+
     setFormData(prev => ({
       ...prev,
       currentPassword: '',
@@ -91,7 +90,7 @@ const AccountManagement = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Profile Picture Section */}
+   
           <div className="lg:col-span-1">
             <div className="bg-white rounded-lg shadow-sm p-6">
               <h2 className="text-lg font-semibold mb-4">Profile Picture</h2>
@@ -122,9 +121,9 @@ const AccountManagement = () => {
             </div>
           </div>
 
-          {/* Profile Information */}
+        
           <div className="lg:col-span-2 space-y-6">
-            {/* Personal Information */}
+          
             <div className="bg-white rounded-lg shadow-sm p-6">
               <h2 className="text-lg font-semibold mb-4">Personal Information</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -187,7 +186,7 @@ const AccountManagement = () => {
               </div>
             </div>
 
-            {/* Change Password */}
+     
             <div className="bg-white rounded-lg shadow-sm p-6">
               <h2 className="text-lg font-semibold mb-4">Change Password</h2>
               <div className="space-y-4">

@@ -64,7 +64,7 @@ const InboxContent = ({ selectedMessages, setSelectedMessages }) => {
   };
 
   const handleDeleteSelected = () => {
-    // Here you would implement the delete logic
+   
     console.log('Deleting messages:', selectedMessages);
     setSelectedMessages([]);
   };

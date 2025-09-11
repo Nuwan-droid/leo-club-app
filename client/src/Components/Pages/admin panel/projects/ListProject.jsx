@@ -110,7 +110,7 @@ const ListProject = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 p-6 text-black">
-      {/* Header with Add Button */}
+   
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold">All Projects</h1>
         <button
@@ -125,7 +125,7 @@ const ListProject = () => {
 
 
 
-      {/* Projects Table */}
+     
       <div className="overflow-x-auto bg-white rounded-xl shadow-lg">
         <table className="min-w-full table-auto">
           <thead className="bg-gray-200 text-gray-700">
@@ -176,7 +176,7 @@ const ListProject = () => {
         </table>
       </div>
 
-      {/* Add Project Modal */}
+     
       {showAddDialog && (
         <div className="fixed inset-0 bg-[#000000b0] flex items-center justify-center z-50 overflow-y-auto">
           <div className="relative bg-white w-full max-w-5xl mx-4 my-10 rounded-xl shadow-xl max-h-[90vh] overflow-y-auto">
@@ -191,7 +191,7 @@ const ListProject = () => {
         </div>
       )}
 
-      {/* Edit Dialog */}
+   
       {showEditDialog && (
         <div className="fixed inset-0 bg-[#000000b0] flex justify-center items-center z-50">
           <div className="bg-white p-6 rounded-lg w-full max-w-xl shadow-xl mx-4 overflow-y-auto max-h-[90vh]">
@@ -228,7 +228,7 @@ const ListProject = () => {
         </div>
       )}
 
-      {/* Delete Dialog */}
+      
       {showDeleteDialog && (
         <div className="fixed inset-0 bg-[#000000b0] flex justify-center items-center z-50">
           <div className="bg-white p-6 rounded-lg max-w-md w-full mx-4 shadow-xl">

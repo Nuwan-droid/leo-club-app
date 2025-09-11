@@ -42,7 +42,7 @@ const DashboardContent = () => {
   return (
     <div className="flex-1 bg-transparent p-6">
       <div className="max-w-7xl mx-auto">
-        {/* Page Title + Add Award Button */}
+       
         <div className="mb-8 flex justify-between items-center">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Dashboard Overview</h1>
@@ -55,7 +55,7 @@ const DashboardContent = () => {
             Add Awards
           </button>
         </div>
-        {/* Stats Grid */}
+       
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {statsData.map((stat, index) => (
             <StatCard
@@ -69,9 +69,9 @@ const DashboardContent = () => {
           ))}
         </div>
 
-        {/* Additional Dashboard Content */}
+  
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          {/* Recent Activity Card */}
+     
           <div className="bg-white rounded-xl shadow-sm p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h3>
             <div className="space-y-3">
@@ -93,7 +93,6 @@ const DashboardContent = () => {
             </div>
           </div>
 
-          {/* Quick Actions Card */}
           <div className="bg-white rounded-xl shadow-sm p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
             <div className="grid grid-cols-2 gap-3">
@@ -111,7 +110,7 @@ const DashboardContent = () => {
               </button>
             </div>
           </div>
-{/* Add Award Modal - FIXED VERSION */}
+
 {showAwardModal && (
   <div className="fixed inset-0 text-black bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
     <div className="bg-white rounded-xl w-full max-w-7xl max-h-[90vh] overflow-y-auto relative shadow-2xl">

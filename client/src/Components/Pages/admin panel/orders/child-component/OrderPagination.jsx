@@ -6,7 +6,7 @@ const OrderPagination = ({
   rowsPerPage, 
   totalRows, 
   onPageChange, 
-  //onRowsPerPageChange 
+ 
 }) => {
   const renderPagination = () => {
     const pages = [];

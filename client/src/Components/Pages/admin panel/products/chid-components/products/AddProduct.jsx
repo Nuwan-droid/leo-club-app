@@ -35,7 +35,7 @@ const AddProduct = () => {
     setProductDetails({ ...productDetails, [name]: value });
   };
 
-  // Size selection logic with One Size mutual exclusion
+
   const handleSizeSelection = (value) => {
     setProductDetails(prev => {
       const currentSizes = prev.sizes;
@@ -92,7 +92,7 @@ const AddProduct = () => {
   const Add_Product = async (e) => {
     e.preventDefault();
 
-    // Validation
+
     if (!productDetails.name || !productDetails.price || !productDetails.description) {
       alert('Please fill in all required fields (Name, Price, Description)');
       return;
@@ -103,7 +103,7 @@ const AddProduct = () => {
       return;
     }
 
-    // Create product object
+  
     let product = {
       name: productDetails.name.trim(),
       price: parseFloat(productDetails.price) || 0,
@@ -115,10 +115,10 @@ const AddProduct = () => {
       badge: productDetails.badge ? productDetails.badge.trim() : null,
     };
 
-    // Log product data
+    
     console.log('Product data before image upload:', JSON.stringify(product, null, 2));
 
-    // Prepare form data for image upload
+   
     const formData = new FormData();
     if (mainImage) formData.append('mainImage', mainImage);
     additionalImages.forEach((img) => {
@@ -126,7 +126,7 @@ const AddProduct = () => {
     });
 
     try {
-      // Step 1: Upload Images
+     
       console.log('Starting image upload...');
       const uploadRes = await fetch('http://localhost:5001/api/products/upload', {
         method: 'POST',
@@ -150,7 +150,7 @@ const AddProduct = () => {
         return;
       }
 
-      // Step 2: Add Product to Database
+     
       console.log('Final product data being sent:', JSON.stringify(product, null, 2));
       const addRes = await fetch('http://localhost:5001/api/products/addproduct', {
         method: 'POST',
@@ -213,7 +213,7 @@ const AddProduct = () => {
         <h2 className="text-4xl font-extrabold text-center text-blue-700 mb-8">Add New Product</h2>
         
         <form className="space-y-6" onSubmit={Add_Product}>
-          {/* Product Info */}
+     
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="block font-semibold mb-1">
@@ -286,7 +286,7 @@ const AddProduct = () => {
             />
           </div>
 
-          {/* Sizes */}
+          
           <div>
             <label className="block font-semibold mb-2">Available Sizes</label>
             <div className="flex flex-wrap gap-2">
@@ -312,7 +312,7 @@ const AddProduct = () => {
             )}
           </div>
 
-          {/* Colors */}
+          
           <div>
             <label className="block font-semibold mb-2">Available Colors</label>
             <div className="flex flex-wrap gap-2">
@@ -338,7 +338,7 @@ const AddProduct = () => {
             )}
           </div>
 
-          {/* Materials */}
+       
           <div>
             <label className="block font-semibold mb-2">Materials</label>
             {productDetails.material.map((mat, idx) => (
@@ -367,7 +367,7 @@ const AddProduct = () => {
             </button>
           </div>
 
-          {/* Images */}
+        
           <div>
             <label className="block font-semibold mb-2">
               Main Product Image <span className="text-red-500">*</span>
@@ -419,7 +419,7 @@ const AddProduct = () => {
             )}
           </div>
 
-          {/* Submit Button */}
+         
           <div className="flex justify-center pt-6">
             <button 
               type="submit" 

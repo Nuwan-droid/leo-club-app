@@ -31,11 +31,11 @@ const ListProducts = () => {
     try {
       const response = await fetch('http://localhost:5001/api/products/allproducts');
       const data = await response.json();
-      console.log('Fetched products:', data); // Debug log
-      // Transform products to include image field
+      console.log('Fetched products:', data); 
+      
       const transformedProducts = data.map(product => ({
         ...product,
-        image: product.mainImage // Map mainImage to image for ProductTable
+        image: product.mainImage 
       }));
       setAllProducts(transformedProducts);
     } catch (err) {

@@ -18,10 +18,10 @@ const EditDonationProjectModal = ({ isOpen, project, onSave, onCancel }) => {
 
   useEffect(() => {
     if (project) {
-      // Format dates for input fields (convert from display format to YYYY-MM-DD)
+   
       const formatDateForInput = (dateString) => {
         if (!dateString) return '';
-        // Handle both backend ISO dates and display dates
+
         try {
           const date = new Date(dateString);
           return date.toISOString().split('T')[0];
@@ -95,7 +95,7 @@ const EditDonationProjectModal = ({ isOpen, project, onSave, onCancel }) => {
         
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Left Column */}
+           
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -184,7 +184,7 @@ const EditDonationProjectModal = ({ isOpen, project, onSave, onCancel }) => {
               </div>
             </div>
 
-            {/* Right Column */}
+           
             <div className="space-y-4">
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-3">Donation Items</h3>
