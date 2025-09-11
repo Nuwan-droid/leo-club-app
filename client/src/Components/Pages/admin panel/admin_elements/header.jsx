@@ -4,13 +4,13 @@ import Adminlogo from "../../../../../public/profile.png";
 
 const Header = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [user, setUser] = useState(null); // store fetched user
+  const [user, setUser] = useState(null); 
   const [loading, setLoading] = useState(true);
 
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
 
-  // Handle click outside dropdown
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -24,7 +24,7 @@ const Header = () => {
     };
   }, []);
 
-  // Fetch user profile
+  
   useEffect(() => {
     (async () => {
       try {

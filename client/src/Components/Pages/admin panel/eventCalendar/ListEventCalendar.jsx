@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import AddEventCalendar from './AddEventCalendar'; // ✅ Import your AddEventCalendar component
+import AddEventCalendar from './AddEventCalendar'; 
 
 const ListEventCalendar = () => {
   const [events, setEvents] = useState([]);
@@ -7,10 +7,10 @@ const ListEventCalendar = () => {
   const [form, setForm] = useState({ name: '', date: '', time: '', location: '' });
   const [loading, setLoading] = useState(true);
 
-  // ✅ New state for modal
+ 
   const [showAddDialog, setShowAddDialog] = useState(false);
 
-  /* ---------- Helpers ---------- */
+
   const fetchEvents = async () => {
     setLoading(true);
     try {
@@ -74,15 +74,14 @@ const ListEventCalendar = () => {
     }
   };
 
-  /* ---------- Lifecycle ---------- */
+
   useEffect(() => { fetchEvents(); }, []);
 
-  /* ---------- UI ---------- */
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 py-10 px-4">
       <div className="max-w-4xl mx-auto">
 
-        {/* ✅ Top header with Add Event button */}
+        
         <div className="flex justify-between items-center mb-8">
           <h2 className="text-4xl font-bold text-blue-700">Event Calendar List</h2>
           <button
@@ -103,7 +102,7 @@ const ListEventCalendar = () => {
               <div key={ev._id} className="bg-white shadow-md rounded-xl p-6 border border-gray-200">
                 {editingId === ev._id ? (
                   <>
-                    {/* ------------ Edit Form ------------- */}
+                   
                     <div className="grid sm:grid-cols-2 gap-4 text-black">
                       <input
                         className="border rounded p-2"
@@ -151,7 +150,7 @@ const ListEventCalendar = () => {
                   </>
                 ) : (
                   <>
-                    {/* ------------ Display Card ------------- */}
+                   
                     <h3 className="text-2xl font-semibold text-gray-800 mb-2">{ev.name}</h3>
                     <p className="text-gray-600">
                       <span className="font-medium">Date:</span>{' '}
@@ -188,7 +187,7 @@ const ListEventCalendar = () => {
           </div>
         )}
 
-        {/* ✅ Add Event Modal */}
+     
         {showAddDialog && (
           <div className="fixed inset-0 bg-[#000000b0] z-50 flex items-center justify-center overflow-y-auto">
             <div className="relative bg-white w-full max-w-3xl mx-4 my-10 rounded-xl shadow-xl max-h-[90vh] overflow-y-auto">

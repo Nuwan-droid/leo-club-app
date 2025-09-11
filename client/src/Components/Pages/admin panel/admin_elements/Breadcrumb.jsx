@@ -14,7 +14,7 @@ const Breadcrumb = () => {
       { name: 'Dashboard', icon: '🏠', clickable: true, onClick: handleHomeClick }
     ];
 
-    // Map paths to display names
+
     const pathMapping = {
       '/admin': 'Dashboard',
       '/admin/users': 'Users',

@@ -44,7 +44,7 @@ const AddProject = () => {
         body: formData,
       });
 
-      // Check if the response is JSON
+    
       const contentType = res.headers.get('content-type');
       if (!contentType || !contentType.includes('application/json')) {
         throw new Error(`Server returned HTML instead of JSON. Status: ${res.status}`);
@@ -76,7 +76,7 @@ const AddProject = () => {
     try {
       let project = { ...projectDetails };
 
-      // Extract year
+    
       if (project.date) {
         const selectedDate = new Date(project.date);
         project.year = selectedDate.getFullYear();
@@ -104,7 +104,7 @@ const AddProject = () => {
       const result = await res.json();
       if (result.success) {
         alert('Project Added Successfully!');
-        // Reset form
+        
         setProjectDetails({
           title: '',
           subtitle: '',
@@ -132,7 +132,7 @@ const AddProject = () => {
       <div className="bg-white shadow-xl rounded-2xl max-w-2xl mx-auto p-8 transition-all duration-300 hover:shadow-2xl">
         <h2 className="text-4xl font-extrabold text-center text-blue-700 mb-8">Add New Project</h2>
         <form className="space-y-6" onSubmit={Add_Project}>
-          {/* Title */}
+          
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-1">Project Title</label>
             <input
@@ -146,7 +146,7 @@ const AddProject = () => {
             />
           </div>
 
-          {/* Subtitle */}
+        
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-1">Subtitle</label>
             <input
@@ -160,7 +160,7 @@ const AddProject = () => {
             />
           </div>
 
-          {/* Date */}
+       
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-1">Date</label>
             <input
@@ -175,7 +175,7 @@ const AddProject = () => {
             />
           </div>
 
-          {/* Location */}
+       
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-1">Location</label>
             <input
@@ -197,7 +197,7 @@ const AddProject = () => {
             </div>
           )}
 
-          {/* Description */}
+        
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-1">Description</label>
             <textarea
@@ -210,7 +210,7 @@ const AddProject = () => {
             ></textarea>
           </div>
 
-          {/* Main Image Upload */}
+         
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">Main Image</label>
             <div className="flex items-center gap-4">
@@ -241,7 +241,7 @@ const AddProject = () => {
             </div>
           </div>
 
-          {/* Slider Images Upload */}
+         
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-2">Slider Images (Optional)</label>
             <input

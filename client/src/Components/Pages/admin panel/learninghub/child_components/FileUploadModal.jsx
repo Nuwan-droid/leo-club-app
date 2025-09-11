@@ -44,7 +44,7 @@ const FileUploadModal = ({ isOpen, onSubmit, onCancel }) => {
         <h2 className="text-xl font-semibold mb-4">File Upload</h2>
         
         <form onSubmit={handleSubmit}>
-          {/* File Upload Area */}
+       
           <div className="mb-6">
             <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
               <div className="mb-4">
@@ -78,7 +78,7 @@ const FileUploadModal = ({ isOpen, onSubmit, onCancel }) => {
             </div>
           </div>
 
-          {/* Title Input */}
+        
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Title of Lesson
@@ -94,7 +94,7 @@ const FileUploadModal = ({ isOpen, onSubmit, onCancel }) => {
             />
           </div>
 
-          {/* Description Input */}
+         
           <div className="mb-6">
             <label className="block text-sm font-medium text-gray-700 mb-2">
               Description
@@ -109,7 +109,7 @@ const FileUploadModal = ({ isOpen, onSubmit, onCancel }) => {
             />
           </div>
 
-          {/* Action Buttons */}
+          
           <div className="flex justify-end space-x-3">
             <button
               type="button"

@@ -47,7 +47,7 @@ const AddEventCalendar = () => {
         </h2>
         <div className="space-y-6">
           
-          {/* Event Name */}
+         
           <div className="relative">
             <label className="block text-sm font-semibold text-gray-700 mb-2">Event Name</label>
             <div className="relative">
@@ -64,7 +64,7 @@ const AddEventCalendar = () => {
             </div>
           </div>
 
-          {/* Date */}
+   
           <div className="relative">
             <label className="block text-sm font-semibold text-gray-700 mb-2">Date</label>
             <div className="relative">
@@ -83,7 +83,7 @@ const AddEventCalendar = () => {
             </div>
           </div>
 
-          {/* Time */}
+       
           <div className="relative">
             <label className="block text-sm font-semibold text-gray-700 mb-2">Time</label>
             <div className="relative">
@@ -102,7 +102,7 @@ const AddEventCalendar = () => {
             </div>
           </div>
 
-          {/* Location */}
+        
           <div className="relative">
             <label className="block text-sm font-semibold text-gray-700 mb-2">Location</label>
             <div className="relative">

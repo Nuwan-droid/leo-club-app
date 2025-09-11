@@ -7,7 +7,7 @@ const AddAward = ({ closeModal }) => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState({ type: "", text: "" });
 
-  // Fetch awards from backend
+ 
   const fetchAwards = async () => {
     try {
       const res = await fetch("http://localhost:5001/api/awards");
@@ -24,7 +24,7 @@ const AddAward = ({ closeModal }) => {
     fetchAwards();
   }, []);
 
-  // Auto-hide messages after 5 seconds
+
   useEffect(() => {
     if (message.text) {
       const timer = setTimeout(() => {
@@ -104,7 +104,7 @@ const AddAward = ({ closeModal }) => {
   return (
     <div className=" bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100 p-6">
       <div className="max-w-6xl mx-auto">
-        {/* Header */}
+      
         <div className="bg-white rounded-2xl shadow-xl mb-8 p-6 border-l-4 border-purple-500">
           <div className="flex items-center justify-between">
             <div>
@@ -125,7 +125,7 @@ const AddAward = ({ closeModal }) => {
           </div>
         </div>
 
-        {/* Success/Error Message */}
+       
         {message.text && (
           <div className={`mb-6 p-4 rounded-xl border-l-4 transition-all duration-300 ${
             message.type === "success" 
@@ -148,7 +148,7 @@ const AddAward = ({ closeModal }) => {
         )}
 
         <div className="grid lg:grid-cols-5 gap-8">
-          {/* Award Form */}
+          
           <div className="lg:col-span-2">
             <div className="bg-white rounded-2xl shadow-xl p-6">
               <div className="flex items-center mb-6">
@@ -240,7 +240,7 @@ const AddAward = ({ closeModal }) => {
             </div>
           </div>
 
-          {/* Awards List */}
+        
           <div className="lg:col-span-3">
             <div className="bg-white rounded-2xl shadow-xl">
               <div className="p-6 border-b border-gray-200">

@@ -1,6 +1,6 @@
 import React from 'react';
 
-// Simple status badge component
+
 const StatusBadge = ({ status }) => {
   const getStatusColor = (status) => {
     const normalizedStatus = status?.toLowerCase();
@@ -31,7 +31,7 @@ const StatusBadge = ({ status }) => {
 };
 
 const OrderRow = ({ order }) => {
-  // Format date properly
+  
   const formatDate = (dateString) => {
     if (!dateString) return 'N/A';
     try {
@@ -41,7 +41,7 @@ const OrderRow = ({ order }) => {
     }
   };
 
-  // Format price with currency - MOVED TO CORRECT POSITION
+
   const formatPrice = (amount) => {
     if (amount === null || amount === undefined) return 'N/A';
     const numAmount = parseFloat(amount);

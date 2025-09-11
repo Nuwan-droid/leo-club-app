@@ -10,13 +10,13 @@ const Users = () => {
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // confirmation modal state
+
   const [showConfirm, setShowConfirm] = useState(false);
   const [userToDelete, setUserToDelete] = useState(null);
   const [deleting, setDeleting] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
-  // 🔹 Fetch users from API
+
   useEffect(() => {
     const fetchUsers = async () => {
       try {
@@ -50,23 +50,23 @@ const Users = () => {
     console.log("Edit user:", userId);
   };
 
-  // Called from child - opens modal
+
   const handleDelete = (userId) => {
     setErrorMsg("");
     setUserToDelete(userId);
     setShowConfirm(true);
   };
 
-  // Confirmed delete action
+  
   const confirmDelete = async () => {
     if (!userToDelete) return;
     setDeleting(true);
     setErrorMsg("");
     try {
       await axios.delete(`http://localhost:5001/api/users/${userToDelete}`);
-      // update list
+  
       setUsers((prev) => prev.filter((u) => u.id !== userToDelete));
-      // if the current page becomes empty after deletion, go to previous page if possible
+
       const remainingRowsOnPage =
         (totalRows - 1) - (currentPage - 1) * rowsPerPage;
       if (remainingRowsOnPage <= 0 && currentPage > 1) {
@@ -105,7 +105,7 @@ const Users = () => {
               onSelectAll={handleSelectAll}
               onSelectUser={handleSelectUser}
               onEdit={handleEdit}
-              onDelete={handleDelete} // still the same prop
+              onDelete={handleDelete} 
             />
 
             <UsersPagination
@@ -123,7 +123,7 @@ const Users = () => {
         )}
       </div>
 
-      {/* Confirmation Modal */}
+ 
       {showConfirm && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center p-4"
@@ -131,7 +131,7 @@ const Users = () => {
           role="dialog"
           aria-modal="true"
         >
-          {/* backdrop */}
+          
           <div
             className="absolute inset-0 bg-black/40 backdrop-blur-sm"
             onClick={cancelDelete}
@@ -142,7 +142,7 @@ const Users = () => {
               <div className="flex items-start space-x-4">
                 <div className="flex-shrink-0">
                   <div className="h-12 w-12 rounded-full bg-red-50 flex items-center justify-center">
-                    {/* trash icon */}
+                   
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="h-6 w-6 text-red-600"

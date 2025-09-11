@@ -13,8 +13,8 @@ const SubscriberTable = ({
   currentPage,
   totalPages,
   rowsPerPage,
-  totalRows,  //onEdit, 
-              //onDelete,
+  totalRows, 
+             
   onPageChange,
   onRowsPerPageChange
 }) => {

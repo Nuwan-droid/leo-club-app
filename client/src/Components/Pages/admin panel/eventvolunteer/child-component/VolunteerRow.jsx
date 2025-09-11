@@ -1,5 +1,5 @@
 import React from 'react';
-//onDelete
+
 const VolunteerRow = ({ volunteer, isSelected, onSelect, onAddScore, onAddContribution }) => {
   return (
     <tr className="hover:bg-gray-50">

@@ -49,7 +49,7 @@ const StatusBadgeBoxes = ({
   onFilterChange, 
   activeFilter = 'all' 
 }) => {
-  // Default values to prevent crash if stats is undefined
+  
   const safeStats = stats || {
     totalOrders: 0,
     completedOrders: 0,
@@ -107,7 +107,7 @@ const StatusBadgeBoxes = ({
         }
         label="Total Revenue"
         value={`Rs ${safeStats.totalRevenue?.toFixed(2) ?? '0.00'}`}
-        onClick={() => {}} // Revenue card doesn't filter
+        onClick={() => {}} 
         isActive={false}
         filterType="revenue"
       />

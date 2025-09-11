@@ -1,7 +1,7 @@
 import React from 'react';
 import OrderRow from './OrderRow';
 
-// Simple pagination component
+
 const OrderPagination = ({
   currentPage,
   totalPages,
@@ -68,7 +68,7 @@ const OrderTable = ({
   onPageChange,
   adminView = false
 }) => {
-  // Show empty state if no orders
+ 
   if (!Array.isArray(orders) || orders.length === 0) {
     return (
       <div className="bg-white rounded-lg shadow">

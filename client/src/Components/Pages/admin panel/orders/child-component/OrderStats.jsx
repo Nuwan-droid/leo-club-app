@@ -1,6 +1,6 @@
 import React from 'react';
 
-// Smaller, cleaner stats card
+
 const StatsCard = ({ title, value, color = 'blue', icon }) => {
   const colorClasses = {
     blue: 'bg-blue-50 text-blue-600 border-blue-200',
@@ -27,7 +27,7 @@ const StatsCard = ({ title, value, color = 'blue', icon }) => {
 };
 
 const OrderStats = ({ stats }) => {
-  // Provide default values to prevent crashes
+  
   const safeStats = {
     totalOrders: 0,
     completedOrders: 0,

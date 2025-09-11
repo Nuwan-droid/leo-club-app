@@ -1,9 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import OrderTable from './child-component/OrderTable';
-
-
-
-import StatusBadgeBoxes from './child-component/StatusBadge'; // Updated import
+import StatusBadgeBoxes from './child-component/StatusBadge'; 
 
 const Orders = () => {
   const [memberOrders, setMemberOrders] = useState([]);
@@ -11,7 +8,7 @@ const Orders = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Filter states for member and visitor orders
+
   const [memberFilter, setMemberFilter] = useState('all');
   const [visitorFilter, setVisitorFilter] = useState('all');
 
@@ -37,7 +34,7 @@ const Orders = () => {
           'Authorization': `Bearer ${token}`,
         };
 
-        // Fetch member orders
+      
         const memberRes = await fetch('http://localhost:5001/api/orders/all?customer_type=member', {
           method: 'GET',
           headers,
@@ -49,7 +46,7 @@ const Orders = () => {
 
         const memberData = await memberRes.json();
 
-        // Fetch visitor orders
+        
         const visitorRes = await fetch('http://localhost:5001/api/orders/all?customer_type=visitor', {
           method: 'GET',
           headers,
@@ -77,7 +74,7 @@ const Orders = () => {
     fetchOrders();
   }, []);
 
-  // Filter orders based on status
+  
   const filterOrders = (orders, filter) => {
     if (filter === 'all') return orders;
     
@@ -100,22 +97,22 @@ const Orders = () => {
     return orders;
   };
 
-  // Handle filter changes from status badge clicks
+ 
   const handleMemberFilterChange = (filterType) => {
     setMemberFilter(filterType);
-    setMemberPage(1); // Reset to first page when filter changes
+    setMemberPage(1); 
   };
 
   const handleVisitorFilterChange = (filterType) => {
     setVisitorFilter(filterType);
-    setVisitorPage(1); // Reset to first page when filter changes
+    setVisitorPage(1); 
   };
 
-  // Get filtered orders
+ 
   const filteredMemberOrders = filterOrders(memberOrders, memberFilter);
   const filteredVisitorOrders = filterOrders(visitorOrders, visitorFilter);
 
-  // Pagination for filtered orders
+ 
   const pagedMemberOrders = filteredMemberOrders.slice(
     (memberPage - 1) * rowsPerPage,
     memberPage * rowsPerPage
@@ -125,7 +122,7 @@ const Orders = () => {
     visitorPage * rowsPerPage
   );
 
-  // Stats calculation with proper data structure
+
   const memberStats = {
     totalOrders: memberOrders.length,
     completedOrders: memberOrders.filter(o => 
@@ -174,11 +171,11 @@ const Orders = () => {
       <div className="max-w-7xl mx-auto">
         <h1 className="text-3xl font-bold text-gray-900 mb-8">Order Management</h1>
 
-        {/* Member Orders */}
+       
         <div className="mb-10">
           <h2 className="text-2xl font-bold text-blue-900 mb-4">Member Orders</h2>
           
-          {/* Clickable Status Badge Boxes for Member Orders */}
+       
           <StatusBadgeBoxes 
             stats={memberStats} 
             onFilterChange={handleMemberFilterChange}
@@ -211,11 +208,11 @@ const Orders = () => {
           </div>
         </div>
 
-        {/* Visitor Orders */}
+       
         <div>
           <h2 className="text-2xl font-bold text-purple-900 mb-4">Visitor Orders</h2>
           
-          {/* Clickable Status Badge Boxes for Visitor Orders */}
+        
           <StatusBadgeBoxes 
             stats={visitorStats} 
             onFilterChange={handleVisitorFilterChange}
