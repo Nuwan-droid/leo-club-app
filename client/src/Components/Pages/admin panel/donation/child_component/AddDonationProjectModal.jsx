@@ -82,13 +82,13 @@ const AddDonationProjectModal = ({ isOpen, onSave, onCancel }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white rounded-lg p-6 w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto outline outline-black">
         <h2 className="text-2xl font-semibold mb-6 text-center">Add Donation for project</h2>
         
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Left Column */}
+            
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -177,7 +177,7 @@ const AddDonationProjectModal = ({ isOpen, onSave, onCancel }) => {
               </div>
             </div>
 
-            {/* Right Column */}
+           
             <div className="space-y-4">
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-3">Donation Items</h3>

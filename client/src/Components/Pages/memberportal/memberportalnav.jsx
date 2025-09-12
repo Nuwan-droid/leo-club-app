@@ -1,13 +1,20 @@
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { FaBell, FaUserCircle } from 'react-icons/fa'; // Import icons
+import { Link, useLocation, useNavigate } from 'react-router-dom'; // ✅ useNavigate added
+import { FaBell } from 'react-icons/fa'; 
 import leoLogo from '../../../assets/LEO-Logo.png';
+import AccountSettings from './accountSettings';
 
 const MemberPortalNav = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
-  
-  // Split nav items for better handling in desktop vs. mobile
+  const navigate = useNavigate(); // ✅ navigation hook
+
+  // ✅ Logout handler
+  const handleLogout = () => {
+    localStorage.removeItem("leoToken"); // remove token
+    navigate("/"); // redirect to home (or login page)
+  };
+
   const mainNavItems = [
     { name: 'Home', path: '/memberportal' },
     { name: 'Learning Hub', path: '/memberportal/learning-hub' },
@@ -17,8 +24,8 @@ const MemberPortalNav = () => {
 
   const allNavItems = [
     ...mainNavItems,
-    { name: 'Notifications', path: '/memberportal/notifications' }, // Corrected path
-    { name: 'Account', path: '/memberportal/account' }             // Corrected path
+    { name: 'Notifications', path: '/memberportal/notifications' },
+    { name: 'Account', path: '/memberportal/account' }
   ];
 
   const isActive = (path) => location.pathname === path;
@@ -40,7 +47,6 @@ const MemberPortalNav = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center justify-end flex-1">
-            {/* Main Text-based Links */}
             <div className="flex items-center space-x-6">
               {mainNavItems.map((item) => (
                 <Link
@@ -54,13 +60,8 @@ const MemberPortalNav = () => {
                 >
                   {item.name}
                 </Link>
-                 
               ))} 
-              
-           
             </div>
-
-            
 
             {/* Divider and Icon-based Links */}
             <div className="flex items-center space-x-4 ml-6 pl-6 border-l border-gray-200">
@@ -71,13 +72,7 @@ const MemberPortalNav = () => {
               >
                 <FaBell className="h-5 w-5" />
               </Link>
-              <Link
-                to="/memberportal/account"
-                aria-label="Account"
-                className="p-2 rounded-full text-gray-600 hover:text-blue-600 hover:bg-gray-100 transition-colors"
-              >
-                <FaUserCircle className="h-6 w-6" />
-              </Link>
+              <AccountSettings />
             </div>
           </div>
 
@@ -120,7 +115,12 @@ const MemberPortalNav = () => {
                 {item.name}
               </Link>
             ))}
-            <button className="w-full text-left bg-red-500 text-white px-3 py-2 rounded-md text-base font-medium hover:bg-red-600 transition-colors duration-200 mt-2">
+
+            {/* ✅ Now logout works */}
+            <button
+              onClick={handleLogout}
+              className="w-full text-left bg-red-500 text-white px-3 py-2 rounded-md text-base font-medium hover:bg-red-600 transition-colors duration-200 mt-2"
+            >
               Log Out
             </button>
           </div>

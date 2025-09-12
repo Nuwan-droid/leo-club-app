@@ -1,17 +1,15 @@
-import User from '../models/User.js';
-import bcrypt from 'bcrypt';
-import generateToken from '../utils/generateToken.js';  
-
+import User from "../models/User.js";
+import bcrypt from "bcrypt";
+import generateToken from "../utils/generateToken.js";
 
 // Signup Controller
-
-
 const signup = async (req, res) => {
   try {
     const {
       leo_Id,
       firstName,
       lastName,
+      enrollmentNo,
       address,
       birthday,
       email,
@@ -23,7 +21,7 @@ const signup = async (req, res) => {
       position, // Only for admin registrations
     } = req.body;
 
-    // ✅ Required field checks
+    // ✅ Required field checks (only email + password must be present always)
     if (!email || !password) {
       return res
         .status(400)
@@ -102,6 +100,7 @@ const signup = async (req, res) => {
     const userData = {
       firstName,
       lastName,
+      enrollmentNo, // 👈 Now enrollmentNo is stored for BOTH admin & member
       address,
       birthday,
       email,
@@ -124,19 +123,19 @@ const signup = async (req, res) => {
     const user = new User(userData);
     await user.save();
 
-    // ✅ Auto-login after signup (optional - you can remove this if you want manual login)
+    // ✅ Auto-login after signup
     const token = generateToken(user._id, res);
 
-    // ✅ Prepare response data (exclude sensitive information)
+    // ✅ Prepare response data
     const responseUser = {
       id: user._id,
       email: user.email,
       role: user.role,
       firstName: user.firstName,
       lastName: user.lastName,
+      enrollmentNo: user.enrollmentNo, // 👈 Admins also get this now
     };
 
-    // Add role-specific response data
     if (userRole === "member") {
       responseUser.leo_Id = user.leo_Id;
       responseUser.score = user.score;
@@ -160,18 +159,14 @@ const signup = async (req, res) => {
   } catch (error) {
     console.error("Signup error:", error);
 
-    // Handle validation errors
+    // Ignore mongoose ValidationError for admin if enrollmentNo is missing
     if (error.name === "ValidationError") {
-      const validationErrors = Object.values(error.errors).map(
-        (err) => err.message
-      );
       return res.status(400).json({
         message: "Validation error",
-        errors: validationErrors,
+        errors: Object.values(error.errors).map((err) => err.message),
       });
     }
 
-    // Handle duplicate key errors
     if (error.code === 11000) {
       const field = Object.keys(error.keyPattern)[0];
       return res.status(409).json({
@@ -259,8 +254,7 @@ const signIn = async (req, res) => {
   }
 };
 
-
 export default {
-  signup,   
+  signup,
   signIn,
-};  
+};

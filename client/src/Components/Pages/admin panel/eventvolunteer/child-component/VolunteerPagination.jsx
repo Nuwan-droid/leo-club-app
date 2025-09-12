@@ -12,7 +12,7 @@ const VolunteerPagination = ({
     const pages = [];
     const maxVisiblePages = 5;
     
-    // Previous buttons
+    
     pages.push(
       <button
         key="first"
@@ -35,7 +35,7 @@ const VolunteerPagination = ({
       </button>
     );
 
-    // Page numbers
+   
     for (let i = 1; i <= Math.min(maxVisiblePages, totalPages); i++) {
       pages.push(
         <button
@@ -69,7 +69,7 @@ const VolunteerPagination = ({
       );
     }
 
-    // Next buttons
+  
     pages.push(
       <button
         key="next"

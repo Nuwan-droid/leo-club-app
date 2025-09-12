@@ -1,18 +1,47 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import lionImage from '../../assets/DonateImages/Lion.png';
-import project1Image from '../../assets/DonateImages/project2.jpg';
-import project2Image from '../../assets/DonateImages/project1.jpg';
 import { useNavigate } from 'react-router-dom';
 
 const Donation = () => {
   const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState('schedule');
-  const [donations, setDonations] = useState({
-    1: { books: 20, pens: 60 },
-    2: { books: 20, pens: 0, tablet: 0 },
-  });
+  const [donationProjects, setDonationProjects] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [clubFund, setClubFund] = useState(54450);
-  const [detailsVisible, setDetailsVisible] = useState({ 1: false, 2: false });
+  const [detailsVisible, setDetailsVisible] = useState({});
+
+  // Fetch donation projects from backend
+  useEffect(() => {
+    const fetchDonationProjects = async () => {
+      try {
+        setLoading(true);
+        const response = await fetch('http://localhost:5001/api/donation-projects');
+        if (!response.ok) {
+          throw new Error('Failed to fetch donation projects');
+        }
+        const result = await response.json();
+        console.log('API Response:', result); // Debug log
+        
+        // Check if response has success and data properties
+        if (result.success && result.data) {
+          setDonationProjects(result.data);
+        } else if (Array.isArray(result)) {
+          setDonationProjects(result);
+        } else {
+          setDonationProjects([]);
+        }
+        setError(null);
+      } catch (err) {
+        setError(err.message);
+        console.error('Error fetching donation projects:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDonationProjects();
+  }, []);
 
   const handleDonate = (type, projectId) => {
     if (projectId === 'club') {
@@ -21,17 +50,6 @@ const Donation = () => {
       alert(`Thank you for donating Rs.${amount} to the club fund!`);
       return;
     }
-
-    setDonations((prev) => {
-      const newDonations = { ...prev };
-      if (type === 'books') {
-        newDonations[projectId].books += 1;
-        if (projectId === 2) newDonations[2].tablet += 1;
-      } else if (type === 'pens') {
-        newDonations[projectId].pens += 1;
-      }
-      return newDonations;
-    });
 
     if (type === 'books') {
       alert('Thank you for donating books!');
@@ -116,184 +134,108 @@ const Donation = () => {
           id="schedule-section"
           className={`content-section ${activeSection === 'schedule' ? 'block' : 'hidden'}`}
         >
-          <div className="project-cards flex flex-col lg:flex-row gap-5 justify-start">
-            {/* Project 1 */}
-            <div className="project-card w-[200px] bg-white rounded-lg shadow-md overflow-hidden">
-              <div className="project-header bg-blue-100 p-2 flex items-center gap-2">
-                <div className="project-icon w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center text-xs text-white">
-                  📚
-                </div>
-                <h3 className="text-xs font-semibold text-gray-800">Seeds for Hope</h3>
-              </div>
-              <div
-                className="project-image h-[150px] bg-cover bg-center"
-                style={{ backgroundImage: `url(${project1Image})` }}
-              ></div>
-              <div className="project-content p-3">
-                <div className="funding-item mb-2">
-                  <div className="funding-label text-xs font-semibold text-gray-800 mb-1">
-                    Books
+          {loading ? (
+            <div className="text-center text-gray-600">Loading donation projects...</div>
+          ) : error ? (
+            <div className="text-center text-red-600">Error: {error}</div>
+          ) : donationProjects.length === 0 ? (
+            <div className="text-center text-gray-600">No donation projects available at the moment.</div>
+          ) : (
+            <div className="project-cards flex flex-col lg:flex-row gap-5 justify-start flex-wrap">
+              {donationProjects.map((project) => (
+                <div key={project._id} className="project-card w-[200px] bg-white rounded-lg shadow-md overflow-hidden">
+                  <div className="project-header bg-blue-100 p-2 flex items-center gap-2">
+                    <div className="project-icon w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center text-xs text-white">
+                      📚
+                    </div>
+                    <h3 className="text-xs font-semibold text-gray-800">{project.title}</h3>
                   </div>
-                  <div className="funding-bar flex justify-between items-center bg-gray-200 p-1 rounded text-xs">
-                    <span className="required-text text-orange-500 font-medium">
-                      Required: 50
-                    </span>
-                    <span className="received-text text-green-600 font-medium">
-                      Received: {donations[1].books}
-                    </span>
-                  </div>
-                </div>
-                <div className="funding-item mb-2">
-                  <div className="funding-label text-xs font-semibold text-gray-800 mb-1">
-                    Pens
-                  </div>
-                  <div className="funding-bar flex justify-between items-center bg-gray-200 p-1 rounded text-xs">
-                    <span className="required-text text-orange-500 font-medium">
-                      Required: 100
-                    </span>
-                    <span className="received-text text-green-600 font-medium">
-                      Received: {donations[1].pens}
-                    </span>
-                  </div>
-                </div>
-                <button
-                  className="see-more-btn text-xs text-blue-500 underline mb-2"
-                  onClick={() => toggleDetails(1)}
-                >
-                  {detailsVisible[1] ? 'See less' : 'See more'}
-                </button>
-                <div
-                  className={`project-details text-xs ${detailsVisible[1] ? 'block' : 'hidden'} bg-gray-50 p-2 rounded mb-2`}
-                >
-                  <div className="detail-row mb-1">
-                    <span className="detail-label font-semibold text-gray-800">
-                      Date:  July 30, 2025
-
-                    </span>
-                     July 30, 2025
-                   
-                  </div>
-                  <div className="detail-row mb-1">
-                    <span className="detail-label font-semibold text-gray-800">
-                      Venue:  Kurukulava Maha Vidyalaya
-
-                    </span>
-                     Kurukulava Maha Vidyalaya
-
-                  </div>
-                  <div className="detail-row">
-                    <span className="detail-label font-semibold text-gray-800">
-                      Description: Educational support program for underprivileged children.
-
-                    </span>
-                    Description:  Educational support program for underprivileged children.
+                  <div
+                    className="project-image h-[150px] bg-cover bg-center bg-gray-200"
+                    style={{
+                      backgroundImage: project.image_path 
+                        ? `url(${project.image_path})` 
+                        : `url(${lionImage})`
+                    }}
+                  ></div>
+                  <div className="project-content p-3">
+                    {project.donation_items && Object.entries(project.donation_items).map(([itemName, itemData]) => {
+                      // Only show items that have required quantity > 0
+                      if (itemData.required > 0) {
+                        return (
+                          <div key={itemName} className="funding-item mb-2">
+                            <div className="funding-label text-xs font-semibold text-gray-800 mb-1">
+                              {itemName.charAt(0).toUpperCase() + itemName.slice(1)}
+                            </div>
+                            <div className="funding-bar flex justify-between items-center bg-gray-200 p-1 rounded text-xs">
+                              <span className="required-text text-orange-500 font-medium">
+                                Required: {itemData.required}
+                              </span>
+                              <span className="received-text text-green-600 font-medium">
+                                Received: {itemData.received}
+                              </span>
+                            </div>
+                          </div>
+                        );
+                      }
+                      return null;
+                    })}
                     
+                    <div className="project-description text-xs text-gray-600 mb-2">
+                      {project.description}
+                    </div>
+                    
+                    <button
+                      className="see-more-btn text-xs text-blue-500 underline mb-2"
+                      onClick={() => toggleDetails(project._id)}
+                    >
+                      {detailsVisible[project._id] ? 'See less' : 'See more'}
+                    </button>
+                    
+                    <div
+                      className={`project-details text-xs ${detailsVisible[project._id] ? 'block' : 'hidden'} bg-gray-50 p-2 rounded mb-2`}
+                    >
+                      <div className="detail-row mb-1">
+                        <span className="detail-label font-semibold text-gray-800">
+                          Start Date: {new Date(project.start_date).toLocaleDateString()}
+                        </span>
+                      </div>
+                      <div className="detail-row mb-1">
+                        <span className="detail-label font-semibold text-gray-800">
+                          End Date: {new Date(project.end_date).toLocaleDateString()}
+                        </span>
+                      </div>
+                      <div className="detail-row mb-1">
+                        <span className="detail-label font-semibold text-gray-800">
+                          Location: {project.location}
+                        </span>
+                      </div>
+                      <div className="detail-row">
+                        <span className="detail-label font-semibold text-gray-800">
+                          City: {project.city}
+                        </span>
+                      </div>
+                    </div>
+                    
+                    <div className="action-buttons flex gap-1 mb-2">
+                      <button
+                        className="btn btn-blue btn-small text-xs p-1.5 flex-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+                        onClick={() => navigate(`/donateitems/${project._id}`)}
+                      >
+                        Donate Items
+                      </button>
+                    </div>
+                    <button
+                      className="btn btn-yellow text-xs p-2 w-full bg-yellow-400 text-gray-800 rounded hover:bg-yellow-500"
+                      onClick={() => navigate('/donatemoney')}
+                    >
+                      Donate Money
+                    </button>
                   </div>
                 </div>
-                <div className="action-buttons flex gap-1 mb-2">
-                  <button
-                    className="btn btn-blue btn-small text-xs p-1.5 flex-1 bg-blue-500 text-white rounded hover:bg-blue-600"
-                    onClick={() =>navigate('/donatebook')}
-                  >
-                    Donate Book
-                  </button>
-                  <button
-                    className="btn btn-blue btn-small text-xs p-1.5 flex-1 bg-blue-500 text-white rounded hover:bg-blue-600"
-                    onClick={() => navigate('/donatebook')}
-                  >
-                    Donate Pens
-                  </button>
-                </div>
-                <button
-                  className="btn btn-yellow text-xs p-2 w-full bg-yellow-400 text-gray-800 rounded hover:bg-yellow-500"
-                  onClick={() => navigate('/donatemoney')}
-                >
-                  Donate Money
-                </button>
-              </div>
+              ))}
             </div>
-
-            {/* Project 2 */}
-            <div className="project-card w-[200px] bg-white rounded-lg shadow-md overflow-hidden">
-              <div className="project-header bg-blue-100 p-2 flex items-center gap-2">
-                <div className="project-icon w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center text-xs text-white">
-                  📚
-                </div>
-                <h3 className="text-xs font-semibold text-gray-800">Sith Ruu</h3>
-              </div>
-              <div
-                className="project-image h-[150px] bg-cover bg-center"
-                style={{ backgroundImage: `url(${project2Image})` }}
-              ></div>
-              <div className="project-content p-3">
-                <div className="funding-item mb-2">
-                  <div className="funding-label text-xs font-semibold text-gray-800 mb-1">
-                    Books
-                  </div>
-                  <div className="funding-bar flex justify-between items-center bg-gray-200 p-1 rounded text-xs">
-                    <span className="required-text text-orange-500 font-medium">
-                      Required: 50
-                    </span>
-                    <span className="received-text text-green-600 font-medium">
-                      Received: {donations[2].books}
-                    </span>
-                  </div>
-                </div>
-                <div className="project-description text-xs text-gray-600 mb-2">
-                  Help children access digital learning tools and educational
-                  content.
-                </div>
-                <button
-                  className="see-more-btn text-xs text-blue-500 underline mb-2"
-                  onClick={() => toggleDetails(2)}
-                >
-                  {detailsVisible[2] ? 'See less' : 'See more'}
-                </button>
-                <div
-                  className={`project-details text-xs ${detailsVisible[2] ? 'block' : 'hidden'} bg-gray-50 p-2 rounded mb-2`}
-                >
-                  <div className="detail-row mb-1">
-                    <span className="detail-label font-semibold text-gray-800">
-                      Date:    August 31, 2025
-                    </span>
-                    August 31, 2025
-                  </div>
-                  <div className="detail-row mb-1">
-                    <span className="detail-label font-semibold text-gray-800">
-                      Venue:   Ibbagamuva Maha Vidyalaya
-                    </span>
-                    Ibbagamuva Maha Vidyalaya
-                  </div>
-                  <div className="detail-row">
-                    <span className="detail-label font-semibold text-gray-800">
-                      Description: Digital learning initiative to bridge the technology gap for children.
-                    </span>
-                    Digital learning initiative to bridge the technology gap.
-                  </div>
-                </div>
-                <div className="action-buttons flex gap-1 mb-2">
-                  <button
-                    className="btn btn-blue btn-small text-xs p-1.5 flex-1 bg-blue-500 text-white rounded hover:bg-blue-600"
-                    onClick={() => navigate('/donatebook')}
-                  >
-                    Donate Book
-                  </button>
-                  <button
-                    className="btn btn-blue btn-small text-xs p-1.5 flex-1 bg-blue-500 text-white rounded hover:bg-blue-600"
-                    onClick={() =>navigate('/donatebook')}
-                  >
-                    Donate Pens
-                  </button>
-                </div>
-                <button
-                  className="btn btn-yellow text-xs p-2 w-full bg-yellow-400 text-gray-800 rounded hover:bg-yellow-500"
-                  onClick={() => navigate('/donatemoney')}
-                >
-                  Donate Money
-                </button>
-              </div>
-            </div>
-          </div>
+          )}
         </div>
 
         {/* Club Funds Section - Centered */}

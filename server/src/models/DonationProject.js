@@ -6,21 +6,13 @@ const donateProjectSchema = new mongoose.Schema({
     required: true,
     unique: true
   },
-  donation_items: {
-    type: String,
-    required: false
-  },
   title: {
     type: String,
-    required: false
-  },
-  item_quantity: {
-    type: Number,
-    required: false
+    required: true
   },
   description: {
     type: String,
-    required: false
+    required: true
   },
   image_path: {
     type: String,
@@ -28,13 +20,35 @@ const donateProjectSchema = new mongoose.Schema({
   },
   start_date: {
     type: Date,
-    required: false
+    required: true
   },
   end_date: {
     type: Date,
-    required: false
+    required: true
   },
-  creaed_at: {
+  location: {
+    type: String,
+    required: true
+  },
+  city: {
+    type: String,
+    required: true
+  },
+  donation_items: {
+    books: {
+      required: { type: Number, default: 0 },
+      received: { type: Number, default: 0 }
+    },
+    pens: {
+      required: { type: Number, default: 0 },
+      received: { type: Number, default: 0 }
+    },
+    clothes: {
+      required: { type: Number, default: 0 },
+      received: { type: Number, default: 0 }
+    }
+  },
+  created_at: {
     type: Date,
     default: Date.now
   },
@@ -44,4 +58,10 @@ const donateProjectSchema = new mongoose.Schema({
   }
 });
 
-export default mongoose.model('DonateProject', donateProjectSchema);
+// Update the updated_at field before saving
+donateProjectSchema.pre('save', function(next) {
+  this.updated_at = Date.now();
+  next();
+});
+
+export default mongoose.model('DonationProject', donateProjectSchema);

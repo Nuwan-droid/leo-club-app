@@ -1,21 +1,46 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Stat from "./Stat";
-import {
-  UserCircle,
-  Briefcase,
-  Newspaper,
-  Trophy,
-} from "lucide-react";
+import { UserCircle, Briefcase, Newspaper, Trophy } from "lucide-react";
 
 const StatsSection = () => {
+  const [memberCount, setMemberCount] = useState(0);
+  const [projectCount, setProjectCount] = useState(0);
+  const [awardCount, setAwardCount] = useState(0); // ✅ dynamic award count
+
+  useEffect(() => {
+    const fetchCounts = async () => {
+      try {
+        // Members count
+        const resMembers = await fetch("http://localhost:5001/api/users/members/count");
+        const dataMembers = await resMembers.json();
+        setMemberCount(dataMembers.count);
+
+        // Projects count
+        const resProjects = await fetch("http://localhost:5001/api/projects/allprojects");
+        const dataProjects = await resProjects.json();
+        setProjectCount(dataProjects.length);
+
+        // Awards count
+        const resAwards = await fetch("http://localhost:5001/api/awards");
+        const dataAwards = await resAwards.json();
+        setAwardCount(dataAwards.length);
+      } catch (error) {
+        console.error("Error fetching counts:", error);
+      }
+    };
+
+    fetchCounts();
+  }, []);
+
   return (
-   
-    <div className="pb-8 -mt-18 bg-gradient-to-br  from-white to-blue-50 flex justify-center ">
-      <div className="w-4/5 ">
+    <div className="pb-8 -mt-18 bg-gradient-to-br from-white to-blue-50 flex justify-center">
+      <div className="w-4/5">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+
+          {/* Members */}
           <div className="bg-white shadow-xl rounded-2xl p-4 hover:scale-[1.03] transition duration-300">
             <Stat
-              end={1200}
+              end={memberCount}
               label="Members"
               Icon={() => (
                 <div className="bg-blue-100 text-blue-600 p-3 rounded-full">
@@ -25,9 +50,10 @@ const StatsSection = () => {
             />
           </div>
 
+          {/* Projects */}
           <div className="bg-white shadow-xl rounded-2xl p-4 hover:scale-[1.03] transition duration-300">
             <Stat
-              end={345}
+              end={projectCount}
               label="Projects"
               Icon={() => (
                 <div className="bg-purple-100 text-purple-600 p-3 rounded-full">
@@ -37,10 +63,11 @@ const StatsSection = () => {
             />
           </div>
 
+          {/* Newsletters (static) */}
           <div className="bg-white shadow-xl rounded-2xl p-4 hover:scale-[1.03] transition duration-300">
             <Stat
-              end={78}
-              label="News Leters"
+              end={10}
+              label="News Letters"
               Icon={() => (
                 <div className="bg-green-100 text-green-600 p-3 rounded-full">
                   <Newspaper className="w-8 h-8" />
@@ -49,9 +76,10 @@ const StatsSection = () => {
             />
           </div>
 
+          {/* Awards (dynamic) */}
           <div className="bg-white shadow-xl rounded-2xl p-4 hover:scale-[1.03] transition duration-300">
             <Stat
-              end={25}
+              end={awardCount}
               label="Awards"
               Icon={() => (
                 <div className="bg-yellow-100 text-yellow-600 p-3 rounded-full">
@@ -60,10 +88,10 @@ const StatsSection = () => {
               )}
             />
           </div>
+
         </div>
       </div>
     </div>
-  
   );
 };
 

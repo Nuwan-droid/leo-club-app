@@ -18,7 +18,8 @@ const Sidebar = () => {
     { name: 'Products', path: '/admin/products' },
     { name: 'Orders', path: '/admin/orders' },
     { name: 'Donation', path: '/admin/donation' },
-    { name: 'Manage about', path: '/admin/manage-about' }
+    { name: 'Manage about', path: '/admin/manage-executive-members' }
+ 
   ];
 
   const handleNavigation = (path) => {

@@ -1,76 +1,107 @@
 import React from 'react';
-import StatusBadge from './StatusBadge';
 
-const OrderRow = ({ order, isSelected, onSelect, onEdit, onDelete, onUpdateStatus }) => {
-  const handleStatusChange = (newStatus) => {
-    onUpdateStatus(order.id, newStatus);
+
+const StatusBadge = ({ status }) => {
+  const getStatusColor = (status) => {
+    const normalizedStatus = status?.toLowerCase();
+    switch (normalizedStatus) {
+      case 'delivered':
+      case 'completed':
+        return 'bg-green-100 text-green-800';
+      case 'processing':
+      case 'confirmed':
+        return 'bg-blue-100 text-blue-800';
+      case 'shipped':
+        return 'bg-purple-100 text-purple-800';
+      case 'cancelled':
+      case 'failed':
+        return 'bg-red-100 text-red-800';
+      case 'pending':
+        return 'bg-yellow-100 text-yellow-800';
+      default:
+        return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  return (
+    <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(status)}`}>
+      {status || 'Unknown'}
+    </span>
+  );
+};
+
+const OrderRow = ({ order }) => {
+  
+  const formatDate = (dateString) => {
+    if (!dateString) return 'N/A';
+    try {
+      return new Date(dateString).toLocaleDateString();
+    } catch (error) {
+      return 'Invalid Date';
+    }
+  };
+
+
+  const formatPrice = (amount) => {
+    if (amount === null || amount === undefined) return 'N/A';
+    const numAmount = parseFloat(amount);
+    if (isNaN(numAmount)) return 'N/A';
+    return `Rs ${numAmount.toFixed(2)}`;
+  };
+
+  // Get customer name
+  const getCustomerName = (customer) => {
+    if (!customer) return 'N/A';
+    
+    const firstName = customer.firstName || customer.first_name || '';
+    const lastName = customer.lastName || customer.last_name || '';
+    const fullName = customer.name || '';
+    
+    if (fullName) return fullName;
+    if (firstName || lastName) return `${firstName} ${lastName}`.trim();
+    return 'N/A';
+  };
+
+  // Get customer address
+  const getCustomerAddress = (customer) => {
+    if (!customer) return 'N/A';
+    return customer.address || customer.shipping_address || customer.billing_address || 'N/A';
+  };
+
+  // Get items display
+  const getItemsDisplay = (items) => {
+    if (!Array.isArray(items)) return 'No items';
+    if (items.length === 0) return 'No items';
+    
+    return items.map((item, index) => {
+      return item.name || item.product_name || item.title || `Item ${index + 1}`;
+    }).join(', ');
   };
 
   return (
     <tr className="hover:bg-gray-50">
-      <td className="px-6 py-4 whitespace-nowrap">
-        <input
-          type="checkbox"
-          checked={isSelected}
-          onChange={(e) => onSelect(e.target.checked)}
-          className="rounded border-gray-300"
-        />
+      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+        #{order.order_id || order.id || 'N/A'}
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-        {String(order.id).padStart(5, '0')}
+        {getCustomerName(order.customer)}
       </td>
-      <td className="px-6 py-4 whitespace-nowrap">
-        <div className="flex items-center">
-          <div className="flex-shrink-0 h-10 w-10">
-            <img
-              className="h-10 w-10 rounded-full"
-              src={order.avatar}
-              alt={order.name}
-            />
-          </div>
-          <div className="ml-4">
-            <div className="text-sm font-medium text-gray-900">
-              {order.name}
-            </div>
-          </div>
+      <td className="px-6 py-4 text-sm text-gray-900 max-w-xs truncate">
+        {getCustomerAddress(order.customer)}
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+        {formatDate(order.created_date || order.createdAt)}
+      </td>
+      <td className="px-6 py-4 text-sm text-gray-900 max-w-xs">
+        <div className="truncate" title={getItemsDisplay(order.items)}>
+          {getItemsDisplay(order.items)}
         </div>
       </td>
-      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-        {order.address}
+      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+        {formatPrice(order.total_amount || order.payment?.amount)}
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-        {order.date}
-      </td>
-      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-        {order.type}
-      </td>
-      <td className="px-6 py-4 whitespace-nowrap">
-        <StatusBadge 
-          status={order.status} 
-          onStatusChange={handleStatusChange}
-        />
-      </td>
-      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-        <div className="flex space-x-2">
-          <button
-            onClick={onEdit}
-            className="text-blue-600 hover:text-blue-900"
-            title="Edit Order"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-            </svg>
-          </button>
-          <button
-            onClick={onDelete}
-            className="text-red-600 hover:text-red-900"
-            title="Delete Order"
-          >
-            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-            </svg>
-          </button>
-        </div>
+        <StatusBadge status={order.order_status || order.status} />
       </td>
     </tr>
   );

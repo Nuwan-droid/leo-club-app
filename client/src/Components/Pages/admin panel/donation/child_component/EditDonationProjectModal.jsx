@@ -18,10 +18,26 @@ const EditDonationProjectModal = ({ isOpen, project, onSave, onCancel }) => {
 
   useEffect(() => {
     if (project) {
+   
+      const formatDateForInput = (dateString) => {
+        if (!dateString) return '';
+
+        try {
+          const date = new Date(dateString);
+          return date.toISOString().split('T')[0];
+        } catch {
+          return '';
+        }
+      };
+
       setFormData({
         name: project.name || '',
-        startDate: project.startDate || '',
-        endDate: project.endDate || '',
+        startDate: project._originalData ? 
+          formatDateForInput(project._originalData.start_date) : 
+          formatDateForInput(project.startDate),
+        endDate: project._originalData ? 
+          formatDateForInput(project._originalData.end_date) : 
+          formatDateForInput(project.endDate),
         location: project.location || '',
         city: project.city || '',
         description: project.description || '',
@@ -79,7 +95,7 @@ const EditDonationProjectModal = ({ isOpen, project, onSave, onCancel }) => {
         
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Left Column */}
+           
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -168,7 +184,7 @@ const EditDonationProjectModal = ({ isOpen, project, onSave, onCancel }) => {
               </div>
             </div>
 
-            {/* Right Column */}
+           
             <div className="space-y-4">
               <div>
                 <h3 className="text-lg font-semibold text-gray-900 mb-3">Donation Items</h3>

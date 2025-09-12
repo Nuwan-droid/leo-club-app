@@ -44,6 +44,7 @@ export default function Login({ onClose }) {
         onClose();
 
         if (user?.role === "member") {
+          toast.success("Member Login successful!");
           navigate("/memberportal");
         } else if (user?.role === "admin") {
           navigate("/admin");

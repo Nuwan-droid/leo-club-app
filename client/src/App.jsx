@@ -11,6 +11,7 @@ import Terms from "./Components/Pages/Terms";
 import Donation from "./Components/Pages/Donation";
 import DonateMoney from "./Components/Pages/DonateMoney";
 import DonateBooks from "./Components/Pages/DonateBook";
+import DonateItems from "./Components/Pages/DonateItems";
 import EventCalendar from "./Components/Pages/EventCalendar";
 import Shop from "./Components/Pages/LeoShop";
 import ProjectShowcasePage from "./Components/Pages/ProjectShowcasePage";
@@ -20,6 +21,9 @@ import EventVolunteerPage from "./Components/Pages/event_volunteer/EventVoluntee
 import NewsLetter from "./Components/Pages/NewsLetter";
 import Chatbot from "./Components/Pages/chatbot/LeoChatbot";
 import Admin from "./Components/Pages/admin panel/main_admin";
+import AccountManage from "./Components/Pages/memberportal/accountManagement/account";
+import Membernotification from "./Components/Pages/memberportal/Notification/request";
+
 
 function App() {
   const location = useLocation();
@@ -39,6 +43,7 @@ function App() {
         <Route path="/donation" element={<Donation />} />
         <Route path="/donatemoney" element={<DonateMoney />} />
         <Route path="/donatebook" element={<DonateBooks />} />
+        <Route path="/donateitems/:projectId" element={<DonateItems />} />
         <Route path="/calander" element={<EventCalendar />} />
         <Route path="/shop" element={<Shop />} />
         <Route path="/project" element={<ProjectShowcasePage />} />
@@ -46,6 +51,8 @@ function App() {
         <Route path="/memberportal/learning-hub" element={<LearningHub />} />
         <Route path="/memberportal/join-newsletter" element={<NewsLetter />} />
         <Route path="/memberportal/event-volunteer" element={<EventVolunteerPage />} />
+        <Route path="/memberportal/account-manage" element={<AccountManage/>} />
+        <Route path="/memberportal/notifications" element={<Membernotification/>} />
         <Route path="/chatbot" element={<Chatbot />} />
         {/* Admin routes - use wildcard to handle nested routing */}
         <Route path="/admin/*" element={<Admin />} />

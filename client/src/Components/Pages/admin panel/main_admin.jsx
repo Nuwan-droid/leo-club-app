@@ -1,12 +1,12 @@
 import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 
-// components
+
 import Sidebar from './admin_elements/sildebar';
 import Header from './admin_elements/header';
 import Breadcrumb from './admin_elements/Breadcrumb';
 
-// pages
+
 import Dashboard from './dashboard/dashboard';
 import Users from './users/Users';
 import Request from './request/request';
@@ -20,6 +20,9 @@ import Orders from './orders/Orders';
 import Donation from './donation/Donation';
 import ManageAbout from './manageabout/ManageAbout';
 import AccountManagement from './admin_elements/AccountManagement';
+import ManageExecutiveMembers from './manage-executive-members/ManageExecutiveMembers';
+
+
 
 const Adminmain = () => {
   return (
@@ -43,8 +46,9 @@ const Adminmain = () => {
             <Route path="/donation" element={<Donation />} />
             <Route path="/manage-about" element={<ManageAbout />} />
             <Route path="/account-settings" element={<AccountManagement />} />
-            {/* Redirect any unknown admin routes to dashboard */}
+           
             <Route path="*" element={<Navigate to="/admin" replace />} />
+            <Route path="/manage-executive-members" element={<ManageExecutiveMembers />} />
           </Routes>
         </div>
       </div>

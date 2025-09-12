@@ -1,13 +1,13 @@
-import React from 'react';
-import UserTableRow from './UserTableRow';
+import React from "react";
+import UserTableRow from "./UserTableRow";
 
-const UserTable = ({ 
-  users, 
-  selectedUsers, 
-  onSelectAll, 
-  onSelectUser, 
-  onEdit, 
-  onDelete 
+const UserTable = ({
+  users,
+  selectedUsers,
+  onSelectAll,
+  onSelectUser,
+  onEdit,
+  onDelete,
 }) => {
   return (
     <div className="overflow-x-auto">
@@ -17,7 +17,9 @@ const UserTable = ({
             <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
               <input
                 type="checkbox"
-                checked={selectedUsers.length === users.length && users.length > 0}
+                checked={
+                  selectedUsers.length === users.length && users.length > 0
+                }
                 onChange={(e) => onSelectAll(e.target.checked)}
                 className="rounded border-gray-300"
               />
@@ -29,15 +31,15 @@ const UserTable = ({
               First Name
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
-              last Name             
+              last Name
             </th>
             <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
               Email
             </th>
-             <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
               Role
             </th>
-             <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+            <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
               Actions
             </th>
           </tr>
