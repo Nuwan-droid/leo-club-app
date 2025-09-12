@@ -8,7 +8,7 @@ import Whatsapp from './memberportal/Whatsapp';
 function NewsLetter() {
 return (
 <>  
-<MemberPortalNav />
+<MemberPortalNav/>
 <Whatsapp/>
 <EventCardSlider />
  </>

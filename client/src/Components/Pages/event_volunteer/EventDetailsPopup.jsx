@@ -4,7 +4,7 @@ import { Calendar, Clock, MapPin, User, X, ChevronLeft, Share2, Heart, Users } f
 const EventDetailsPopup = ({ event, onClose }) => {
   const [isJoined, setIsJoined] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
-  const [attendeeCount, setAttendeeCount] = useState(32);
+  const [attendeeCount, setAttendeeCount] = useState(10);
   const [isLoading, setIsLoading] = useState(false);
   const [showFullDescription, setShowFullDescription] = useState(false);
 

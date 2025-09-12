@@ -19,9 +19,14 @@ const badgeSchema = new mongoose.Schema({
     required: false
   },
   date_issued: {
-    type: Date,
+    type: String,
     required: false
+  },
+  image_path: {   // ✅ New field for image storage
+    type: String,
+    required: false,
+    trim: true
   }
-});
+}, { timestamps: true });
 
 export default mongoose.model('Badge', badgeSchema);
