@@ -48,12 +48,7 @@ const DashboardContent = () => {
             <h1 className="text-2xl font-bold text-gray-900">Dashboard Overview</h1>
             <p className="text-gray-600 mt-1">Welcome to admin dashboard</p>
           </div>
-         <button
-            onClick={() => setShowAwardModal(true)}
-            className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition"
-          >
-            Add Awards
-          </button>
+
         </div>
        
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
@@ -72,42 +67,26 @@ const DashboardContent = () => {
   
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
      
-          <div className="bg-white rounded-xl shadow-sm p-6">
-            <h3 className="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h3>
-            <div className="space-y-3">
-              <div className="flex items-center space-x-3">
-                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                <p className="text-sm text-gray-600">New user registration</p>
-                <span className="text-xs text-gray-400">2 min ago</span>
-              </div>
-              <div className="flex items-center space-x-3">
-                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                <p className="text-sm text-gray-600">Project completed</p>
-                <span className="text-xs text-gray-400">5 min ago</span>
-              </div>
-              <div className="flex items-center space-x-3">
-                <div className="w-2 h-2 bg-yellow-500 rounded-full"></div>
-                <p className="text-sm text-gray-600">New order received</p>
-                <span className="text-xs text-gray-400">10 min ago</span>
-              </div>
-            </div>
-          </div>
+  
 
           <div className="bg-white rounded-xl shadow-sm p-6">
             <h3 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
             <div className="grid grid-cols-2 gap-3">
-              <button className="p-3 bg-blue-50 rounded-lg hover:bg-blue-100 transition-colors">
+              <button className="p-3 bg-blue-200 rounded-lg hover:bg-blue-100 transition-colors">
                 <div className="text-blue-600 text-sm font-medium">Add User</div>
               </button>
-              <button className="p-3 bg-green-50 rounded-lg hover:bg-green-100 transition-colors">
-                <div className="text-green-600 text-sm font-medium">New Project</div>
+              <button className="p-3 bg-green-200 rounded-lg hover:bg-green-100 transition-colors">
+                <div className="text-green-600 text-sm font-medium">Add New Project</div>
               </button>
-              <button className="p-3 bg-yellow-50 rounded-lg hover:bg-yellow-100 transition-colors">
-                <div className="text-yellow-600 text-sm font-medium">View Reports</div>
+              <button className="p-3 bg-yellow-200 rounded-lg hover:bg-yellow-100 transition-colors">
+                <div className="text-yellow-600 text-sm font-medium">Add Learning Materials</div>
               </button>
-              <button className="p-3 bg-purple-50 rounded-lg hover:bg-purple-100 transition-colors">
-                <div className="text-purple-600 text-sm font-medium">Settings</div>
-              </button>
+         <button
+            onClick={() => setShowAwardModal(true)}
+            className="px-4 py-2 bg-purple-200 text-white rounded-lg hover:bg-purple-100 transition"
+          >
+            <div className="text-purple-600 text-sm font-medium">Add Awards</div>
+          </button>
             </div>
           </div>
 
