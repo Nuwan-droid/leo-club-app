@@ -9,44 +9,24 @@ const ContentGrid = () => {
       id: 1,
       date: '11/04/2025',
       title: 'How design a Flyer',
-      description: 'Body ',
+      description: 'Basic understanding for designing a flyer',
       image: '../../../../public/flyer_image.jpg'
     },
     {
       id: 2,
       date: '11/04/2025',
       title: 'How write caption for flyer',
-      description: 'Body ',
-      image: '../../../../public/flyer_image.jpg'
+      description: 'Best way to create  captions for flyer',
+      image: '../../../../public/caption_for flyer.jpg'
     },
     {
       id: 3,
       date: '11/04/2025',
       title: 'How using AI corectly ',
-      description: 'Body ',
-      image: '../../../../public/caption_for flyer.jpg'
-    },
-    {
-      id: 4,
-      date: '11/04/2025',
-      title: 'How design a Flyer',
-      description: 'Body ',
-      image: '../../../../public/new-idea.jpg'
-    },
-    {
-      id: 5,
-      date: '11/04/2025',
-      title: 'How design a Flyer',
-      description: 'Body',
-      image: '../../../../public/Use _AI.jpg'
-    },
-    {
-      id: 6,
-      date: '11/04/2025',
-      title: 'How design a Flyer',
-      description: 'Body ',
-      image: '../../../../public/flyer_image.jpg'
+      description: 'Pro Tips for using AI correctly', 
+      image: '../../../../public/how_to_use_AI_Correctly.png'
     }
+    
   ];
 
   const loadMore = () => {
