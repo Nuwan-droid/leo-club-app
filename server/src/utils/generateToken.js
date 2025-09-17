@@ -6,9 +6,10 @@ const generateToken = (userId, res) => {
         throw new Error("JWT_SECRET not defined in environment");
     }
 
-    const token = jwt.sign({ id: userId }, process.env.JWT_SECRET, {
-        expiresIn: "1d",
-    });
+ const token = jwt.sign({ id: userId }, process.env.JWT_SECRET, {
+    expiresIn: "30m"
+});
+
 
     res.cookie("token", token, {
         httpOnly: true,

@@ -28,7 +28,7 @@ const Header = () => {
   useEffect(() => {
     (async () => {
       try {
-        const token = localStorage.getItem("leoToken");
+        const token = sessionStorage.getItem("adminToken");
         if (!token) {
           console.error("No token found, redirect to login");
           setLoading(false);
@@ -62,7 +62,7 @@ const Header = () => {
 
   const handleLogoutClick = () => {
     setIsDropdownOpen(false);
-    localStorage.removeItem("leoToken");
+    sessionStorage.removeItem("adminToken");
     navigate("/");
   };
 

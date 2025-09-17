@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Menu } from "lucide-react";
+import { toast } from "react-toastify";
 import Button from "./Button";
 import Header from "./Header";
 import AuthPopup from "./AuthPop";
@@ -17,8 +18,8 @@ export default function Navbar() {
   // ✅ Check if token exists in localStorage
   useEffect(() => {
     const checkToken = () => {
-      const token = localStorage.getItem("leoToken");
-      setHasToken(!!token);
+      const token = sessionStorage.getItem("memberToken");
+      setHasToken(token);
     };
 
     checkToken(); // run at mount
@@ -52,15 +53,42 @@ export default function Navbar() {
   }, [isOpen, showHamburger]);
 
   // ✅ Handler for Member Portal
-  const handleMemberPortalClick = (e) => {
-    const token = localStorage.getItem("leoToken");
-    if (!token) {
-      e.preventDefault(); // stop navigation
-      setShowAuthPopup1(true); // show Login popup
-    } else {
-      navigate("/memberportal"); // allow navigation
+ const handleMemberPortalClick = async (e) => {
+  e.preventDefault(); // prevent default first
+
+  const token = sessionStorage.getItem("memberToken");
+
+  if (!token) {
+    setShowAuthPopup1(true); // show Login popup
+    return;
+  }
+
+  try {
+    const res = await fetch("http://localhost:5001/api/user/profile", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch profile");
     }
-  };
+
+    const data = await res.json();
+    const role = data.role;
+
+    if (role === "member") {
+      navigate("/memberportal"); // redirect members
+    } else {
+      toast.error("Only members can access the member portal!");
+    }
+  } catch (err) {
+    console.error(err);
+    setShowAuthPopup1(true); // show login popup on error
+  }
+};
+
 
   return (
     <>

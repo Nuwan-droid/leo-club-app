@@ -38,7 +38,12 @@ export default function Login({ onClose }) {
 
       if (res.ok) {
         const { token, user } = data;
-        localStorage.setItem("leoToken", token);
+
+        if (user.role ==="admin"){
+          sessionStorage.setItem("adminToken",token);
+        }else{
+          sessionStorage.setItem("memberToken",token);
+        }
         toast.success("Login successful!");
 
         onClose();
