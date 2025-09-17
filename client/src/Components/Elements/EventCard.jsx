@@ -53,6 +53,7 @@ export default function EventCard({
         ${className}
       `}
     >
+
       <div className="relative group">
         {imageSrc && (
           <img
@@ -97,6 +98,7 @@ export default function EventCard({
         className="login mt-2 sm:mt-4 text-sm sm:text-base"
         onClick={handleDownload}
       />
+
     </div>
   );
 }
