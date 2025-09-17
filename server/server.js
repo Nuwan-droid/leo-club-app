@@ -18,13 +18,14 @@ import awardRoutes from "./src/routes/awardRoutes.js";
 import donationRoutes from "./src/routes/donationRoutes.js";
 import orderRoutes from './src/routes/orderRoutes.js';
 import cartRoutes from './src/routes/cartRoutes.js'; 
-
+import newsletterRoutes from "./src/routes/newsletterRoutes.js";
+import { handleMulterError } from "./src/config/upload.js";
 
 dotenv.config();
 connectDB();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5001;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -35,6 +36,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 app.use("/images", express.static(path.join(__dirname, "upload/images")));
+app.use("/uploads", express.static(path.join(__dirname, "uploads"))); 
+
+
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
@@ -50,6 +54,8 @@ app.use("/api/awards", awardRoutes);
 app.use("/api/donation-projects", donationRoutes); 
 app.use("/api/user",userRoutes);
 
+app.use("/api/newsletters", newsletterRoutes);
+app.use(handleMulterError);
 
 app.get("/", (req, res) => {
   res.json({ message: "LEO Club API is running ✅" });
@@ -58,4 +64,11 @@ app.get("/", (req, res) => {
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
   console.log(`🤖 Chatbot API: http://localhost:${PORT}/api/chatbot`);
+});
+app.use((err, req, res, next) => {
+  console.error('Global error handler:', err);
+  res.status(500).json({ 
+    message: 'Internal server error',
+    error: process.env.NODE_ENV === 'development' ? err.message : 'Something went wrong'
+  });
 });

@@ -1,35 +1,5 @@
 import React from 'react';
 
-
-const StatusBadge = ({ status }) => {
-  const getStatusColor = (status) => {
-    const normalizedStatus = status?.toLowerCase();
-    switch (normalizedStatus) {
-      case 'delivered':
-      case 'completed':
-        return 'bg-green-100 text-green-800';
-      case 'processing':
-      case 'confirmed':
-        return 'bg-blue-100 text-blue-800';
-      case 'shipped':
-        return 'bg-purple-100 text-purple-800';
-      case 'cancelled':
-      case 'failed':
-        return 'bg-red-100 text-red-800';
-      case 'pending':
-        return 'bg-yellow-100 text-yellow-800';
-      default:
-        return 'bg-gray-100 text-gray-800';
-    }
-  };
-
-  return (
-    <span className={`px-2 py-1 text-xs font-medium rounded-full ${getStatusColor(status)}`}>
-      {status || 'Unknown'}
-    </span>
-  );
-};
-
 const OrderRow = ({ order }) => {
   
   const formatDate = (dateString) => {
@@ -40,7 +10,6 @@ const OrderRow = ({ order }) => {
       return 'Invalid Date';
     }
   };
-
 
   const formatPrice = (amount) => {
     if (amount === null || amount === undefined) return 'N/A';
@@ -68,40 +37,122 @@ const OrderRow = ({ order }) => {
     return customer.address || customer.shipping_address || customer.billing_address || 'N/A';
   };
 
-  // Get items display
+  // Get items display with commercial format
   const getItemsDisplay = (items) => {
-    if (!Array.isArray(items)) return 'No items';
-    if (items.length === 0) return 'No items';
+    if (!Array.isArray(items) || items.length === 0) return 'No items';
     
     return items.map((item, index) => {
-      return item.name || item.product_name || item.title || `Item ${index + 1}`;
-    }).join(', ');
+      const itemName = item.name || item.product_name || item.title || `Item ${index + 1}`;
+      return `${index + 1}. ${itemName}`;
+    }).join('\n');
+  };
+
+  // Get quantities display
+  const getQuantitiesDisplay = (items) => {
+    if (!Array.isArray(items) || items.length === 0) return '0';
+    
+    return items.map((item, index) => {
+      const qty = item.quantity || 0;
+      return `${index + 1}. Qty: ${qty}`;
+    }).join('\n');
+  };
+
+  // Get sizes display
+  const getSizesDisplay = (items) => {
+    if (!Array.isArray(items) || items.length === 0) return '-';
+    
+    return items.map((item, index) => {
+      const size = item.size || '-';
+      return `${index + 1}. ${size}`;
+    }).join('\n');
+  };
+
+  // Get colors display
+  const getColorsDisplay = (items) => {
+    if (!Array.isArray(items) || items.length === 0) return '-';
+    
+    return items.map((item, index) => {
+      const color = item.color || '-';
+      return `${index + 1}. ${color}`;
+    }).join('\n');
   };
 
   return (
     <tr className="hover:bg-gray-50">
-      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+      <td className="px-3 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
         #{order.order_id || order.id || 'N/A'}
       </td>
-      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-        {getCustomerName(order.customer)}
-      </td>
-      <td className="px-6 py-4 text-sm text-gray-900 max-w-xs truncate">
-        {getCustomerAddress(order.customer)}
-      </td>
-      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-        {formatDate(order.created_date || order.createdAt)}
-      </td>
-      <td className="px-6 py-4 text-sm text-gray-900 max-w-xs">
-        <div className="truncate" title={getItemsDisplay(order.items)}>
-          {getItemsDisplay(order.items)}
+      <td className="px-3 py-4 text-sm text-gray-900">
+        <div className="max-w-xs">
+          <div className="font-medium">{getCustomerName(order.customer)}</div>
+          <div className="text-xs text-gray-500">
+            {order.customer?.type === 'member' ? 'Member' : 'Visitor'}
+          </div>
         </div>
       </td>
-      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-        {formatPrice(order.total_amount || order.payment?.amount)}
+      <td className="px-3 py-4 text-sm text-gray-900">
+        <div className="max-w-xs">
+          <div className="font-mono text-xs bg-blue-50 px-2 py-1 rounded border">
+            {order.customer?.mobile || 'N/A'}
+          </div>
+        </div>
       </td>
-      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-        <StatusBadge status={order.order_status || order.status} />
+      <td className="px-3 py-4 text-sm text-gray-900">
+        <div className="max-w-xs">
+          <div className="text-xs truncate bg-green-50 px-2 py-1 rounded border" title={order.customer?.email || 'N/A'}>
+            {order.customer?.email || 'N/A'}
+          </div>
+        </div>
+      </td>
+      <td className="px-3 py-4 text-sm text-gray-900">
+        <div className="max-w-xs">
+          <div className="truncate text-xs" title={getCustomerAddress(order.customer)}>
+            {getCustomerAddress(order.customer)}
+          </div>
+        </div>
+      </td>
+      <td className="px-3 py-4 whitespace-nowrap text-sm text-gray-900">
+        <div className="text-xs">
+          {formatDate(order.created_date || order.createdAt)}
+        </div>
+      </td>
+      <td className="px-3 py-4 text-sm text-gray-900">
+        <div className="max-w-xs">
+          <pre className="whitespace-pre-line text-xs font-mono bg-gray-50 p-2 rounded border">
+            {getItemsDisplay(order.items)}
+          </pre>
+        </div>
+      </td>
+      <td className="px-3 py-4 text-sm text-gray-900">
+        <div className="max-w-xs">
+          <pre className="whitespace-pre-line text-xs font-mono bg-blue-50 p-2 rounded border text-center">
+            {getQuantitiesDisplay(order.items)}
+          </pre>
+        </div>
+      </td>
+      <td className="px-3 py-4 text-sm text-gray-900">
+        <div className="max-w-xs">
+          <pre className="whitespace-pre-line text-xs font-mono bg-green-50 p-2 rounded border text-center">
+            {getSizesDisplay(order.items)}
+          </pre>
+        </div>
+      </td>
+      <td className="px-3 py-4 text-sm text-gray-900">
+        <div className="max-w-xs">
+          <pre className="whitespace-pre-line text-xs font-mono bg-yellow-50 p-2 rounded border text-center">
+            {getColorsDisplay(order.items)}
+          </pre>
+        </div>
+      </td>
+      <td className="px-3 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+        <div className="text-right">
+          <div className="font-bold text-green-600">
+            {formatPrice(order.total_amount || order.payment?.amount)}
+          </div>
+          <div className="text-xs text-gray-500">
+            Total Amount
+          </div>
+        </div>
       </td>
     </tr>
   );
