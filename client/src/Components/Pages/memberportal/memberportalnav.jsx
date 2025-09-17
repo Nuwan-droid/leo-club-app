@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom'; // ✅ useNavigate added
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { FaBell } from 'react-icons/fa'; 
 import leoLogo from '../../../assets/LEO-Logo.png';
 import AccountSettings from './accountSettings';
@@ -7,12 +7,16 @@ import AccountSettings from './accountSettings';
 const MemberPortalNav = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
-  const navigate = useNavigate(); // ✅ navigation hook
+  const navigate = useNavigate();
 
-  // ✅ Logout handler
+  // Logout handler
   const handleLogout = () => {
-    localStorage.removeItem("leoToken"); // remove token
-    navigate("/"); // redirect to home (or login page)
+    const token = sessionStorage.getItem("memberToken");
+    if (token) {
+      sessionStorage.removeItem("memberToken");
+      console.log("Member token removed");
+    }
+    navigate("/"); // redirect to home or login
   };
 
   const mainNavItems = [
@@ -35,13 +39,9 @@ const MemberPortalNav = () => {
     <nav className="bg-white shadow-sm border-b border-gray-200 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* Logo and Brand */}
+          {/* Logo */}
           <Link to="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
-            <img 
-              src={leoLogo} 
-              alt="LEO Club Logo" 
-              className="w-12 h-12 object-contain"
-            />
+            <img src={leoLogo} alt="LEO Club Logo" className="w-12 h-12 object-contain" />
             <span className="text-xl font-semibold text-gray-900 hidden sm:block">Member Portal</span>
           </Link>
 
@@ -60,10 +60,9 @@ const MemberPortalNav = () => {
                 >
                   {item.name}
                 </Link>
-              ))} 
+              ))}
             </div>
 
-            {/* Divider and Icon-based Links */}
             <div className="flex items-center space-x-4 ml-6 pl-6 border-l border-gray-200">
               <Link
                 to="/memberportal/notifications"
@@ -76,7 +75,7 @@ const MemberPortalNav = () => {
             </div>
           </div>
 
-          {/* Mobile menu button */}
+          {/* Mobile Menu Button */}
           <div className="md:hidden">
             <button
               type="button"
@@ -97,7 +96,7 @@ const MemberPortalNav = () => {
         </div>
       </div>
 
-      {/* Mobile Navigation Menu */}
+      {/* Mobile Navigation */}
       {isMobileMenuOpen && (
         <div className="md:hidden">
           <div className="px-2 pt-2 pb-3 space-y-1 bg-white border-t border-gray-200">
@@ -116,9 +115,9 @@ const MemberPortalNav = () => {
               </Link>
             ))}
 
-            {/* ✅ Now logout works */}
+            {/* Logout Button */}
             <button
-              onClick={handleLogout}
+              onClick={() => { setIsMobileMenuOpen(false); handleLogout(); }}
               className="w-full text-left bg-red-500 text-white px-3 py-2 rounded-md text-base font-medium hover:bg-red-600 transition-colors duration-200 mt-2"
             >
               Log Out
