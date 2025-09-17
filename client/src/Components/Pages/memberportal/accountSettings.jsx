@@ -31,7 +31,7 @@ const ProfileMenu = () => {
   useEffect(() => {
     (async () => {
       try {
-        const token = localStorage.getItem("leoToken");
+        const token = sessionStorage.getItem("memberToken");
         if (!token) return console.error("No token found, redirect to login");
 
         const res = await fetch("http://localhost:5001/api/user/profile", {
@@ -55,7 +55,7 @@ const ProfileMenu = () => {
   };
 
   const handleLogoutClick = () => {
-    localStorage.removeItem("leoToken");
+    localStorage.removeItem("memberToken");
     setState((prev) => ({ ...prev, isDropdownOpen: false }));
     navigate("/");
   };
