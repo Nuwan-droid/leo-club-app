@@ -1,12 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import SubscriberTable from './child_components/SubscriberTable';
 import AddSubscriberModal from './child_components/AddSubscriberModal';
 import EditSubscriberModal from './child_components/EditSubscriberModal';
 import AddScoreModal from './child_components/AddScoreModal';
 import AddSubmissionModal from './child_components/AddSubmissionModal';
 import NewsletterStats from './child_components/NewsletterStats';
+import AddNewsletterModal from './child_components/AddNewsletterModal';
+import EditNewsletterModal from './child_components/EditNewsletterModal';
+import NewsletterList from './child_components/NewsletterList';
 
 const Newsletters = () => {
+  // Newsletter states
+  const [newsletters, setNewsletters] = useState([]);
+  const [newslettersLoading, setNewslettersLoading] = useState(false);
+  const [isEditNewsletterModalOpen, setIsEditNewsletterModalOpen] = useState(false);
+  const [editingNewsletter, setEditingNewsletter] = useState(null);
+
+  // Existing subscriber states
   const [subscribers, setSubscribers] = useState([
     {
       id: 1,
@@ -149,9 +160,29 @@ const Newsletters = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isAddScoreModalOpen, setIsAddScoreModalOpen] = useState(false);
   const [isAddSubmissionModalOpen, setIsAddSubmissionModalOpen] = useState(false);
+  const [isAddNewsletterModalOpen, setIsAddNewsletterModalOpen] = useState(false);
+
   const [editingSubscriber, setEditingSubscriber] = useState(null);
   const [selectedMemberForScore, setSelectedMemberForScore] = useState(null);
   const [selectedMemberForSubmission, setSelectedMemberForSubmission] = useState(null);
+
+  // Fetch newsletters on component mount
+  useEffect(() => {
+    fetchNewsletters();
+  }, []);
+
+  const fetchNewsletters = async () => {
+    try {
+      setNewslettersLoading(true);
+      const response = await axios.get('http://localhost:5001/api/newsletters');
+      setNewsletters(response.data.newsletters || []);
+    } catch (error) {
+      console.error('Error fetching newsletters:', error);
+      setNewsletters([]);
+    } finally {
+      setNewslettersLoading(false);
+    }
+  };
 
   const totalRows = subscribers.length;
   const totalPages = Math.ceil(totalRows / rowsPerPage);
@@ -250,6 +281,44 @@ const Newsletters = () => {
     setSelectedMemberForSubmission(null);
   };
 
+  // Newsletter handlers
+  const handleSaveNewsletter = (newsletterData) => {
+    console.log("New Newsletter Added:", newsletterData);
+    // Refresh the newsletters list
+    fetchNewsletters();
+    setIsAddNewsletterModalOpen(false);
+  };
+
+  const handleEditNewsletter = (newsletter) => {
+    setEditingNewsletter(newsletter);
+    setIsEditNewsletterModalOpen(true);
+  };
+
+  const handleSaveEditedNewsletter = (updatedNewsletter) => {
+    // Update the newsletter in the list
+    setNewsletters(newsletters.map(n => 
+      n._id === updatedNewsletter._id ? updatedNewsletter : n
+    ));
+    setIsEditNewsletterModalOpen(false);
+    setEditingNewsletter(null);
+  };
+
+  const handleDeleteNewsletter = async (newsletterId) => {
+    if (!window.confirm('Are you sure you want to delete this newsletter?')) {
+      return;
+    }
+
+    try {
+      await axios.delete(`http://localhost:5001/api/newsletters/${newsletterId}`);
+      // Remove from local state
+      setNewsletters(newsletters.filter(n => n._id !== newsletterId));
+      console.log('Newsletter deleted successfully');
+    } catch (error) {
+      console.error('Error deleting newsletter:', error);
+      alert('Failed to delete newsletter. Please try again.');
+    }
+  };
+
   const handleCancelAdd = () => {
     setIsAddModalOpen(false);
   };
@@ -286,14 +355,31 @@ const Newsletters = () => {
       <div className="max-w-7xl mx-auto">
         <div className="flex justify-between items-center mb-8">
           <h1 className="text-3xl font-bold text-gray-900">Newsletter Management</h1>
-          <button
-            onClick={handleAddSubscriber}
-            className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors flex items-center space-x-2"
-          >
-            <span>+</span>
-            <span>Add Subscriber</span>
-          </button>
+          <div className="flex space-x-3">
+            <button
+              onClick={handleAddSubscriber}
+              className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors flex items-center space-x-2"
+            >
+              <span>+</span>
+              <span>Add Subscriber</span>
+            </button>
+            <button
+              onClick={() => setIsAddNewsletterModalOpen(true)}
+              className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors flex items-center space-x-2"
+            >
+              <span>+</span>
+              <span>Add Newsletter</span>
+            </button>
+          </div>
         </div>
+
+        {/* Newsletter List Component */}
+        <NewsletterList
+          newsletters={newsletters}
+          onEdit={handleEditNewsletter}
+          onDelete={handleDeleteNewsletter}
+          loading={newslettersLoading}
+        />
 
         <NewsletterStats stats={stats} />
 
@@ -346,6 +432,20 @@ const Newsletters = () => {
         onSave={handleSaveSubmission}
         onCancel={handleCancelSubmission}
       />
+
+      <AddNewsletterModal
+        isOpen={isAddNewsletterModalOpen}
+        onClose={() => setIsAddNewsletterModalOpen(false)}
+        onSave={handleSaveNewsletter}
+      />
+
+      <EditNewsletterModal
+        isOpen={isEditNewsletterModalOpen}
+        onClose={() => setIsEditNewsletterModalOpen(false)}
+        newsletter={editingNewsletter}
+        onSave={handleSaveEditedNewsletter}
+      />
+
     </div>
   );
 };
