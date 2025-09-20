@@ -49,6 +49,7 @@ const getUserProfile = async (req, res) => {
     res.json({
       name: user.name,
       role: user.role,
+      adminRole: user.adminRole,
       profilePic: user.userImage,
       score: user.score,
       maxScore: 100,
