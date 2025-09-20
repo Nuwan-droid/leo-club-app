@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import StatCard from "./StatCard";
 import AddAward from "./AddAward";
 
 
 const DashboardContent = () => {
-  const navigate = useNavigate();
   const [userCount, setUserCount] = useState(0);
   const [projectCount, setProjectCount] = useState(0);
   const [orderCount, setOrderCount] = useState(0);
