@@ -266,7 +266,8 @@ export const deleteNewsletter = async (req, res) => {
     console.error("Error deleting newsletter:", error);
     res.status(500).json({ 
       message: "Error deleting newsletter", 
-      error: error.message 
+      error: error.message  
+      
     });
   }
 };
