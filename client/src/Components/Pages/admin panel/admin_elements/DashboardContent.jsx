@@ -91,7 +91,7 @@ const DashboardContent = () => {
           </div>
 
 {showAwardModal && (
-  <div className="fixed inset-0 text-black bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+  <div className="fixed inset-0 text-black bg-transparent bg-opacity-100 flex items-center justify-center p-4 z-50">
     <div className="bg-white rounded-xl w-full max-w-7xl max-h-[90vh] overflow-y-auto relative shadow-2xl">
       <button
         onClick={() => setShowAwardModal(false)}

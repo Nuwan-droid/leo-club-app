@@ -1,18 +1,17 @@
-import React from 'react';
+import React from "react";
 
-const UsersPagination = ({ 
-  currentPage, 
-  totalPages, 
-  rowsPerPage, 
-  totalRows, 
-  onPageChange, 
-  onRowsPerPageChange 
+const UsersPagination = ({
+  currentPage,
+  totalPages,
+  rowsPerPage,
+  totalRows,
+  onPageChange,
+  onRowsPerPageChange,
 }) => {
   const renderPagination = () => {
     const pages = [];
     const maxVisiblePages = 5;
-    
- 
+
     pages.push(
       <button
         key="first"
@@ -23,7 +22,7 @@ const UsersPagination = ({
         «
       </button>
     );
-    
+
     pages.push(
       <button
         key="prev"
@@ -35,16 +34,13 @@ const UsersPagination = ({
       </button>
     );
 
-
     for (let i = 1; i <= Math.min(maxVisiblePages, totalPages); i++) {
       pages.push(
         <button
           key={i}
           onClick={() => onPageChange(i)}
           className={`px-3 py-1 mx-1 rounded border ${
-            currentPage === i 
-              ? 'bg-blue-500 text-white' 
-              : 'hover:bg-gray-50'
+            currentPage === i ? "bg-blue-500 text-white" : "hover:bg-gray-50"
           }`}
         >
           {i}
@@ -53,22 +49,25 @@ const UsersPagination = ({
     }
 
     if (totalPages > maxVisiblePages) {
-      pages.push(<span key="dots" className="px-2">...</span>);
+      pages.push(
+        <span key="dots" className="px-2">
+          ...
+        </span>
+      );
       pages.push(
         <button
           key={totalPages}
           onClick={() => onPageChange(totalPages)}
           className={`px-3 py-1 mx-1 rounded border ${
-            currentPage === totalPages 
-              ? 'bg-blue-500 text-white' 
-              : 'hover:bg-gray-50'
+            currentPage === totalPages
+              ? "bg-blue-500 text-white"
+              : "hover:bg-gray-50"
           }`}
         >
           {totalPages}
         </button>
       );
     }
-
 
     pages.push(
       <button
@@ -80,7 +79,7 @@ const UsersPagination = ({
         ›
       </button>
     );
-    
+
     pages.push(
       <button
         key="last"
@@ -109,14 +108,10 @@ const UsersPagination = ({
           <option value={25}>25</option>
           <option value={50}>50</option>
         </select>
-        <span className="ml-4 text-sm text-gray-700">
-          of {totalRows} rows
-        </span>
+        <span className="ml-4 text-sm text-gray-700">of {totalRows} rows</span>
       </div>
-      
-      <div className="flex items-center space-x-2">
-        {renderPagination()}
-      </div>
+
+      <div className="flex items-center space-x-2">{renderPagination()}</div>
     </div>
   );
 };
