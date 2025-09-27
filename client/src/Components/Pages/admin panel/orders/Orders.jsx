@@ -8,13 +8,20 @@ const Orders = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-
   const [memberFilter, setMemberFilter] = useState('all');
   const [visitorFilter, setVisitorFilter] = useState('all');
 
-  const [memberPage, setMemberPage] = useState(1);
-  const [visitorPage, setVisitorPage] = useState(1);
-  const rowsPerPage = 10;
+  // Helper function to sort orders by date (newest first)
+  const sortOrdersByDate = (orders) => {
+    return orders.sort((a, b) => {
+      // Try different possible date field names
+      const dateA = new Date(a.order_date || a.created_at || a.createdAt || a.date_created || 0);
+      const dateB = new Date(b.order_date || b.created_at || b.createdAt || b.date_created || 0);
+      
+      // Sort in descending order (newest first)
+      return dateB - dateA;
+    });
+  };
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -22,44 +29,52 @@ const Orders = () => {
         setLoading(true);
         setError(null);
 
-        const token = localStorage.getItem('leoToken');
-        if (!token) {
-          setError('Admin token missing. Please login as admin.');
-          setLoading(false);
-          return;
-        }
-
         const headers = {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
         };
 
-      
-        const memberRes = await fetch('http://localhost:5001/api/orders/all?customer_type=member', {
+        console.log('Fetching all orders for pagination...');
+
+        // Fetch member orders - Get all orders for frontend pagination
+        const memberRes = await fetch('http://localhost:5001/api/orders/all?customer_type=member&limit=999999', {
           method: 'GET',
           headers,
         });
 
+        console.log('Member API Response:', memberRes.status, memberRes.statusText);
+
         if (!memberRes.ok) {
-          throw new Error(`Failed to fetch member orders: ${memberRes.status}`);
+          const errorText = await memberRes.text();
+          console.log('Member API Error:', errorText);
+          throw new Error(`Failed to fetch member orders: ${memberRes.status} - ${errorText}`);
         }
 
         const memberData = await memberRes.json();
+        console.log('Member data received:', memberData);
 
-        
-        const visitorRes = await fetch('http://localhost:5001/api/orders/all?customer_type=visitor', {
+        // Fetch visitor orders - Get all orders for frontend pagination
+        const visitorRes = await fetch('http://localhost:5001/api/orders/all?customer_type=visitor&limit=999999', {
           method: 'GET',
           headers,
         });
 
+        console.log('Visitor API Response:', visitorRes.status, visitorRes.statusText);
+
         if (!visitorRes.ok) {
-          throw new Error(`Failed to fetch visitor orders: ${visitorRes.status}`);
+          const errorText = await visitorRes.text();
+          console.log('Visitor API Error:', errorText);
+          throw new Error(`Failed to fetch visitor orders: ${visitorRes.status} - ${errorText}`);
         }
 
         const visitorData = await visitorRes.json();
+        console.log('Visitor data received:', visitorData);
 
-        setMemberOrders(memberData.success && Array.isArray(memberData.orders) ? memberData.orders : []);
-        setVisitorOrders(visitorData.success && Array.isArray(visitorData.orders) ? visitorData.orders : []);
+        // Set the data and sort by date (newest first)
+        const memberOrdersArray = memberData.success && Array.isArray(memberData.orders) ? memberData.orders : [];
+        const visitorOrdersArray = visitorData.success && Array.isArray(visitorData.orders) ? visitorData.orders : [];
+        
+        setMemberOrders(sortOrdersByDate([...memberOrdersArray]));
+        setVisitorOrders(sortOrdersByDate([...visitorOrdersArray]));
 
       } catch (error) {
         console.error('Error fetching orders:', error);
@@ -74,7 +89,6 @@ const Orders = () => {
     fetchOrders();
   }, []);
 
-  
   const filterOrders = (orders, filter) => {
     if (filter === 'all') return orders;
     
@@ -97,31 +111,16 @@ const Orders = () => {
     return orders;
   };
 
- 
   const handleMemberFilterChange = (filterType) => {
     setMemberFilter(filterType);
-    setMemberPage(1); 
   };
 
   const handleVisitorFilterChange = (filterType) => {
     setVisitorFilter(filterType);
-    setVisitorPage(1); 
   };
 
- 
   const filteredMemberOrders = filterOrders(memberOrders, memberFilter);
   const filteredVisitorOrders = filterOrders(visitorOrders, visitorFilter);
-
- 
-  const pagedMemberOrders = filteredMemberOrders.slice(
-    (memberPage - 1) * rowsPerPage,
-    memberPage * rowsPerPage
-  );
-  const pagedVisitorOrders = filteredVisitorOrders.slice(
-    (visitorPage - 1) * rowsPerPage,
-    visitorPage * rowsPerPage
-  );
-
 
   const memberStats = {
     totalOrders: memberOrders.length,
@@ -145,10 +144,18 @@ const Orders = () => {
     totalRevenue: visitorOrders.reduce((sum, order) => sum + (order.total_amount || 0), 0)
   };
 
+  // Retry function
+  const handleRetry = () => {
+    window.location.reload();
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="text-lg text-gray-700">Loading orders...</div>
+        <div className="flex flex-col items-center space-y-4">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          <div className="text-lg text-gray-700">Loading orders...</div>
+        </div>
       </div>
     );
   }
@@ -157,9 +164,18 @@ const Orders = () => {
     return (
       <div className="p-6 bg-gray-50 min-h-screen">
         <div className="max-w-7xl mx-auto">
-          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">
+          <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
             <strong className="font-bold">Error: </strong>
             <span className="block sm:inline">{error}</span>
+          </div>
+
+          <div className="space-y-2">
+            <button 
+              onClick={handleRetry}
+              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
+            >
+              Retry
+            </button>
           </div>
         </div>
       </div>
@@ -171,11 +187,10 @@ const Orders = () => {
       <div className="max-w-7xl mx-auto">
         <h1 className="text-3xl font-bold text-gray-900 mb-8">Order Management</h1>
 
-       
+        {/* Member Orders */}
         <div className="mb-10">
           <h2 className="text-2xl font-bold text-blue-900 mb-4">Member Orders</h2>
           
-       
           <StatusBadgeBoxes 
             stats={memberStats} 
             onFilterChange={handleMemberFilterChange}
@@ -190,29 +205,28 @@ const Orders = () => {
                    memberFilter === 'completed' ? 'Completed Member Orders' : 
                    'Processing Member Orders'}
                 </h3>
-                <span className="text-sm text-gray-500">
-                  Showing {filteredMemberOrders.length} of {memberOrders.length} orders
-                </span>
+                <div className="flex items-center space-x-4">
+                  <span className="text-sm text-gray-500">
+                    {filteredMemberOrders.length} total orders
+                  </span>
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                    10 per page
+                  </span>
+                </div>
               </div>
             </div>
             
             <OrderTable
-              orders={pagedMemberOrders}
-              currentPage={memberPage}
-              totalPages={Math.ceil(filteredMemberOrders.length / rowsPerPage)}
-              rowsPerPage={rowsPerPage}
-              totalRows={filteredMemberOrders.length}
-              onPageChange={setMemberPage}
+              orders={filteredMemberOrders}
               adminView={true}
             />
           </div>
         </div>
 
-       
+        {/* Visitor Orders */}
         <div>
           <h2 className="text-2xl font-bold text-purple-900 mb-4">Visitor Orders</h2>
           
-        
           <StatusBadgeBoxes 
             stats={visitorStats} 
             onFilterChange={handleVisitorFilterChange}
@@ -227,19 +241,19 @@ const Orders = () => {
                    visitorFilter === 'completed' ? 'Completed Visitor Orders' : 
                    'Processing Visitor Orders'}
                 </h3>
-                <span className="text-sm text-gray-500">
-                  Showing {filteredVisitorOrders.length} of {visitorOrders.length} orders
-                </span>
+                <div className="flex items-center space-x-4">
+                  <span className="text-sm text-gray-500">
+                    {filteredVisitorOrders.length} total orders
+                  </span>
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                    10 per page
+                  </span>
+                </div>
               </div>
             </div>
             
             <OrderTable
-              orders={pagedVisitorOrders}
-              currentPage={visitorPage}
-              totalPages={Math.ceil(filteredVisitorOrders.length / rowsPerPage)}
-              rowsPerPage={rowsPerPage}
-              totalRows={filteredVisitorOrders.length}
-              onPageChange={setVisitorPage}
+              orders={filteredVisitorOrders}
               adminView={true}
             />
           </div>

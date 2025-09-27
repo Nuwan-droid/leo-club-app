@@ -17,6 +17,7 @@ import LearningHub from './learninghub/LearningHub';
 import EventVolunteer from './eventvolunteer/EventVolunteer';
 import Products from './products/ListProducts';
 import Orders from './orders/Orders';
+import Donations from './donations/Donations';
 import Donation from './donation/Donation';
 import ManageAbout from './manageabout/ManageAbout';
 import AccountManagement from './admin_elements/AccountManagement';
@@ -43,7 +44,8 @@ const Adminmain = () => {
             <Route path="/event-volunteer" element={<EventVolunteer />} />
             <Route path="/products" element={<Products />} />
             <Route path="/orders" element={<Orders />} />
-            <Route path="/donation" element={<Donation />} />
+            <Route path="/donation" element={<Donations />} />
+            <Route path="/project-donation" element={<Donation />} />
             <Route path="/manage-about" element={<ManageAbout />} />
             <Route path="/account-settings" element={<AccountManagement />} />
            

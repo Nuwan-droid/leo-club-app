@@ -7,6 +7,7 @@ const DonateItems = () => {
   const navigate = useNavigate();
   
   const [project, setProject] = useState(null);
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [submitting, setSubmitting] = useState(false);
@@ -56,32 +57,70 @@ const DonateItems = () => {
     }
   }, [projectId]);
 
-  // Check if user is logged in and auto-fill data
+  // Check if user is logged in and auto-fill form data
   useEffect(() => {
-    const checkLoggedInUser = async () => {
+    const fetchUserProfile = async () => {
       try {
-        // Check if user token exists in localStorage
-        const token = localStorage.getItem('token');
+        // Check both storage methods to be compatible with different parts of the app
+        const memberToken = sessionStorage.getItem("memberToken");
+        const fallbackToken = localStorage.getItem('token');
+        const token = memberToken || fallbackToken;
+        
+        console.log('🔍 Checking tokens:', { memberToken: !!memberToken, fallbackToken: !!fallbackToken });
+        
         if (token) {
-          // You can fetch user details from backend if needed
-          const savedUser = localStorage.getItem('user');
-          if (savedUser) {
-            const user = JSON.parse(savedUser);
+          // Fetch user profile from API (same as member portal and DonateMoney)
+          const response = await fetch("http://localhost:5001/api/user/profile", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          });
+
+          if (response.ok) {
+            const userData = await response.json();
+            console.log('👤 User profile fetched from API:', userData);
+            
+            setUser(userData);
             setFormData(prev => ({
               ...prev,
-              firstName: user.name?.split(' ')[0] || '',
-              lastName: user.name?.split(' ')[1] || '',
-              email: user.email || '',
-              // You might want to add more fields if available in user data
+              firstName: userData.firstName || userData.first_name || userData.name?.split(' ')[0] || '',
+              lastName: userData.lastName || userData.last_name || userData.name?.split(' ')[1] || '',
+              email: userData.email || '',
+              phone: userData.mobile || userData.phone || userData.phoneNumber || '',
+              address: userData.address || '',
+              city: userData.city || ''
             }));
+            console.log('✅ Form auto-filled with API data');
+          } else {
+            console.log('❌ Failed to fetch user profile from API, trying localStorage...');
+            // Fallback to localStorage user data
+            const storedUserData = localStorage.getItem('user');
+            if (storedUserData) {
+              const userData = JSON.parse(storedUserData);
+              console.log('👤 User data found in localStorage:', userData);
+              setUser(userData);
+              setFormData(prev => ({
+                ...prev,
+                firstName: userData.firstName || userData.first_name || userData.name?.split(' ')[0] || '',
+                lastName: userData.lastName || userData.last_name || userData.name?.split(' ')[1] || '',
+                email: userData.email || '',
+                phone: userData.mobile || userData.phone || userData.phoneNumber || '',
+                address: userData.address || '',
+                city: userData.city || ''
+              }));
+              console.log('✅ Form auto-filled with localStorage data');
+            }
           }
+        } else {
+          console.log('🔒 No token found - user not logged in');
         }
-      } catch (err) {
-        console.log('No logged in user found');
+      } catch (error) {
+        console.error('❌ Error fetching user data:', error);
       }
     };
 
-    checkLoggedInUser();
+    fetchUserProfile();
   }, []);
 
   const handleFormChange = (e) => {
@@ -300,6 +339,27 @@ We’ll contact you within 24 hours for collection.`,
 
         {/* Form Container */}
         <div className="form-container bg-[#E6F0FA] rounded-xl w-full max-w-4xl p-6 lg:p-10 shadow-md mx-auto">
+          {/* Login Status Banner */}
+          {user && (
+            <div className="mb-6 p-4 bg-green-100 border border-green-300 rounded-lg">
+              <div className="flex items-center">
+                <div className="flex-shrink-0">
+                  <svg className="h-5 w-5 text-green-400" viewBox="0 0 20 20" fill="currentColor">
+                    <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                  </svg>
+                </div>
+                <div className="ml-3">
+                  <h3 className="text-sm font-medium text-green-800">
+                    Welcome back, {user.firstName || user.first_name || user.name || 'Member'}!
+                  </h3>
+                  <div className="mt-1 text-sm text-green-700">
+                    Your details have been automatically filled in the form below (highlighted in green).
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+          
           <form onSubmit={handleSubmit}>
             {/* Donor Information Section */}
             <div className="section mb-8">
@@ -317,7 +377,9 @@ We’ll contact you within 24 hours for collection.`,
                     onChange={handleFormChange}
                     placeholder="John"
                     required
-                    className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500 placeholder:text-gray-500"
+                    className={`w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500 placeholder:text-gray-500 ${
+                      user && formData.firstName ? 'bg-green-50 border-green-300' : ''
+                    }`}
                   />
                 </div>
 
@@ -333,7 +395,9 @@ We’ll contact you within 24 hours for collection.`,
                     onChange={handleFormChange}
                     placeholder="Perera"
                     required
-                    className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500 placeholder:text-gray-500"
+                    className={`w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500 placeholder:text-gray-500 ${
+                      user && formData.lastName ? 'bg-green-50 border-green-300' : ''
+                    }`}
                   />
                 </div>
 
@@ -349,7 +413,9 @@ We’ll contact you within 24 hours for collection.`,
                     onChange={handleFormChange}
                     placeholder="07X XXXXXXX"
                     required
-                    className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500 placeholder:text-gray-500"
+                    className={`w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500 placeholder:text-gray-500 ${
+                      user && formData.phone ? 'bg-green-50 border-green-300' : ''
+                    }`}
                   />
                 </div>
 
@@ -365,7 +431,9 @@ We’ll contact you within 24 hours for collection.`,
                     onChange={handleFormChange}
                     placeholder="john.doe@example.com"
                     required
-                    className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500 placeholder:text-gray-500"
+                    className={`w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500 placeholder:text-gray-500 ${
+                      user && formData.email ? 'bg-green-50 border-green-300' : ''
+                    }`}
                   />
                 </div>
 
@@ -395,7 +463,9 @@ We’ll contact you within 24 hours for collection.`,
                     value={formData.address}
                     onChange={handleFormChange}
                     placeholder="123 Main St"
-                    className="w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500 placeholder:text-gray-500"
+                    className={`w-full p-3 border border-gray-300 rounded focus:outline-none focus:border-blue-500 placeholder:text-gray-500 ${
+                      user && formData.address ? 'bg-green-50 border-green-300' : ''
+                    }`}
                   />
                 </div>
               </div>

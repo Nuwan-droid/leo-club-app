@@ -18,12 +18,20 @@ export default function ProjectShowcasePage() {
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
-        const storedToken = localStorage.getItem('leoToken'); // Use consistent key
+        // Check for tokens in sessionStorage (matching Login component)
+        const memberToken = sessionStorage.getItem('memberToken');
+        const adminToken = sessionStorage.getItem('adminToken');
+        const storedToken = memberToken || adminToken;
+        
+        console.log('Checking tokens:', { memberToken: !!memberToken, adminToken: !!adminToken });
         
         if (!storedToken) {
+          console.log('No token found');
           setLoadingAuth(false);
           return;
         }
+
+        console.log('Found token, verifying with API...');
 
         // Verify token by fetching user profile
         const res = await fetch("http://localhost:5001/api/user/profile", {
@@ -33,19 +41,26 @@ export default function ProjectShowcasePage() {
           },
         });
 
+        console.log('Profile API response status:', res.status);
+
         if (res.ok) {
           const userData = await res.json();
+          console.log('User data received:', userData);
           setUser(userData);
           setToken(storedToken);
         } else {
-          // Token is invalid, remove it
-          localStorage.removeItem('leoToken');
+          const errorData = await res.text();
+          console.log('Profile API error:', errorData);
+          // Token is invalid, remove both tokens
+          sessionStorage.removeItem('memberToken');
+          sessionStorage.removeItem('adminToken');
           setUser(null);
           setToken(null);
         }
       } catch (error) {
         console.error("Error fetching user profile:", error);
-        localStorage.removeItem('leoToken');
+        sessionStorage.removeItem('memberToken');
+        sessionStorage.removeItem('adminToken');
         setUser(null);
         setToken(null);
       } finally {
@@ -75,10 +90,15 @@ export default function ProjectShowcasePage() {
     .sort((a, b) => new Date(b.date) - new Date(a.date));
 
   const handleAddReview = async (projectId, review) => {
+    console.log('handleAddReview called with:', { projectId, review, hasToken: !!token, hasUser: !!user });
+    
     if (!token || !user) {
       alert("Please login to add a comment");
       return;
     }
+
+    console.log('User role:', user.role);
+    console.log('Token being sent:', token);
 
     try {
       const res = await fetch("http://localhost:5001/api/comments/addcomment", {
@@ -93,7 +113,10 @@ export default function ProjectShowcasePage() {
         }),
       });
       
+      console.log('Add comment API response status:', res.status);
+      
       const data = await res.json();
+      console.log('Add comment API response data:', data);
       
       if (res.ok && data.success) {
         // Update reviews immediately
@@ -105,7 +128,9 @@ export default function ProjectShowcasePage() {
       } else {
         if (res.status === 401) {
           // Token expired or invalid
-          localStorage.removeItem('leoToken');
+          console.log('Token expired, clearing session');
+          sessionStorage.removeItem('memberToken');
+          sessionStorage.removeItem('adminToken');
           setUser(null);
           setToken(null);
           alert("Your session has expired. Please login again.");

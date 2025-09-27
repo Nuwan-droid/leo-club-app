@@ -51,46 +51,8 @@ const ProductStats = ({ products }) => {
         </div>
       </div>
 
-      <div className="bg-white p-4 rounded-xl shadow flex items-center gap-4">
-        <div className="bg-orange-100 text-orange-600 p-2 rounded-full">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-6 h-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path d="M5 13l4 4L19 7" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-        </div>
-        <div>
-          <p className="text-gray-500 text-sm">On Sale</p>
-          <p className="text-xl font-semibold">{onSaleCount}</p>
-        </div>
-      </div>
 
-      <div className="bg-white p-4 rounded-xl shadow flex items-center gap-4">
-        <div className="bg-red-100 text-red-600 p-2 rounded-full">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-6 h-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              d="M12 9v2m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        </div>
-        <div>
-          <p className="text-gray-500 text-sm">Out of Stock</p>
-          <p className="text-xl font-semibold">{outOfStockCount}</p>
-        </div>
-      </div>
+
     </div>
   );
 };

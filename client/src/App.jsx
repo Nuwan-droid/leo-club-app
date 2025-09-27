@@ -12,6 +12,7 @@ import Donation from "./Components/Pages/Donation";
 import DonateMoney from "./Components/Pages/DonateMoney";
 import DonateBooks from "./Components/Pages/DonateBook";
 import DonateItems from "./Components/Pages/DonateItems";
+import DonationSuccess from "./Components/Pages/DonationSuccess";
 import EventCalendar from "./Components/Pages/EventCalendar";
 import Shop from "./Components/Pages/LeoShop";
 import ProjectShowcasePage from "./Components/Pages/ProjectShowcasePage";
@@ -46,6 +47,8 @@ function App() {
         <Route path="/terms" element={<Terms />} />
         <Route path="/donation" element={<Donation />} />
         <Route path="/donatemoney" element={<DonateMoney />} />
+        <Route path="/donatemoney/:projectId" element={<DonateMoney />} />
+        <Route path="/donation-success" element={<DonationSuccess />} />
         <Route path="/donatebook" element={<DonateBooks />} />
         <Route path="/donateitems/:projectId" element={<DonateItems/>}/>
         <Route path="/calander" element={<EventCalendar />} />

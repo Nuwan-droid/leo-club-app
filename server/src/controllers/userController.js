@@ -48,6 +48,11 @@ const getUserProfile = async (req, res) => {
 
     res.json({
       name: user.name,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      email: user.email,
+      mobile: user.mobile,
+      address: user.address,
       role: user.role,
       adminRole: user.adminRole,
       profilePic: user.userImage,
