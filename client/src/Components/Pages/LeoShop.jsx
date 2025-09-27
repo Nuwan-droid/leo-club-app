@@ -33,18 +33,24 @@ const Shop = () => {
   useEffect(() => {
     const checkAuthStatus = async () => {
       try {
-        const storedToken = localStorage.getItem('leoToken');
+        // Check for tokens in sessionStorage (matching Login component)
+        const memberToken = sessionStorage.getItem('memberToken');
+        const adminToken = sessionStorage.getItem('adminToken');
+        const storedToken = memberToken || adminToken;
+        
         if (!storedToken) {
           loadLocalCart();
           setIsLoadingAuth(false);
           return;
         }
+        
         const response = await fetch('http://localhost:5001/api/user/profile', {
           headers: {
             'Authorization': `Bearer ${storedToken}`,
             'Content-Type': 'application/json'
           }
         });
+        
         if (response.ok) {
           const userData = await response.json();
           setUserInfo(userData);
@@ -52,11 +58,15 @@ const Shop = () => {
           await loadPersistentCart(storedToken);
           await syncLocalCartWithServer(storedToken);
         } else {
-          localStorage.removeItem('leoToken');
+          // Invalid tokens, remove them
+          sessionStorage.removeItem('memberToken');
+          sessionStorage.removeItem('adminToken');
           loadLocalCart();
         }
       } catch (error) {
-        localStorage.removeItem('leoToken');
+        console.error('Auth check error:', error);
+        sessionStorage.removeItem('memberToken');
+        sessionStorage.removeItem('adminToken');
         loadLocalCart();
       } finally {
         setIsLoadingAuth(false);
@@ -201,6 +211,15 @@ const Shop = () => {
           toast.success('Item added to cart!');
         }
       } else {
+        // If server fails, fall back to local cart
+        if (response.status === 401) {
+          // Token expired
+          sessionStorage.removeItem('memberToken');
+          sessionStorage.removeItem('adminToken');
+          setUserInfo(null);
+          setToken(null);
+          toast.error('Session expired. Please login again.');
+        }
         addToLocalCart(item);
         toast.error('Failed to add item to cart');
       }
@@ -267,6 +286,13 @@ const Shop = () => {
           setCartItems(data.cart.items || []);
         }
       } else {
+        if (response.status === 401) {
+          sessionStorage.removeItem('memberToken');
+          sessionStorage.removeItem('adminToken');
+          setUserInfo(null);
+          setToken(null);
+          toast.error('Session expired. Please login again.');
+        }
         updateLocalCartItem(itemId, newQuantity);
       }
     } catch (error) {
@@ -315,6 +341,13 @@ const Shop = () => {
           toast.success('Item removed from cart');
         }
       } else {
+        if (response.status === 401) {
+          sessionStorage.removeItem('memberToken');
+          sessionStorage.removeItem('adminToken');
+          setUserInfo(null);
+          setToken(null);
+          toast.error('Session expired. Please login again.');
+        }
         removeFromLocalCart(itemId);
       }
     } catch (error) {

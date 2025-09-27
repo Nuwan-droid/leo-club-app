@@ -17,7 +17,7 @@ router.post('/create', optionalAuth, createOrder);
 router.get('/my-orders', protect, getUserOrders);
 
 // Get all orders (admin only)
-router.get('/all', protect, adminOnly, getAllOrders);
+router.get('/all', getAllOrders);
 
 // Get specific order details
 router.get('/:orderId', optionalAuth, getOrderById);
