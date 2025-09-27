@@ -8,7 +8,8 @@ const Donation = () => {
   const [donationProjects, setDonationProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [clubFund, setClubFund] = useState(54450);
+  const [clubFund, setClubFund] = useState(0);
+  const [clubFundLoading, setClubFundLoading] = useState(false);
   const [detailsVisible, setDetailsVisible] = useState({});
 
   // Fetch donation projects from backend
@@ -43,21 +44,62 @@ const Donation = () => {
     fetchDonationProjects();
   }, []);
 
-  const handleDonate = (type, projectId) => {
+  // Fetch total from all donations (club fund + project donations)
+  useEffect(() => {
+    const fetchTotalDonations = async () => {
+      try {
+        setClubFundLoading(true);
+        const response = await fetch('http://localhost:5001/api/donation-projects/donations');
+        if (!response.ok) {
+          throw new Error('Failed to fetch donations');
+        }
+        const donations = await response.json();
+        
+        // Calculate total from ALL verified donations (both club_fund and project)
+        const totalDonations = donations
+          .filter(donation => donation.status === 'verified')
+          .reduce((total, donation) => total + (donation.amount || 0), 0);
+        
+        setClubFund(totalDonations);
+      } catch (err) {
+        console.error('Error fetching total donations:', err);
+        // Keep the default value of 0 if there's an error
+      } finally {
+        setClubFundLoading(false);
+      }
+    };
+
+    fetchTotalDonations();
+  }, []);
+
+  const handleDonate = (type, projectId, projectTitle = null) => {
     if (projectId === 'club') {
-      const amount = Math.floor(Math.random() * 100) + 50;
-      setClubFund((prev) => prev + amount);
-      alert(`Thank you for donating Rs.${amount} to the club fund!`);
+      // Navigate to DonateMoney page for club fund donation
+      navigate('/donatemoney', {
+        state: {
+          donationType: 'club_fund',
+          projectId: null,
+          projectTitle: null
+        }
+      });
       return;
     }
 
-    if (type === 'books') {
-      alert('Thank you for donating books!');
-    } else if (type === 'pens') {
-      alert('Thank you for donating pens!');
-    } else if (type === 'money') {
-      const amount = Math.floor(Math.random() * 200) + 25;
-      alert(`Thank you for your monetary donation of Rs.${amount}!`);
+    if (type === 'money') {
+      // Navigate to DonateMoney page with project context
+      navigate(`/donatemoney/${projectId}`, {
+        state: {
+          donationType: 'project',
+          projectId: projectId,
+          projectTitle: projectTitle
+        }
+      });
+    } else if (type === 'items') {
+      // Navigate to donate items page
+      navigate(`/donateitems/${projectId}`);
+    } else if (type === 'books' || type === 'pens') {
+      // For backward compatibility, navigate to items donation
+      navigate(`/donateitems/${projectId}`);
     }
   };
 
@@ -227,7 +269,7 @@ const Donation = () => {
                     </div>
                     <button
                       className="btn btn-yellow text-xs p-2 w-full bg-yellow-400 text-gray-800 rounded hover:bg-yellow-500"
-                      onClick={() => navigate('/donatemoney')}
+                      onClick={() => handleDonate('money', project.donation_project_id, project.title)}
                     >
                       Donate Money
                     </button>
@@ -253,10 +295,17 @@ const Donation = () => {
                 community needs and support various ongoing initiatives.
               </p>
               <div className="club-amount text-3xl lg:text-4xl text-green-600 font-bold mb-4">
-                Rs.{clubFund.toLocaleString()}
+                {clubFundLoading ? (
+                  <div className="flex items-center justify-center">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-green-600 mr-3"></div>
+                    Loading...
+                  </div>
+                ) : (
+                  `Rs.${clubFund.toLocaleString()}`
+                )}
               </div>
               <p className="text-sm lg:text-base text-gray-600 mb-5">
-                Total funds raised this year
+                Total verified donations (all projects & club fund)
               </p>
 
               {/* Banking Information */}
@@ -289,7 +338,7 @@ const Donation = () => {
 
               <button
                 className="btn btn-yellow text-xs lg:text-sm p-2 w-full max-w-xs mx-auto bg-yellow-400 text-gray-800 rounded hover:bg-yellow-500"
-                onClick={() => navigate('/donatemoney')}
+                onClick={() => handleDonate('money', 'club')}
               >
                 Donate to Club Fund
               </button>
