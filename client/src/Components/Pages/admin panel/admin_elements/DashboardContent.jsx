@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import StatCard from "./StatCard";
 import AddAward from "./AddAward";
 
 
 const DashboardContent = () => {
-  const navigate = useNavigate();
   const [userCount, setUserCount] = useState(0);
   const [projectCount, setProjectCount] = useState(0);
   const [orderCount, setOrderCount] = useState(0);
@@ -91,7 +89,7 @@ const DashboardContent = () => {
           </div>
 
 {showAwardModal && (
-  <div className="fixed inset-0 text-black bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+  <div className="fixed inset-0 text-black bg-transparent bg-opacity-100 flex items-center justify-center p-4 z-50">
     <div className="bg-white rounded-xl w-full max-w-7xl max-h-[90vh] overflow-y-auto relative shadow-2xl">
       <button
         onClick={() => setShowAwardModal(false)}

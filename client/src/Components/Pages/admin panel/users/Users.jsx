@@ -9,86 +9,174 @@ const Users = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [loading, setLoading] = useState(true);
-
-
-  const [showConfirm, setShowConfirm] = useState(false);
-  const [userToDelete, setUserToDelete] = useState(null);
-  const [deleting, setDeleting] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
 
+  // Fetch active and inactive users
+  const fetchAllUsers = async () => {
+    try {
+      setLoading(true);
+
+      const [activeRes, inactiveRes] = await Promise.all([
+        axios.get("http://localhost:5001/api/user/getAllUsers"),
+        axios.get("http://localhost:5001/api/user/getInactiveUsers")
+      ]);
+
+      const activeUsers = Array.isArray(activeRes.data.users)
+        ? activeRes.data.users.map(user => ({
+            ...user,
+            isActive: true,
+            userType: 'active',
+            tableId: user._id
+          }))
+        : [];
+
+      const inactiveUsers = Array.isArray(inactiveRes.data.users)
+        ? inactiveRes.data.users.map(user => {
+            // Debug: Log the inactive user structure
+            console.log("🔍 Inactive user structure:", user);
+            console.log("🔍 Available fields:", Object.keys(user));
+            
+            return {
+              ...user,
+              isActive: false,
+              userType: 'inactive',
+              // CRITICAL: Make sure originalUserId is set correctly
+              // The backend controller expects this field to find the inactive user
+              originalUserId: user.originalUserId || user.userId || user.originalId,
+              tableId: user._id
+            };
+          })
+        : [];
+
+      console.log("✅ Active users loaded:", activeUsers.length);
+      console.log("✅ Inactive users loaded:", inactiveUsers.length);
+
+      setUsers([...activeUsers, ...inactiveUsers]);
+      setErrorMsg("");
+    } catch (err) {
+      console.error("❌ Error fetching users:", err);
+      setErrorMsg("Failed to load users.");
+      setUsers([]);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const res = await axios.get("http://localhost:5001/api/user/getAllUsers");
-        setUsers(res.data.users || []);
-      } catch (err) {
-        console.error("Error fetching users:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-
-    fetchUsers();
+    fetchAllUsers();
   }, []);
 
   const totalRows = users.length;
   const totalPages = Math.ceil(totalRows / rowsPerPage);
 
   const handleSelectAll = (checked) => {
-    setSelectedUsers(checked ? users.map((user) => user.id) : []);
+    setSelectedUsers(checked ? users.map((user) => user.tableId) : []);
   };
 
   const handleSelectUser = (userId, checked) => {
     setSelectedUsers(
-      checked ? [...selectedUsers, userId] : selectedUsers.filter((id) => id !== userId)
+      checked
+        ? [...selectedUsers, userId]
+        : selectedUsers.filter((id) => id !== userId)
     );
   };
 
-  const handleEdit = (userId) => {
-    console.log("Edit user:", userId);
-  };
-
-
-  const handleDelete = (userId) => {
+  // Toggle active/inactive
+  const handleToggleActive = async (userId, userType) => {
+    console.log("=== TOGGLE ACTIVE DEBUG START ===");
+    console.log("handleToggleActive called with:", { userId, userType });
+    console.log("User ID type:", typeof userId);
+    console.log("User ID value:", userId);
     setErrorMsg("");
-    setUserToDelete(userId);
-    setShowConfirm(true);
-  };
 
-  
-  const confirmDelete = async () => {
-    if (!userToDelete) return;
-    setDeleting(true);
-    setErrorMsg("");
-    try {
-      await axios.delete(`http://localhost:5001/api/users/${userToDelete}`);
-  
-      setUsers((prev) => prev.filter((u) => u.id !== userToDelete));
-
-      const remainingRowsOnPage =
-        (totalRows - 1) - (currentPage - 1) * rowsPerPage;
-      if (remainingRowsOnPage <= 0 && currentPage > 1) {
-        setCurrentPage((p) => p - 1);
-      }
-      setShowConfirm(false);
-      setUserToDelete(null);
-    } catch (err) {
-      console.error("Error deleting user:", err);
-      setErrorMsg("Failed to delete user. Try again.");
-    } finally {
-      setDeleting(false);
+    // Validate userId
+    if (!userId) {
+      console.error("❌ Invalid user ID provided");
+      setErrorMsg("Invalid user ID provided");
+      return;
     }
+
+    try {
+      let res;
+      let endpoint;
+      let requestData = {};
+      
+      if (userType === 'active') {
+        // Deactivate user
+        endpoint = `http://localhost:5001/api/user/inactivateUser/${userId}`;
+        console.log("🔴 Deactivating user with endpoint:", endpoint);
+      } else if (userType === 'inactive') {
+        // Reactivate user
+        endpoint = `http://localhost:5001/api/user/reactivateUser/${userId}`;
+        console.log("🟢 Reactivating user with endpoint:", endpoint);
+      }
+
+      console.log("📤 Making request to:", endpoint);
+      console.log("📤 Request method: PATCH");
+      console.log("📤 Request data:", requestData);
+
+      // Make the request
+      res = await axios.patch(endpoint, requestData);
+
+      console.log("✅ API response successful");
+      console.log("📥 Response status:", res.status);
+      console.log("📥 Response data:", res.data);
+
+      if (res.data) {
+        console.log("🔄 Refreshing user list...");
+        await fetchAllUsers();
+        // Reset page if current page is now empty
+        if (currentPage > 1 && users.length <= (currentPage - 1) * rowsPerPage) {
+          setCurrentPage(1);
+        }
+        console.log("✅ User list refreshed successfully");
+      }
+    } catch (err) {
+      console.error("=== ERROR DETAILS START ===");
+      console.error("❌ Error toggling active status:", err);
+      
+      // More detailed error logging
+      console.error("Error message:", err.message);
+      console.error("Error name:", err.name);
+      console.error("Error code:", err.code);
+      
+      if (err.response) {
+        console.error("📥 Response error details:");
+        console.error("  - Status:", err.response.status);
+        console.error("  - Status text:", err.response.statusText);
+        console.error("  - Headers:", err.response.headers);
+        console.error("  - Data:", err.response.data);
+        console.error("  - URL:", err.response.config?.url);
+        console.error("  - Method:", err.response.config?.method);
+      } else if (err.request) {
+        console.error("📤 Request error details:");
+        console.error("  - Request:", err.request);
+        console.error("  - No response received from server");
+      } else {
+        console.error("⚙️ Setup error:", err.message);
+      }
+
+      console.error("Full axios config:", err.config);
+      console.error("=== ERROR DETAILS END ===");
+
+      // Set user-friendly error message
+      if (err.response) {
+        const statusCode = err.response.status;
+        const errorMessage = err.response.data?.message || err.response.data?.error || "Server error";
+        setErrorMsg(`Failed to update user status (${statusCode}): ${errorMessage}`);
+      } else if (err.request) {
+        setErrorMsg("Network error: Could not reach server. Please check your connection.");
+      } else {
+        setErrorMsg(`Failed to update user status: ${err.message}`);
+      }
+    }
+
+    console.log("=== TOGGLE ACTIVE DEBUG END ===");
   };
 
-  const cancelDelete = () => {
-    setShowConfirm(false);
-    setUserToDelete(null);
-    setErrorMsg("");
-  };
-
-  const currentUsers = users.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage);
+  const currentUsers = Array.isArray(users)
+    ? users.slice((currentPage - 1) * rowsPerPage, currentPage * rowsPerPage)
+    : [];
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
@@ -96,16 +184,32 @@ const Users = () => {
         <h1 className="text-3xl font-bold text-gray-900 mb-8">User Management</h1>
 
         {loading ? (
-          <p className="text-gray-600">Loading users...</p>
+          <div className="flex justify-center items-center py-8">
+            <div className="text-gray-600">Loading users...</div>
+          </div>
         ) : (
           <div className="bg-white rounded-lg shadow overflow-hidden">
+            {errorMsg && (
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md mb-4 mx-4 mt-4">
+                <div className="flex">
+                  <div className="flex-shrink-0">
+                    <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                      <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                    </svg>
+                  </div>
+                  <div className="ml-3">
+                    <p className="text-sm">{errorMsg}</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
             <UserTable
               users={currentUsers}
               selectedUsers={selectedUsers}
               onSelectAll={handleSelectAll}
               onSelectUser={handleSelectUser}
-              onEdit={handleEdit}
-              onDelete={handleDelete} 
+              onToggleActive={handleToggleActive}
             />
 
             <UsersPagination
@@ -122,91 +226,6 @@ const Users = () => {
           </div>
         )}
       </div>
-
- 
-      {showConfirm && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4"
-          aria-labelledby="modal-title"
-          role="dialog"
-          aria-modal="true"
-        >
-          
-          <div
-            className="absolute inset-0 bg-black/40 backdrop-blur-sm"
-            onClick={cancelDelete}
-          />
-
-          <div className="relative bg-white rounded-2xl shadow-xl max-w-md w-full mx-4">
-            <div className="p-6">
-              <div className="flex items-start space-x-4">
-                <div className="flex-shrink-0">
-                  <div className="h-12 w-12 rounded-full bg-red-50 flex items-center justify-center">
-                   
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-6 w-6 text-red-600"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      strokeWidth="2"
-                    >
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M1 7h22M10 3h4a1 1 0 011 1v1H9V4a1 1 0 011-1z" />
-                    </svg>
-                  </div>
-                </div>
-
-                <div className="flex-1">
-                  <h2 id="modal-title" className="text-lg font-semibold text-gray-900">
-                    Delete user
-                  </h2>
-                  <p className="mt-2 text-sm text-gray-600">
-                    Are you sure you want to delete this user? This action cannot be undone.
-                  </p>
-
-                  {errorMsg && (
-                    <p className="mt-3 text-sm text-red-600">{errorMsg}</p>
-                  )}
-                </div>
-              </div>
-
-              <div className="mt-6 flex justify-end space-x-3">
-                <button
-                  type="button"
-                  onClick={cancelDelete}
-                  className="inline-flex items-center px-4 py-2 rounded-lg border border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-300"
-                >
-                  Cancel
-                </button>
-
-                <button
-                  type="button"
-                  onClick={confirmDelete}
-                  disabled={deleting}
-                  className="inline-flex items-center px-4 py-2 rounded-lg bg-red-600 text-white text-sm font-medium hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-300 disabled:opacity-60"
-                >
-                  {deleting ? (
-                    <>
-                      <svg
-                        className="animate-spin -ml-1 mr-2 h-5 w-5 text-white"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"></path>
-                      </svg>
-                      Deleting...
-                    </>
-                  ) : (
-                    "Delete"
-                  )}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

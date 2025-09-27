@@ -1,7 +1,8 @@
 import crypto from "crypto";
 import dotenv from "dotenv";
-import Order from '../models/Order.js';
-import User from '../models/User.js';
+import Order from "../models/Order.js";
+import User from "../models/User.js";
+import { sendEmail } from "../utils/sendEmail.js";
 
 dotenv.config();
 
@@ -159,8 +160,8 @@ export const initiatePayHerePayment = async (req, res) => {
 
     const payherePayload = {
       merchant_id: PAYHERE_MERCHANT_ID,
-      return_url: `${BASE_URL}/payment-success`,
-      cancel_url: `${BASE_URL}/`,
+      return_url: `${process.env.FRONTEND_URL}/payment-success?order_id=${order_id}&name=${customerData.first_name}`,
+      cancel_url: `${process.env.FRONTEND_URL}/payment-cancel`,
       notify_url: `${BASE_URL}/api/payment/payhere-notify`,
       order_id,
       items: itemsSummary,
@@ -200,6 +201,13 @@ export const initiatePayHerePayment = async (req, res) => {
       .toUpperCase();
 
     payherePayload.hash = md5sig;
+     await sendEmail(
+        order.customer.email,
+        "Leo Club Registration Successful",
+        `<h2>Hi ${order.customer.firstName}!</h2>
+         <p>Your registration request is under review by admin. You have successfully registered and your payment is confirmed.</p>
+         <p>Thank you for joining Leo Club!</p>`
+      );
 
     console.log(`Payment initialized for order: ${order_id}, Customer type: ${customerType}, Amount: ${normalizedAmount}`);
 

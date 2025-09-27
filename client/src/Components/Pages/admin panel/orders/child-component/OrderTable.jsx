@@ -1,7 +1,6 @@
 import React from 'react';
 import OrderRow from './OrderRow';
 
-
 const OrderPagination = ({
   currentPage,
   totalPages,
@@ -86,26 +85,38 @@ const OrderTable = ({
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-600 text-white">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+              <th className="px-3 py-3 text-left text-xs font-medium uppercase tracking-wider w-20">
                 Order ID
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+              <th className="px-3 py-3 text-left text-xs font-medium uppercase tracking-wider w-28">
                 Customer Name
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+              <th className="px-3 py-3 text-left text-xs font-medium uppercase tracking-wider w-24">
+                Mobile
+              </th>
+              <th className="px-3 py-3 text-left text-xs font-medium uppercase tracking-wider w-32">
+                Email
+              </th>
+              <th className="px-3 py-3 text-left text-xs font-medium uppercase tracking-wider w-32">
                 Address
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+              <th className="px-3 py-3 text-left text-xs font-medium uppercase tracking-wider w-20">
                 Order Date
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
+              <th className="px-3 py-3 text-left text-xs font-medium uppercase tracking-wider w-40">
                 Items
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
-                Price
+              <th className="px-3 py-3 text-left text-xs font-medium uppercase tracking-wider w-16">
+                Quantity
               </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
-                Status
+              <th className="px-3 py-3 text-left text-xs font-medium uppercase tracking-wider w-16">
+                Sizes
+              </th>
+              <th className="px-3 py-3 text-left text-xs font-medium uppercase tracking-wider w-16">
+                Colors
+              </th>
+              <th className="px-3 py-3 text-left text-xs font-medium uppercase tracking-wider w-20">
+                Price
               </th>
             </tr>
           </thead>

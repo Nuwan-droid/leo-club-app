@@ -6,10 +6,9 @@ const userSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
-    // Admin-specific ID (only for admins)
     admin_id: {
       type: String,
-      sparse: true, // Allows null/undefined values but maintains uniqueness when present
+      sparse: true,
       unique: true,
     },
     firstName: {
@@ -20,7 +19,6 @@ const userSchema = new mongoose.Schema(
       type: String,
       trim: true,
     },
-    // Combined name field (can be computed from firstName + lastName or stored separately)
     name: {
       type: String,
       trim: true,
@@ -31,7 +29,6 @@ const userSchema = new mongoose.Schema(
       required: true,
       default: "member",
     },
-    // Admin-specific position
     position: {
       type: String,
       trim: true,
@@ -70,22 +67,16 @@ const userSchema = new mongoose.Schema(
         return `https://randomuser.me/api/portraits/${gender}/${number}.jpg`;
       },
     },
-
-    // Admin image path (different from userImage)
     image_path: {
       type: String,
       trim: true,
     },
-    // Admin permissions
     permissions: {
-      type: [String], // Array of permission strings
+      type: [String],
       enum: [
-        // Common permissions (all admins have these)
         "manage_about",
         "dashboard",
         "learning_hub",
-
-        // IT Director (Super Admin) - has all permissions
         "super_admin",
         "users_management",
         "requests_management",
@@ -95,29 +86,20 @@ const userSchema = new mongoose.Schema(
         "products_management",
         "orders_management",
         "donations_management",
-
-        // Membership Admin specific
         "membership_admin",
-
-        // Event Coordinator Admin specific
         "event_coordinator",
-
-        // Chief Editor Admin specific
         "chief_editor",
-
-        // Treasurer Admin specific
         "treasurer",
       ],
       default: function () {
         if (this.role === "admin") {
-          return ["manage_about", "dashboard", "learning_hub"]; // Common permissions
+          return ["manage_about", "dashboard", "learning_hub"];
         }
         return [];
       },
       validate: {
         validator: function (permissions) {
           if (this.role === "admin") {
-            // All admins must have at least the common permissions
             const commonPermissions = [
               "manage_about",
               "dashboard",
@@ -134,8 +116,6 @@ const userSchema = new mongoose.Schema(
           "Admin users must have at least the common permissions (manage_about, dashboard, learning_hub).",
       },
     },
-
-    // Admin role type for easier querying and role management
     adminRole: {
       type: String,
       enum: [
@@ -149,12 +129,10 @@ const userSchema = new mongoose.Schema(
         return this.role === "admin";
       },
     },
-    // Admin active status
     is_active: {
       type: Boolean,
       default: true,
     },
-    // Member-specific fields (only for members)
     score: {
       type: Number,
       default: function () {
@@ -162,7 +140,6 @@ const userSchema = new mongoose.Schema(
       },
       validate: {
         validator: function (value) {
-          // Only allow score for members
           if (this.role === "admin") {
             return value === undefined || value === null;
           }
@@ -178,7 +155,6 @@ const userSchema = new mongoose.Schema(
       },
       validate: {
         validator: function (value) {
-          // Only allow eventsParticipated for members
           if (this.role === "admin") {
             return value === undefined || value === null;
           }
@@ -190,16 +166,13 @@ const userSchema = new mongoose.Schema(
     newsletterParticipated: {
       type: Number,
       default: function () {
-        // For members start at 0, admins don’t need this field
         return this.role === "member" ? 0 : undefined;
       },
       validate: {
         validator: function (value) {
-          // Only members can have a number (>= 0), admins should have undefined/null
           if (this.role === "admin") {
             return value === undefined || value === null;
           }
-          // For members, only allow non-negative integers
           return Number.isInteger(value) && value >= 0;
         },
         message:
@@ -210,24 +183,19 @@ const userSchema = new mongoose.Schema(
       type: String,
       trim: true,
       unique: true,
-      sparse: true, // still ensures uniqueness when present
-      // 👇 removed the restrictive validator
-      default: null,
+      sparse: true,
     },
   },
   {
     timestamps: true,
-    // Add discriminator key for potential future separation
     discriminatorKey: "userType",
   }
 );
 
-// Method to check if user has specific permission
 userSchema.methods.hasPermission = function (permission) {
   return this.role === "admin" && this.permissions.includes(permission);
 };
 
-// Method to get admin role-specific permissions
 userSchema.methods.getRolePermissions = function () {
   if (this.role !== "admin") return [];
 
@@ -276,13 +244,11 @@ userSchema.methods.getRolePermissions = function () {
   }
 };
 
-// Pre-save middleware to auto-assign permissions based on admin role
 userSchema.pre("save", function (next) {
   if (!this.name && this.firstName && this.lastName) {
     this.name = `${this.firstName} ${this.lastName}`;
   }
 
-  // Auto-assign permissions based on admin role
   if (this.role === "admin" && this.adminRole) {
     this.permissions = this.getRolePermissions();
   }
@@ -290,17 +256,14 @@ userSchema.pre("save", function (next) {
   next();
 });
 
-// Virtual to get full name
 userSchema.virtual("fullName").get(function () {
   return this.name || `${this.firstName || ""} ${this.lastName || ""}`.trim();
 });
 
-// Static method to find admins by role
 userSchema.statics.findAdminsByRole = function (adminRole) {
   return this.find({ role: "admin", adminRole: adminRole, is_active: true });
 };
 
-// Static method to find active admins
 userSchema.statics.findActiveAdmins = function () {
   return this.find({ role: "admin", is_active: true });
 };

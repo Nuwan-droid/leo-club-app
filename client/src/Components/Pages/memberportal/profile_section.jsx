@@ -8,7 +8,7 @@ const ProfileSection = () => {
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
-        const token = localStorage.getItem("leoToken");
+        const token = sessionStorage.getItem("memberToken");
         if (!token) {
           console.error("No token found, redirect to login");
           return;
