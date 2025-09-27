@@ -160,7 +160,7 @@ export const initiatePayHerePayment = async (req, res) => {
 
     const payherePayload = {
       merchant_id: PAYHERE_MERCHANT_ID,
-      return_url: `${process.env.FRONTEND_URL}/payment-success?order_id=${order_id}&name=${customerData.first_name}`,
+      return_url: `${process.env.FRONTEND_URL}/order-success?order_id=${order_id}&name=${customerData.first_name}&amount=${normalizedAmount}`,
       cancel_url: `${process.env.FRONTEND_URL}/payment-cancel`,
       notify_url: `${BASE_URL}/api/payment/payhere-notify`,
       order_id,
