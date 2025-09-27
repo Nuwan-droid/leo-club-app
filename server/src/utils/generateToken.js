@@ -1,12 +1,12 @@
 import jwt from "jsonwebtoken";
 import "dotenv/config";
 
-const generateToken = (userId, res) => {
+const generateToken = (userId,userRole,res) => {
     if (!process.env.JWT_SECRET) {
         throw new Error("JWT_SECRET not defined in environment");
     }
 
- const token = jwt.sign({ id: userId }, process.env.JWT_SECRET, {
+ const token = jwt.sign({ id: userId}, process.env.JWT_SECRET, {
     expiresIn: "30m"
 });
 

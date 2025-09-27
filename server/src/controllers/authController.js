@@ -1,3 +1,4 @@
+// Updated Signup Controller (sign-up controller)
 import User from "../models/User.js";
 import bcrypt from "bcrypt";
 import generateToken from "../utils/generateToken.js";
@@ -30,12 +31,6 @@ const signup = async (req, res) => {
 
     // ✅ Role-specific validation
     const userRole = role || "member"; // Default to member if not specified
-
-    if (userRole === "member" && (!leo_Id || leo_Id.trim() === "")) {
-      return res
-        .status(400)
-        .json({ message: "Leo ID is required for members." });
-    }
 
     if (userRole === "admin") {
       if (!adminRole) {
@@ -85,8 +80,8 @@ const signup = async (req, res) => {
       }
     }
 
-    // ✅ Check duplicate leo_Id for members
-    if (userRole === "member" && leo_Id) {
+    // ✅ Check duplicate leo_Id if provided (but not required for pending members)
+    if (leo_Id) {
       const existingMember = await User.findOne({ leo_Id });
       if (existingMember) {
         return res.status(409).json({ message: "Leo ID already exists." });
@@ -111,7 +106,7 @@ const signup = async (req, res) => {
 
     // Add role-specific fields
     if (userRole === "member") {
-      userData.leo_Id = leo_Id;
+      if (leo_Id) userData.leo_Id = leo_Id; // Optional for pending
     } else if (userRole === "admin") {
       userData.admin_id = admin_id;
       userData.adminRole = adminRole;
@@ -119,12 +114,15 @@ const signup = async (req, res) => {
       userData.name = `${firstName} ${lastName}`; // Set full name for admins
     }
 
-    // ✅ Save user
+    // ✅ Save user (status will be set to 'pending' for members, 'approved' for admins via schema default)
     const user = new User(userData);
     await user.save();
 
-    // ✅ Auto-login after signup
-    const token = generateToken(user._id, res);
+    // ✅ Auto-login only for admins (members are pending)
+    let token;
+    if (userRole === "admin") {
+      token = generateToken(user._id, res);
+    }
 
     // ✅ Prepare response data
     const responseUser = {
@@ -134,6 +132,7 @@ const signup = async (req, res) => {
       firstName: user.firstName,
       lastName: user.lastName,
       enrollmentNo: user.enrollmentNo, // 👈 Admins also get this now
+      status: user.status,
     };
 
     if (userRole === "member") {
@@ -150,10 +149,10 @@ const signup = async (req, res) => {
     }
 
     res.status(201).json({
-      message: `${
-        userRole.charAt(0).toUpperCase() + userRole.slice(1)
-      } registered successfully.`,
-      token,
+      message: userRole === "member"
+        ? "Registration submitted for approval."
+        : `${userRole.charAt(0).toUpperCase() + userRole.slice(1)} registered successfully.`,
+      token, // Undefined for members
       user: responseUser,
     });
   } catch (error) {
@@ -168,6 +167,7 @@ const signup = async (req, res) => {
     }
 
     if (error.code === 11000) {
+      
       const field = Object.keys(error.keyPattern)[0];
       return res.status(409).json({
         message: `${field} already exists.`,
@@ -177,6 +177,7 @@ const signup = async (req, res) => {
     res.status(500).json({ message: "Server error during signup." });
   }
 };
+
 
 // SignIn Controller
 const signIn = async (req, res) => {
@@ -210,7 +211,7 @@ const signIn = async (req, res) => {
     }
 
     // ✅ Create JWT token
-    const token = generateToken(user._id, res);
+    const token = generateToken(user._id,user.role,res);
 
     // ✅ Prepare response data based on user role
     const responseUser = {
