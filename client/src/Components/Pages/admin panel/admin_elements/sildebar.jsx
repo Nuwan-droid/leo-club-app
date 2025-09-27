@@ -15,6 +15,7 @@ const permissionToTabMap = {
   products_management: { name: 'Products', path: '/admin/products' },
   orders_management: { name: 'Orders', path: '/admin/orders' },
   donations_management: { name: 'Donation', path: '/admin/donation' },
+  donations_Programs: { name: 'Donation Programs', path: '/admin/project-donation' },
   manage_about: { name: 'Manage about', path: '/admin/manage-executive-members' },
 };
 
@@ -35,6 +36,8 @@ const getRolePermissions = (adminRole) => {
         'products_management',
         'orders_management',
         'donations_management',
+        'donations_Programs',
+
       ];
     case 'membership_admin':
       return [
@@ -59,6 +62,7 @@ const getRolePermissions = (adminRole) => {
         'products_management',
         'orders_management',
         'donations_management',
+        'donations_Programs',
       ];
     default:
       return commonPermissions;
@@ -80,7 +84,7 @@ const Sidebar = () => {
           return;
         }
     
-          const response = await axios.get('/api/user/profile', {
+          const response = await axios.get('http://localhost:5001/api/users/profile', {
             headers: { Authorization: `Bearer ${token}` },
           });
         const adminRole = response.data.adminRole;

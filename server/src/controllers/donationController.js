@@ -1,6 +1,497 @@
 import mongoose from "mongoose";
 import DonationProject from "../models/DonationProject.js";
 import DonationItem from "../models/DonationItem.js";
+import Donation from "../models/Donation.js";
+import User from "../models/User.js";
+import crypto from "crypto";
+import { fileURLToPath } from "url";
+import path from "path";
+import multer from "multer";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// ======================== DONATION PAYMENT FUNCTIONALITY ========================
+
+// Create a new donation record
+export const createDonation = async (req, res) => {
+  try {
+    const {
+      amount,
+      donation_type, // 'project' or 'club_fund'
+      donation_project_id,
+      first_name,
+      last_name,
+      email,
+      phone,
+      address,
+      city,
+      payment_method = 'online' // 'online' or 'bank_transfer'
+    } = req.body;
+
+    // Validation
+    if (!amount || !donation_type || !first_name || !last_name || !email || !phone || !address || !city) {
+      return res.status(400).json({
+        success: false,
+        message: "All required fields must be provided"
+      });
+    }
+
+    if (!['project', 'club_fund'].includes(donation_type)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid donation type. Must be 'project' or 'club_fund'"
+      });
+    }
+
+    if (donation_type === 'project' && !donation_project_id) {
+      return res.status(400).json({
+        success: false,
+        message: "Project ID is required for project donations"
+      });
+    }
+
+    // Validate project exists if it's a project donation
+    if (donation_type === 'project') {
+      const project = await DonationProject.findOne({ donation_project_id });
+      if (!project) {
+        return res.status(404).json({
+          success: false,
+          message: "Donation project not found"
+        });
+      }
+    }
+
+    // Generate unique donation ID
+    const lastDonation = await Donation.findOne({}, {}, { sort: { donate_id: -1 } });
+    const donate_id = lastDonation ? lastDonation.donate_id + 1 : 1;
+
+    // Check if user is logged in
+    let user_id = null;
+    if (req.user && req.user._id) {
+      user_id = req.user._id;
+    }
+
+    // Generate unique order ID for payment
+    const order_id = `DON_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+
+    // Create donation record
+    const donation = new Donation({
+      donate_id,
+      amount: parseFloat(amount),
+      donor: {
+        user_id,
+        first_name,
+        last_name,
+        email,
+        phone,
+        address,
+        city
+      },
+      donation_project_id: donation_type === 'project' ? donation_project_id : null,
+      donation_type,
+      payment: {
+        order_id,
+        status: 'pending',
+        payment_method
+      }
+    });
+
+    await donation.save();
+
+    res.status(201).json({
+      success: true,
+      message: "Donation record created successfully",
+      data: {
+        donation_id: donation._id,
+        donate_id: donation.donate_id,
+        order_id,
+        amount: donation.amount,
+        donation_type: donation.donation_type,
+        project_id: donation.donation_project_id
+      }
+    });
+
+  } catch (error) {
+    console.error("Error creating donation:", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+      error: error.message
+    });
+  }
+};
+
+// Initiate PayHere payment for donation
+export const initiateDonationPayment = async (req, res) => {
+  try {
+    const { donation_id } = req.body;
+
+    if (!donation_id) {
+      return res.status(400).json({
+        success: false,
+        message: "Donation ID is required"
+      });
+    }
+
+    // Find donation record
+    const donation = await Donation.findById(donation_id);
+    if (!donation) {
+      return res.status(404).json({
+        success: false,
+        message: "Donation not found"
+      });
+    }
+
+    if (donation.payment.status !== 'pending') {
+      return res.status(400).json({
+        success: false,
+        message: "Payment has already been processed for this donation"
+      });
+    }
+
+    const { PAYHERE_MERCHANT_ID, PAYHERE_MERCHANT_SECRET } = process.env;
+    const BASE_URL = process.env.BASE_URL || 'http://localhost:5173';
+
+    // Format amount to 2 decimal places
+    const normalizedAmount = Number(donation.amount).toFixed(2);
+
+    // Create PayHere payload
+    const payherePayload = {
+      merchant_id: PAYHERE_MERCHANT_ID,
+      return_url: `${BASE_URL}/donation-success`,
+      cancel_url: `${BASE_URL}/donation`,
+      notify_url: `${BASE_URL}/api/donation-projects/payment-notify`,
+      order_id: donation.payment.order_id,
+      items: donation.donation_type === 'project' 
+        ? `Donation to Project #${donation.donation_project_id}` 
+        : 'Donation to Club Fund',
+      amount: normalizedAmount,
+      currency: 'LKR',
+      first_name: donation.donor.first_name,
+      last_name: donation.donor.last_name,
+      email: donation.donor.email,
+      phone: donation.donor.phone,
+      address: donation.donor.address,
+      city: donation.donor.city,
+      country: "Sri Lanka",
+      delivery_address: donation.donor.address,
+      delivery_city: donation.donor.city,
+      delivery_country: "Sri Lanka",
+      custom_1: donation.donation_type,
+      custom_2: donation._id.toString()
+    };
+
+    // Generate MD5 signature
+    const merchantSecretMd5 = crypto
+      .createHash("md5")
+      .update(PAYHERE_MERCHANT_SECRET || "")
+      .digest("hex")
+      .toUpperCase();
+
+    const md5sig = crypto
+      .createHash("md5")
+      .update(
+        payherePayload.merchant_id +
+          payherePayload.order_id +
+          payherePayload.amount +
+          payherePayload.currency +
+          merchantSecretMd5
+      )
+      .digest("hex")
+      .toUpperCase();
+
+    payherePayload.hash = md5sig;
+
+    console.log(`Donation payment initialized: ${donation.payment.order_id}, Amount: ${normalizedAmount}`);
+
+    res.json({
+      success: true,
+      payhere_payload: payherePayload
+    });
+
+  } catch (error) {
+    console.error("Error initiating donation payment:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error initiating payment",
+      error: error.message
+    });
+  }
+};
+
+// Handle PayHere notification for donations
+export const handleDonationPaymentNotification = async (req, res) => {
+  try {
+    const {
+      merchant_id,
+      order_id,
+      payhere_amount,
+      payhere_currency,
+      status_code,
+      md5sig,
+      custom_1, // donation_type
+      custom_2, // donation_id
+      payment_id,
+      payhere_reference
+    } = req.body;
+
+    console.log("Donation payment notification received:", { order_id, status_code, custom_1 });
+
+    // Verify signature
+    const { PAYHERE_MERCHANT_SECRET } = process.env;
+    const merchantSecretMd5 = crypto
+      .createHash("md5")
+      .update(PAYHERE_MERCHANT_SECRET || "")
+      .digest("hex")
+      .toUpperCase();
+
+    const localMd5 = crypto
+      .createHash("md5")
+      .update(
+        String(merchant_id || "") +
+          String(order_id || "") +
+          String(payhere_amount || "") +
+          String(payhere_currency || "") +
+          String(status_code || "") +
+          merchantSecretMd5
+      )
+      .digest("hex")
+      .toUpperCase();
+
+    if (localMd5 !== String(md5sig).toUpperCase()) {
+      console.log(`❌ Invalid signature for donation order ${order_id}`);
+      return res.sendStatus(200);
+    }
+
+    // Find donation by order_id
+    const donation = await Donation.findOne({ 'payment.order_id': order_id });
+    if (!donation) {
+      console.error("Donation not found:", order_id);
+      return res.sendStatus(200);
+    }
+
+    // Update donation based on payment status
+    let paymentStatus = 'pending';
+    let donationStatus = 'pending';
+
+    if (Number(status_code) === 2) {
+      // Payment successful
+      paymentStatus = 'completed';
+      donationStatus = 'verified';
+      donation.payment.paid_at = new Date();
+      console.log(`✅ Donation payment successful for order ${order_id}`);
+    } else if (Number(status_code) === 0) {
+      // Payment pending
+      paymentStatus = 'pending';
+      donationStatus = 'pending';
+      console.log(`⏳ Donation payment pending for order ${order_id}`);
+    } else {
+      // Payment failed
+      paymentStatus = 'failed';
+      donationStatus = 'pending';
+      console.log(`❌ Donation payment failed for order ${order_id}, status code: ${status_code}`);
+    }
+
+    // Update donation record
+    donation.payment.status = paymentStatus;
+    donation.payment.payment_id = payment_id;
+    donation.payment.transaction_id = payhere_reference;
+    donation.status = donationStatus;
+    
+    await donation.save();
+
+    console.log(`Donation ${order_id} updated: Payment ${paymentStatus}, Status ${donationStatus}`);
+
+    return res.sendStatus(200);
+  } catch (error) {
+    console.error("handleDonationPaymentNotification error:", error);
+    return res.sendStatus(200);
+  }
+};
+
+// Upload receipt for bank transfer donations
+export const uploadDonationReceipt = async (req, res) => {
+  try {
+    const { donation_id } = req.body;
+    
+    if (!donation_id) {
+      return res.status(400).json({
+        success: false,
+        message: "Donation ID is required"
+      });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({
+        success: false,
+        message: "Receipt file is required"
+      });
+    }
+
+    console.log('Receipt upload - Donation ID:', donation_id);
+    console.log('Receipt file details:', {
+      filename: req.file.filename,
+      originalname: req.file.originalname,
+      size: req.file.size,
+      path: req.file.path
+    });
+
+    // Find donation
+    const donation = await Donation.findById(donation_id);
+    if (!donation) {
+      return res.status(404).json({
+        success: false,
+        message: "Donation not found"
+      });
+    }
+
+    // Update donation with receipt information
+    donation.receipt = {
+      file_path: req.file.path,
+      file_name: req.file.filename,
+      original_name: req.file.originalname,
+      uploaded_at: new Date()
+    };
+    donation.payment.status = 'receipt_uploaded';
+    donation.status = 'pending'; // Pending admin verification
+
+    await donation.save();
+
+    console.log('Receipt uploaded successfully for donation:', donation_id);
+
+    res.json({
+      success: true,
+      message: "Receipt uploaded successfully",
+      data: {
+        donation_id: donation._id,
+        receipt_filename: req.file.filename,
+        status: donation.status
+      }
+    });
+
+  } catch (error) {
+    console.error("Error uploading donation receipt:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error uploading receipt",
+      error: error.message
+    });
+  }
+};
+
+// Get all donations (admin)
+export const getAllDonations = async (req, res) => {
+  try {
+    const { page = 1, limit = 100, status, donation_type } = req.query;
+    
+    const filter = {};
+    if (status) filter.status = status;
+    if (donation_type) filter.donation_type = donation_type;
+
+    const donations = await Donation.find(filter)
+      .populate('donor.user_id', 'firstName lastName leo_Id')
+      .sort({ createdAt: -1 })
+      .limit(limit * 1)
+      .skip((page - 1) * limit);
+
+    const total = await Donation.countDocuments(filter);
+
+    // Transform the data to match frontend expectations
+    const transformedDonations = donations.map(donation => ({
+      _id: donation._id,
+      donor_name: donation.donor.first_name && donation.donor.last_name 
+        ? `${donation.donor.first_name} ${donation.donor.last_name}` 
+        : donation.donor.user_id 
+          ? `${donation.donor.user_id.firstName} ${donation.donor.user_id.lastName}` 
+          : 'Anonymous',
+      donor_email: donation.donor.email || (donation.donor.user_id ? donation.donor.user_id.email : ''),
+      donor_phone: donation.donor.phone,
+      donor_address: donation.donor.address,
+      donor_city: donation.donor.city,
+      amount: donation.amount,
+      donation_type: donation.donation_type,
+      project_id: donation.donation_project_id,
+      payment_method: donation.payment?.payment_method || 'online',
+      payment: donation.payment,
+      receipt: donation.receipt?.file_path || donation.receipt,
+      status: donation.status,
+      createdAt: donation.createdAt,
+      updatedAt: donation.updatedAt
+    }));
+
+    res.json(transformedDonations);
+
+  } catch (error) {
+    console.error("Error fetching donations:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error fetching donations",
+      error: error.message
+    });
+  }
+};
+
+// Get donations by user
+export const getUserDonations = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    
+    const donations = await Donation.find({
+      $or: [
+        { 'donor.user_id': userId },
+        { 'donor.email': req.user.email }
+      ]
+    }).sort({ created_at: -1 });
+
+    res.json({
+      success: true,
+      data: donations
+    });
+
+  } catch (error) {
+    console.error("Error fetching user donations:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error fetching user donations",
+      error: error.message
+    });
+  }
+};
+
+// Verify donation (admin)
+export const verifyDonation = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const donation = await Donation.findById(id);
+    if (!donation) {
+      return res.status(404).json({
+        success: false,
+        message: "Donation not found"
+      });
+    }
+
+    // Update status to verified
+    donation.status = 'verified';
+    donation.verified_at = new Date();
+    await donation.save();
+
+    res.json({
+      success: true,
+      message: "Donation verified successfully",
+      data: donation
+    });
+
+  } catch (error) {
+    console.error("Error verifying donation:", error);
+    res.status(500).json({
+      success: false,
+      message: "Error verifying donation",
+      error: error.message
+    });
+  }
+};
 
 // Get all donation projects
 export const getAllDonationProjects = async (req, res) => {
