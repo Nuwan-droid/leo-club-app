@@ -20,6 +20,7 @@ import orderRoutes from './src/routes/orderRoutes.js';
 import cartRoutes from './src/routes/cartRoutes.js'; 
 import newsletterRoutes from "./src/routes/newsletterRoutes.js";
 import { handleMulterError } from "./src/config/upload.js";
+import adminRequestRoutes from "./src/routes/admin_requestRoutes.js";
 
 dotenv.config();
 connectDB();
@@ -53,6 +54,7 @@ app.use('/api/cart', cartRoutes);
 app.use("/api/awards", awardRoutes);
 app.use("/api/donation-projects", donationRoutes); 
 app.use("/api/user",userRoutes);
+app.use("/api/admin-requests",adminRequestRoutes);
 
 app.use("/api/newsletters", newsletterRoutes);
 app.use(handleMulterError);
