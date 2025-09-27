@@ -24,6 +24,8 @@ import Chatbot from "./Components/Pages/chatbot/LeoChatbot";
 import Admin from "./Components/Pages/admin panel/main_admin";
 import AccountManage from "./Components/Pages/memberportal/accountManagement/account";
 import Membernotification from "./Components/Pages/memberportal/Notification/request";
+import PaymentSuccess from "./Components/Elements/PaymentSuccess";
+import PaymentCancel from "./Components/Elements/PaymentCancel";
 
 
 function App() {
@@ -37,6 +39,8 @@ function App() {
     <>
       {!isMemberPortal && !isAdmin && <NavBar />}
       <Routes>
+        <Route path="/payment-success" element={<PaymentSuccess />} />
+<Route path="/payment-cancel" element={<PaymentCancel />} />
         <Route path="/" element={<Landing />} />
         <Route path="/about" element={<About />} />
         <Route path="/privacy-policy" element={<PrivacyPolicy />} />
@@ -46,7 +50,7 @@ function App() {
         <Route path="/donatemoney/:projectId" element={<DonateMoney />} />
         <Route path="/donation-success" element={<DonationSuccess />} />
         <Route path="/donatebook" element={<DonateBooks />} />
-        <Route path="/donateitems/:projectId" element={<DonateItems />} />
+        <Route path="/donateitems/:projectId" element={<DonateItems/>}/>
         <Route path="/calander" element={<EventCalendar />} />
         <Route path="/shop" element={<Shop />} />
         <Route path="/project" element={<ProjectShowcasePage />} />
@@ -71,6 +75,7 @@ function App() {
         theme="light"
       />
       <Chatbot />
+
     </>
   );
 }
