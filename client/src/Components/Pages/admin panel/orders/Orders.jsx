@@ -11,8 +11,6 @@ const Orders = () => {
   const [memberFilter, setMemberFilter] = useState('all');
   const [visitorFilter, setVisitorFilter] = useState('all');
 
-  // Removed pagination - showing all orders
-
   // Helper function to sort orders by date (newest first)
   const sortOrdersByDate = (orders) => {
     return orders.sort((a, b) => {
@@ -35,10 +33,10 @@ const Orders = () => {
           'Content-Type': 'application/json',
         };
 
-        console.log('Making API calls without authentication');
+        console.log('Fetching all orders for pagination...');
 
-        // Fetch member orders
-        const memberRes = await fetch('http://localhost:5001/api/orders/all?customer_type=member', {
+        // Fetch member orders - Get all orders for frontend pagination
+        const memberRes = await fetch('http://localhost:5001/api/orders/all?customer_type=member&limit=999999', {
           method: 'GET',
           headers,
         });
@@ -54,8 +52,8 @@ const Orders = () => {
         const memberData = await memberRes.json();
         console.log('Member data received:', memberData);
 
-        // Fetch visitor orders
-        const visitorRes = await fetch('http://localhost:5001/api/orders/all?customer_type=visitor', {
+        // Fetch visitor orders - Get all orders for frontend pagination
+        const visitorRes = await fetch('http://localhost:5001/api/orders/all?customer_type=visitor&limit=999999', {
           method: 'GET',
           headers,
         });
@@ -124,8 +122,6 @@ const Orders = () => {
   const filteredMemberOrders = filterOrders(memberOrders, memberFilter);
   const filteredVisitorOrders = filterOrders(visitorOrders, visitorFilter);
 
-  // Show all orders - no pagination
-
   const memberStats = {
     totalOrders: memberOrders.length,
     completedOrders: memberOrders.filter(o => 
@@ -156,7 +152,10 @@ const Orders = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
-        <div className="text-lg text-gray-700">Loading orders...</div>
+        <div className="flex flex-col items-center space-y-4">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+          <div className="text-lg text-gray-700">Loading orders...</div>
+        </div>
       </div>
     );
   }
@@ -173,7 +172,7 @@ const Orders = () => {
           <div className="space-y-2">
             <button 
               onClick={handleRetry}
-              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition-colors"
             >
               Retry
             </button>
@@ -206,9 +205,14 @@ const Orders = () => {
                    memberFilter === 'completed' ? 'Completed Member Orders' : 
                    'Processing Member Orders'}
                 </h3>
-                <span className="text-sm text-gray-500">
-                  Showing all {filteredMemberOrders.length} orders (newest first)
-                </span>
+                <div className="flex items-center space-x-4">
+                  <span className="text-sm text-gray-500">
+                    {filteredMemberOrders.length} total orders
+                  </span>
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                    10 per page
+                  </span>
+                </div>
               </div>
             </div>
             
@@ -237,9 +241,14 @@ const Orders = () => {
                    visitorFilter === 'completed' ? 'Completed Visitor Orders' : 
                    'Processing Visitor Orders'}
                 </h3>
-                <span className="text-sm text-gray-500">
-                  Showing all {filteredVisitorOrders.length} orders (newest first)
-                </span>
+                <div className="flex items-center space-x-4">
+                  <span className="text-sm text-gray-500">
+                    {filteredVisitorOrders.length} total orders
+                  </span>
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
+                    10 per page
+                  </span>
+                </div>
               </div>
             </div>
             
@@ -253,6 +262,5 @@ const Orders = () => {
     </div>
   );
 };
-
 
 export default Orders;
