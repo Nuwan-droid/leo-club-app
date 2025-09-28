@@ -1,3 +1,4 @@
+// Updated User Model (user model)
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema(
@@ -5,6 +6,12 @@ const userSchema = new mongoose.Schema(
     leo_Id: {
       type: String,
       trim: true,
+      required: function () {
+        // Require LEO ID only for approved members (assigned by admin at approval time)
+        return this.role === "member" && this.status === "approved";
+      },
+      unique: true,
+      sparse: true,
     },
     admin_id: {
       type: String,
@@ -129,9 +136,18 @@ const userSchema = new mongoose.Schema(
         return this.role === "admin";
       },
     },
+    status: {
+      type: String,
+      enum: ["pending", "approved", "rejected"],
+      default: function () {
+        return this.role === "admin" ? "approved" : "pending";
+      },
+    },
     is_active: {
       type: Boolean,
-      default: true,
+      default: function () {
+        return this.status === "approved";
+      },
     },
     score: {
       type: Number,
@@ -192,6 +208,7 @@ const userSchema = new mongoose.Schema(
   }
 );
 
+// Methods
 userSchema.methods.hasPermission = function (permission) {
   return this.role === "admin" && this.permissions.includes(permission);
 };
@@ -253,19 +270,28 @@ userSchema.pre("save", function (next) {
     this.permissions = this.getRolePermissions();
   }
 
+  // Ensure is_active syncs with status
+  this.is_active = this.status === "approved";
+
   next();
 });
 
+// Virtuals
 userSchema.virtual("fullName").get(function () {
   return this.name || `${this.firstName || ""} ${this.lastName || ""}`.trim();
 });
 
+// Statics
 userSchema.statics.findAdminsByRole = function (adminRole) {
   return this.find({ role: "admin", adminRole: adminRole, is_active: true });
 };
 
 userSchema.statics.findActiveAdmins = function () {
   return this.find({ role: "admin", is_active: true });
+};
+
+userSchema.statics.findPendingUsers = function () {
+  return this.find({ status: "pending", role: "member" });
 };
 
 const User = mongoose.model("User", userSchema);

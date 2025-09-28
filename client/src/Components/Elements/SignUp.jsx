@@ -1,3 +1,4 @@
+// Updated Sign-up JSX (sign-up .jsx) - Minimal changes, already handles approval message
 import { useState, useEffect } from "react";
 import Button from "./Button";
 import Input from "./Input";
@@ -69,8 +70,9 @@ export default function SignUp({ onClose, onSwitchToAdmin }) {
     if (!validatePassword(formData.password))
       return "Password must be 8+ chars with uppercase, lowercase, number & symbol.";
 
-    if (leoStatus === "member" && !formData.leo_Id.trim())
-      return "Leo ID is required for members";
+    // Leo ID is now optional for pending members
+    // if (leoStatus === "member" && !formData.leo_Id.trim())
+    //   return "Leo ID is required for members";
 
     return null;
   };
@@ -269,12 +271,11 @@ export default function SignUp({ onClose, onSwitchToAdmin }) {
             {leoStatus === "member" && (
               <Input
                 type="text"
-                placeholder="Leo ID *"
+                placeholder="Leo ID (optional for registration)"
                 name="leo_Id"
                 value={formData.leo_Id}
                 onChange={handleChange}
                 className="border p-2 mb-4 w-full rounded"
-                required
               />
             )}
 

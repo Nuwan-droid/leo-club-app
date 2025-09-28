@@ -2,8 +2,6 @@ import React,{useState} from 'react';
 import InboxContent from './inboxcontent';
 
 
-
-
 const Request = () => {
 const [selectedMessages, setSelectedMessages] = useState([]);
   return (
