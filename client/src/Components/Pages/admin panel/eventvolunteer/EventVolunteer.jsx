@@ -1,175 +1,77 @@
-import React, { useState } from 'react';
-import EventVolunteerTable from './child-component/EventVolunteerTable';
-import AddScoreModal from './child-component/AddScoreModal';
-import AddContributionModal from './child-component/AddContributionModal';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import EventVolunteerTable from "./child-component/EventVolunteerTable";
+import AddScoreModal from "./child-component/AddScoreModal";
+import AddContributionModal from "./child-component/AddContributionModal";
 
 const EventVolunteer = () => {
-  const [volunteers, setVolunteers] = useState([
-    {
-      id: 1,
-      name: 'John Smith',
-      email: 'john.smith@gmail.com',
-      username: 'jonny77',
-      role: 'Admin',
-      projectId: 'P001225',
-      projectType: 'Organizing committee',
-      participation: 'Participating',
-      score: 85,
-      avatar: 'https://randomuser.me/api/portraits/men/1.jpg'
-    },
-    {
-      id: 2,
-      name: 'Olivia Bennett',
-      email: 'ollyben@gmail.com',
-      username: 'olly659',
-      role: 'Member',
-      projectId: 'P001226',
-      projectType: 'Organizing committee',
-      participation: 'Participating',
-      score: 72,
-      avatar: 'https://randomuser.me/api/portraits/women/2.jpg'
-    },
-    {
-      id: 3,
-      name: 'Daniel Warren',
-      email: 'dwarren3@gmail.com',
-      username: 'dwarren3',
-      role: 'Member',
-      projectId: 'P001227',
-      projectType: 'Organizing committee',
-      participation: 'Participating',
-      score: 68,
-      avatar: 'https://randomuser.me/api/portraits/men/3.jpg'
-    },
-    {
-      id: 4,
-      name: 'Chloe Hayes',
-      email: 'chloelhye@gmail.com',
-      username: 'chloehh',
-      role: 'Member',
-      projectId: 'P001228',
-      projectType: 'Organizing committee',
-      participation: 'Participating',
-      score: 91,
-      avatar: 'https://randomuser.me/api/portraits/women/4.jpg'
-    },
-    {
-      id: 5,
-      name: 'Marcus Reed',
-      email: 'reeds777@gmail.com',
-      username: 'reeds7',
-      role: 'Member',
-      projectId: 'P001229',
-      projectType: 'Organizing committee',
-      participation: 'Participating',
-      score: 77,
-      avatar: 'https://randomuser.me/api/portraits/men/5.jpg'
-    },
-    {
-      id: 6,
-      name: 'Isabelle Clark',
-      email: 'belleclark@gmail.com',
-      username: 'bellecl',
-      role: 'Member',
-      projectId: 'P001230',
-      projectType: 'Organizing committee',
-      participation: 'Participating',
-      score: 83,
-      avatar: 'https://randomuser.me/api/portraits/women/6.jpg'
-    },
-    {
-      id: 7,
-      name: 'Lucas Mitchell',
-      email: 'lucamich@gmail.com',
-      username: 'lucamich',
-      role: 'Member',
-      projectId: 'P001231',
-      projectType: 'Organizing committee',
-      participation: 'Participating',
-      score: 65,
-      avatar: 'https://randomuser.me/api/portraits/men/7.jpg'
-    },
-    {
-      id: 8,
-      name: 'Mark Wilburg',
-      email: 'markwill32@gmail.com',
-      username: 'markwill32',
-      role: 'Member',
-      projectId: 'P001232',
-      projectType: 'Organizing committee',
-      participation: 'Participating',
-      score: 79,
-      avatar: 'https://randomuser.me/api/portraits/men/8.jpg'
-    },
-    {
-      id: 9,
-      name: 'Nicholas Agenn',
-      email: 'nicolass009@gmail.com',
-      username: 'nicolass009',
-      role: 'Member',
-      projectId: 'P001233',
-      projectType: 'Organizing committee',
-      participation: 'Participating',
-      score: 88,
-      avatar: 'https://randomuser.me/api/portraits/men/9.jpg'
-    },
-    {
-      id: 10,
-      name: 'Mia Nadinn',
-      email: 'mianadinn@gmail.com',
-      username: 'mianadinn',
-      role: 'Member',
-      projectId: 'P001234',
-      projectType: 'Organizing committee',
-      participation: 'Participating',
-      score: 74,
-      avatar: 'https://randomuser.me/api/portraits/women/10.jpg'
-    },
-    {
-      id: 11,
-      name: 'Noemi Villan',
-      email: 'noemivill99@gmail.com',
-      username: 'noemi',
-      role: 'Admin',
-      projectId: 'P001235',
-      projectType: 'Organizing committee',
-      participation: 'Participating',
-      score: 92,
-      avatar: 'https://randomuser.me/api/portraits/women/11.jpg'
-    }
-  ]);
-
+  const [volunteers, setVolunteers] = useState([]);
+  const [volunteersLoading, setVolunteersLoading] = useState(true);
+  const [errorMsg, setErrorMsg] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [selectedVolunteers, setSelectedVolunteers] = useState([]);
   const [isAddScoreModalOpen, setIsAddScoreModalOpen] = useState(false);
-  const [isAddContributionModalOpen, setIsAddContributionModalOpen] = useState(false);
-  const [selectedVolunteerForScore, setSelectedVolunteerForScore] = useState(null);
-  const [selectedVolunteerForContribution, setSelectedVolunteerForContribution] = useState(null);
+  const [isAddContributionModalOpen, setIsAddContributionModalOpen] =
+    useState(false);
+  const [selectedVolunteerForScore, setSelectedVolunteerForScore] =
+    useState(null);
+  const [selectedVolunteerForContribution, setSelectedVolunteerForContribution] =
+    useState(null);
+
+  // ✅ Fetch volunteers on component mount
+  useEffect(() => {
+    fetchAllVolunteers();
+  }, []);
+
+  const fetchAllVolunteers = async () => {
+    try {
+      setVolunteersLoading(true);
+      setErrorMsg("");
+      const response = await axios.get(
+        "http://localhost:5001/api/user/getAllUsers"
+      );
+
+      const activeVolunteers = Array.isArray(response.data.users)
+        ? response.data.users.map((user) => ({
+            ...user,
+            id: user._id,
+            isActive: true,
+            userType: "active",
+            status: "Active",
+            role: user.role,
+            score: user.score || 0,
+            projectId: user.projectId || "N/A",
+            projectType: user.projectType || "N/A",
+            participation: user.participation || "Participating",
+            avatar: user.userImage,
+          }))
+        : [];
+
+      console.log("✅ Volunteers loaded:", activeVolunteers.length);
+      setVolunteers(activeVolunteers);
+    } catch (err) {
+      console.error("❌ Error fetching volunteers:", err);
+      setErrorMsg("Failed to load volunteers.");
+      setVolunteers([]);
+    } finally {
+      setVolunteersLoading(false);
+    }
+  };
 
   const totalRows = volunteers.length;
   const totalPages = Math.ceil(totalRows / rowsPerPage);
 
   const handleSelectAll = (checked) => {
-    if (checked) {
-      setSelectedVolunteers(volunteers.map(v => v.id));
-    } else {
-      setSelectedVolunteers([]);
-    }
+    setSelectedVolunteers(checked ? volunteers.map((v) => v.id) : []);
   };
 
   const handleSelectVolunteer = (volunteerId, checked) => {
-    if (checked) {
-      setSelectedVolunteers([...selectedVolunteers, volunteerId]);
-    } else {
-      setSelectedVolunteers(selectedVolunteers.filter(id => id !== volunteerId));
-    }
-  };
-
-  const handleDeleteVolunteer = (volunteerId) => {
-    if (window.confirm('Are you sure you want to remove this volunteer?')) {
-      setVolunteers(volunteers.filter(v => v.id !== volunteerId));
-    }
+    setSelectedVolunteers(
+      checked
+        ? [...selectedVolunteers, volunteerId]
+        : selectedVolunteers.filter((id) => id !== volunteerId)
+    );
   };
 
   const handleAddScore = (volunteer) => {
@@ -182,27 +84,37 @@ const EventVolunteer = () => {
     setIsAddContributionModalOpen(true);
   };
 
-  const handleSaveScore = (scoreData) => {
-    setVolunteers(volunteers.map(v => 
-      v.id === selectedVolunteerForScore.id 
-        ? { ...v, score: (v.score || 0) + scoreData.score }
-        : v
-    ));
+  const handleSaveScore = async (scoreData) => {
+    const newScore = (selectedVolunteerForScore.score || 0) + scoreData.score;
+    try {
+      await axios.patch(
+        `http://localhost:5001/api/user/addScore/${selectedVolunteerForScore.id}`,
+        { score: newScore }
+      );
+      fetchAllVolunteers(); // refresh list
+    } catch (err) {
+      console.error("Error updating score:", err);
+      setErrorMsg("Failed to update score.");
+    }
     setIsAddScoreModalOpen(false);
     setSelectedVolunteerForScore(null);
   };
 
-  const handleSaveContribution = (contributionData) => {
-    setVolunteers(volunteers.map(v => 
-      v.id === selectedVolunteerForContribution.id 
-        ? { 
-            ...v, 
-            projectId: contributionData.projectId,
-            projectType: contributionData.projectType,
-            participation: contributionData.participation
-          }
-        : v
-    ));
+  const handleSaveContribution = async (contributionData) => {
+    try {
+      await axios.patch(
+        `http://localhost:5001/api/user/updateContribution/${selectedVolunteerForContribution.id}`,
+        {
+          projectId: contributionData.projectId,
+          projectType: contributionData.projectType,
+          participation: contributionData.participation,
+        }
+      );
+      fetchAllVolunteers();
+    } catch (err) {
+      console.error("Error updating contribution:", err);
+      setErrorMsg("Failed to update contribution.");
+    }
     setIsAddContributionModalOpen(false);
     setSelectedVolunteerForContribution(null);
   };
@@ -225,28 +137,40 @@ const EventVolunteer = () => {
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">Event Volunteer</h1>
-        
-        <div className="bg-white rounded-lg shadow overflow-hidden">
-          <EventVolunteerTable
-            volunteers={currentVolunteers}
-            selectedVolunteers={selectedVolunteers}
-            onSelectAll={handleSelectAll}
-            onSelectVolunteer={handleSelectVolunteer}
-            onDelete={handleDeleteVolunteer}
-            onAddScore={handleAddScore}
-            onAddContribution={handleAddContribution}
-            currentPage={currentPage}
-            totalPages={totalPages}
-            rowsPerPage={rowsPerPage}
-            totalRows={totalRows}
-            onPageChange={setCurrentPage}
-            onRowsPerPageChange={(rows) => {
-              setRowsPerPage(rows);
-              setCurrentPage(1);
-            }}
-          />
-        </div>
+        <h1 className="text-3xl font-bold text-gray-900 mb-8">
+          Event Volunteers
+        </h1>
+
+        {volunteersLoading ? (
+          <div className="flex justify-center items-center py-8">
+            <div className="text-gray-600">Loading volunteers...</div>
+          </div>
+        ) : (
+          <div className="bg-white rounded-lg shadow overflow-hidden">
+            {errorMsg && (
+              <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md mb-4 mx-4 mt-4">
+                {errorMsg}
+              </div>
+            )}
+            <EventVolunteerTable
+              volunteers={currentVolunteers}
+              selectedVolunteers={selectedVolunteers}
+              onSelectAll={handleSelectAll}
+              onSelectVolunteer={handleSelectVolunteer}
+              onAddScore={handleAddScore}
+              onAddContribution={handleAddContribution}
+              currentPage={currentPage}
+              totalPages={totalPages}
+              rowsPerPage={rowsPerPage}
+              totalRows={totalRows}
+              onPageChange={setCurrentPage}
+              onRowsPerPageChange={(rows) => {
+                setRowsPerPage(rows);
+                setCurrentPage(1);
+              }}
+            />
+          </div>
+        )}
       </div>
 
       <AddScoreModal

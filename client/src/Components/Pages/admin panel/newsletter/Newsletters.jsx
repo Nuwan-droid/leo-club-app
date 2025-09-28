@@ -65,7 +65,7 @@ const Newsletters = () => {
             isActive: true,
             userType: "active",
             status: "Active",
-            role: "member",
+            role: user.role ,
             score: user.score || 0,
             submissions: user.submissions || [],
             subscribeDate:
@@ -204,7 +204,7 @@ const Newsletters = () => {
               className="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 transition-colors flex items-center space-x-2"
             >
               <span>+</span>
-              <span>Add Newsletter</span>
+              <span>Monthly Newsletter</span>
             </button>
           </div>
         </div>

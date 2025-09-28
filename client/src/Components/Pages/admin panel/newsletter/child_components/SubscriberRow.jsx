@@ -1,16 +1,13 @@
 import React from 'react';
 
-const SubscriberRow = ({ subscriber, isSelected, onSelect, onAddScore, onAddSubmission }) => {
+const SubscriberRow = ({ subscriber, onAddScore, onAddSubmission }) => {
+  // Check if the user's role is not "member"; if so, return null to skip rendering
+  if (subscriber.role !== "member") {
+    return null;
+  }
+
   return (
     <tr className="hover:bg-gray-50">
-      <td className="px-6 py-4 whitespace-nowrap">
-        <input
-          type="checkbox"
-          checked={isSelected}
-          onChange={(e) => onSelect(e.target.checked)}
-          className="rounded border-gray-300"
-        />
-      </td>
       <td className="px-6 py-4 whitespace-nowrap">
         <div className="flex items-center">
           <div className="flex-shrink-0 h-10 w-10">

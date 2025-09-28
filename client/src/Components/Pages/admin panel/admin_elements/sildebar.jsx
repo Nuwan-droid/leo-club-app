@@ -19,7 +19,7 @@ const permissionToTabMap = {
   manage_about: { name: 'Manage about', path: '/admin/manage-executive-members' },
 };
 
-// Replicate getRolePermissions logic from Mongoose schema
+
 const getRolePermissions = (adminRole) => {
   const commonPermissions = ['manage_about', 'dashboard', 'learning_hub'];
 
@@ -31,6 +31,7 @@ const getRolePermissions = (adminRole) => {
         'users_management',
         'requests_management',
         'event_volunteers',
+        'event_coordinator',
         'projects_management',
         'newsletters_management',
         'products_management',
