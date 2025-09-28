@@ -442,7 +442,56 @@ const reactivateUser = async (req, res) => {
   }
 };
 
+  const addnewsletterScore = async (req, res) => {
+  const { id } = req.params;
+  const { score } = req.body;
 
+  try {
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    user.score = score; // Update with the new total score sent from frontend
+    await user.save();
+    res.status(200).json({ message: 'Score updated successfully', user });
+  } catch (err) {
+    console.error('Error updating score:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+
+const uploadNewsletterSubmission = async (req, res) => {
+  const userId = req.params.id; // Assuming route is /api/newsletter/uploadSubmission/:id
+  const { title, description } = req.body;
+  const images = req.files ? req.files.map(file => file.path) : []; // Assuming multer is configured to handle 'images' field
+
+  try {
+    const NewsletterSubmission = require('../models/NewsletterSubmission'); // Adjust path as needed
+    const User = require('../models/User'); // Adjust path as needed
+
+    const newSubmission = new NewsletterSubmission({
+      title,
+      description,
+      images,
+      submissionType, // If added to schema, else remove
+      user: userId,
+    });
+
+    await newSubmission.save();
+
+    // Update user's score
+    await User.findByIdAndUpdate(userId, { $inc: { score: 10 } });
+
+    res.status(201).json({
+      message: 'Submission added successfully',
+      submission: newSubmission,
+    });
+  } catch (error) {
+    console.error('Error uploading submission:', error);
+    res.status(500).json({ message: 'Failed to add submission' });
+  }
+};
 
 export default { 
   me, 
@@ -452,5 +501,7 @@ export default {
   toggleUserStatus,
   inactivateUser,
   getInactiveUsers,
-  reactivateUser
+  reactivateUser,
+  addnewsletterScore,
+  uploadNewsletterSubmission
 };

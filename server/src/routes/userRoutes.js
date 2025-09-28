@@ -18,4 +18,9 @@ router.patch("/inactivateUser/:id", UserController.inactivateUser);
 router.patch("/reactivateUser/:id", UserController.reactivateUser); // New route for reactivation
 router.patch("/toggleUserStatus/:id", UserController.toggleUserStatus);
 
+
+//newsletter submission related routes
+router.patch("/addScore/:id", UserController.addnewsletterScore);
+router.post("/uploadSubmission/:id", UserController.uploadNewsletterSubmission);
+router.post("/uploadnewslettersubmission/:id", UserController.uploadNewsletterSubmission);
 export default router;

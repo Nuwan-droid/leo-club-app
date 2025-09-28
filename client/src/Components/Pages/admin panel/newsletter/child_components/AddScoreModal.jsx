@@ -1,11 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const AddScoreModal = ({ isOpen, member, onSave, onCancel }) => {
   const [scoreData, setScoreData] = useState({
     score: '',
-    reason: '',
-    adminNotes: ''
   });
+  const [error, setError] = useState('');
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -13,53 +12,78 @@ const AddScoreModal = ({ isOpen, member, onSave, onCancel }) => {
       ...prev,
       [name]: value
     }));
+    if (error) setError(''); // Clear error on input change
   };
 
-  const handleSubmit = (e) => {
+  const validateAndSubmit = (e) => {
     e.preventDefault();
-    if (scoreData.score && scoreData.reason) {
-      onSave({
-        ...scoreData,
-        score: parseInt(scoreData.score),
-        date: new Date().toISOString().split('T')[0]
-      });
-      setScoreData({ score: '', reason: '', adminNotes: '' });
+    const scoreNum = parseInt(scoreData.score);
+    if (!scoreData.score || isNaN(scoreNum) || scoreNum < 1 || scoreNum > 100) {
+      setError('Please enter a valid score between 1 and 100.');
+      return;
     }
+    onSave({
+      score: scoreNum,
+      date: new Date().toISOString().split('T')[0]
+    });
+    setScoreData({ score: '' });
   };
 
-  const handleCancel = () => {
-    setScoreData({ score: '', reason: '', adminNotes: '' });
+  const handleCancelClick = () => {
+    setScoreData({ score: '' });
+    setError('');
     onCancel();
   };
+
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape') {
+        handleCancelClick();
+      }
+    };
+    if (isOpen) {
+      document.addEventListener('keydown', handleEscape);
+      return () => document.removeEventListener('keydown', handleEscape);
+    }
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-6 w-full max-w-md mx-4 outline outline-black ">
-        <h2 className="text-xl font-semibold mb-4">Add Score</h2>
+    <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50 transition-opacity duration-300 ease-in-out">
+      <div className="bg-white rounded-xl p-6 w-full max-w-md mx-4 shadow-2xl relative transform transition-transform duration-300 ease-in-out scale-100">
+        <button
+          onClick={handleCancelClick}
+          className="absolute top-3 right-3 text-gray-400 hover:text-gray-600 transition-colors"
+          aria-label="Close modal"
+        >
+          <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+        <h2 className="text-lg font-bold mb-4 text-gray-800">Add Score to Member</h2>
         
         {member && (
-          <div className="mb-4 p-3 bg-gray-50 rounded-lg">
-            <div className="flex items-center space-x-3">
+          <div className="mb-5 p-4 bg-gray-50 rounded-xl border border-gray-200">
+            <div className="flex items-center space-x-4">
               <img
-                src={member.avatar}
+                src={member.userImage}
                 alt={member.name}
-                className="w-10 h-10 rounded-full"
+                className="w-12 h-12 rounded-full ring-2 ring-gray-200"
               />
               <div>
-                <p className="font-medium">{member.name}</p>
-                <p className="text-sm text-gray-600">Current Score: {member.score || 0}</p>
+                <p className="font-semibold text-gray-800">{member.name}</p>
+                <p className="text-sm text-gray-500">Current Score: <span className="font-medium text-gray-700">{member.score || 0}</span></p>
               </div>
             </div>
           </div>
         )}
         
-        <form onSubmit={handleSubmit}>
-          <div className="space-y-4">
+        <form onSubmit={validateAndSubmit}>
+          <div className="space-y-5">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Score to Add *
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                Score to Add <span className="text-red-500">*</span>
               </label>
               <input
                 type="number"
@@ -68,61 +92,33 @@ const AddScoreModal = ({ isOpen, member, onSave, onCancel }) => {
                 onChange={handleInputChange}
                 min="1"
                 max="100"
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-shadow duration-200 placeholder-gray-400 text-gray-800"
                 placeholder="Enter score (1-100)"
                 required
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Reason for Score *
-              </label>
-              <select
-                name="reason"
-                value={scoreData.reason}
-                onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                required
-              >
-                <option value="">Select reason</option>
-                <option value="newsletter_contribution">Newsletter Contribution</option>
-                <option value="article_submission">Article Submission</option>
-                <option value="event_participation">Event Participation</option>
-                <option value="leadership_activity">Leadership Activity</option>
-                <option value="community_service">Community Service</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Admin Notes
-              </label>
-              <textarea
-                name="adminNotes"
-                value={scoreData.adminNotes}
-                onChange={handleInputChange}
-                rows={3}
-                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Additional notes (optional)"
+                autoFocus
               />
             </div>
           </div>
 
+          {error && (
+            <div className="mt-4 p-3 bg-red-50 text-red-700 rounded-lg text-sm">
+              {error}
+            </div>
+          )}
+
           <div className="flex justify-end space-x-3 mt-6">
             <button
               type="button"
-              onClick={handleCancel}
-              className="px-4 py-2 text-gray-600 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors"
+              onClick={handleCancelClick}
+              className="px-5 py-2.5 text-gray-600 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors duration-200 font-medium"
             >
               Cancel
             </button>
             <button
               type="submit"
-              className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors"
+              className="px-5 py-2.5 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors duration-200 font-medium flex items-center space-x-1"
             >
-              Add Score
+              <span>Add Score</span>
             </button>
           </div>
         </form>
