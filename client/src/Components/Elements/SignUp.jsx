@@ -271,7 +271,7 @@ export default function SignUp({ onClose, onSwitchToAdmin }) {
             {leoStatus === "member" && (
               <Input
                 type="text"
-                placeholder="Leo ID (optional for registration)"
+                placeholder="Leo ID "
                 name="leo_Id"
                 value={formData.leo_Id}
                 onChange={handleChange}
@@ -306,7 +306,7 @@ export default function SignUp({ onClose, onSwitchToAdmin }) {
               />
               <Input
                 type="text"
-                placeholder="Enrollment No *"
+                placeholder="uwucst21067*"
                 name="enrollmentNo"
                 value={formData.enrollmentNo}
                 onChange={handleChange}
