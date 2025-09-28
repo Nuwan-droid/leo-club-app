@@ -16,7 +16,7 @@ const SubscriberRow = ({ subscriber, isSelected, onSelect, onAddScore, onAddSubm
           <div className="flex-shrink-0 h-10 w-10">
             <img
               className="h-10 w-10 rounded-full"
-              src={subscriber.avatar}
+              src={subscriber.userImage}
               alt={subscriber.name}
             />
           </div>
@@ -32,9 +32,6 @@ const SubscriberRow = ({ subscriber, isSelected, onSelect, onAddScore, onAddSubm
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
         {subscriber.email}
-      </td>
-      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-        {subscriber.username}
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
         {subscriber.role}

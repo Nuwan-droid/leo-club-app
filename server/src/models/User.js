@@ -1,4 +1,3 @@
-// Updated User Model (user model)
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema(
@@ -7,7 +6,6 @@ const userSchema = new mongoose.Schema(
       type: String,
       trim: true,
       required: function () {
-        // Require LEO ID only for approved members (assigned by admin at approval time)
         return this.role === "member" && this.status === "approved";
       },
       unique: true,
@@ -270,7 +268,6 @@ userSchema.pre("save", function (next) {
     this.permissions = this.getRolePermissions();
   }
 
-  // Ensure is_active syncs with status
   this.is_active = this.status === "approved";
 
   next();

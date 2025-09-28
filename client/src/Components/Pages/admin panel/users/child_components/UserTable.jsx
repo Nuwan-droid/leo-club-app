@@ -14,14 +14,6 @@ const UserTable = ({
       <table className="min-w-full divide-y divide-gray-200">
         <thead className="bg-gray-600 text-white">
           <tr>
-            <th className="px-6 py-3">
-              <input
-                type="checkbox"
-                checked={selectedUsers.length === users.length && users.length > 0}
-                onChange={(e) => onSelectAll(e.target.checked)}
-                className="rounded border-gray-300"
-              />
-            </th>
             <th className="px-6 py-3">Image</th>
             <th className="px-6 py-3">First Name</th>
             <th className="px-6 py-3">Last Name</th>
