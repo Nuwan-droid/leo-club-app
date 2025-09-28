@@ -199,7 +199,7 @@ export default function SignUp({ onClose, onSwitchToAdmin }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/10 z-50 flex items-center justify-center px-2 sm:px-0">
+    <div className="fixed inset-0 bg-white z-50 flex items-center justify-center px-2 sm:px-0">
       <div className="relative top-[10px] rounded-xl shadow-2xl w-full max-w-6xl flex flex-col md:flex-row overflow-hidden bg-white">
         <button
           onClick={onClose}
