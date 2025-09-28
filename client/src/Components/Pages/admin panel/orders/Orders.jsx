@@ -23,6 +23,21 @@ const Orders = () => {
     });
   };
 
+  // Helper function to check if order is completed
+  const isOrderCompleted = (order) => {
+    return (
+      order.order_status === 'delivered' || 
+      order.order_status === 'completed' ||
+      order.order_status === 'confirmed' ||
+      order.payment_status === 'completed'
+    );
+  };
+
+  // Filter orders to show only completed ones
+  const filterToCompletedOrders = (orders) => {
+    return orders.filter(order => isOrderCompleted(order));
+  };
+
   useEffect(() => {
     const fetchOrders = async () => {
       try {
@@ -33,7 +48,7 @@ const Orders = () => {
           'Content-Type': 'application/json',
         };
 
-        console.log('Fetching all orders for pagination...');
+        console.log('Fetching all orders for admin (completed only)...');
 
         // Fetch member orders - Get all orders for frontend pagination
         const memberRes = await fetch('http://localhost:5001/api/orders/all?customer_type=member&limit=999999', {
@@ -69,12 +84,19 @@ const Orders = () => {
         const visitorData = await visitorRes.json();
         console.log('Visitor data received:', visitorData);
 
-        // Set the data and sort by date (newest first)
+        // Get orders and filter to completed only
         const memberOrdersArray = memberData.success && Array.isArray(memberData.orders) ? memberData.orders : [];
         const visitorOrdersArray = visitorData.success && Array.isArray(visitorData.orders) ? visitorData.orders : [];
         
-        setMemberOrders(sortOrdersByDate([...memberOrdersArray]));
-        setVisitorOrders(sortOrdersByDate([...visitorOrdersArray]));
+        // IMPORTANT: Filter to show only completed orders
+        const completedMemberOrders = filterToCompletedOrders(memberOrdersArray);
+        const completedVisitorOrders = filterToCompletedOrders(visitorOrdersArray);
+        
+        console.log(`Total member orders: ${memberOrdersArray.length}, Completed: ${completedMemberOrders.length}`);
+        console.log(`Total visitor orders: ${visitorOrdersArray.length}, Completed: ${completedVisitorOrders.length}`);
+        
+        setMemberOrders(sortOrdersByDate([...completedMemberOrders]));
+        setVisitorOrders(sortOrdersByDate([...completedVisitorOrders]));
 
       } catch (error) {
         console.error('Error fetching orders:', error);
@@ -89,25 +111,9 @@ const Orders = () => {
     fetchOrders();
   }, []);
 
+  // Since we're only showing completed orders, all filtering just returns the same data
   const filterOrders = (orders, filter) => {
-    if (filter === 'all') return orders;
-    
-    if (filter === 'completed') {
-      return orders.filter(order => 
-        order.order_status === 'delivered' || 
-        order.order_status === 'completed' ||
-        order.payment_status === 'completed'
-      );
-    }
-    
-    if (filter === 'processing') {
-      return orders.filter(order => 
-        order.order_status === 'processing' || 
-        order.order_status === 'confirmed' ||
-        order.order_status === 'pending'
-      );
-    }
-    
+    // All orders are already completed, so all filters return the same data
     return orders;
   };
 
@@ -122,25 +128,18 @@ const Orders = () => {
   const filteredMemberOrders = filterOrders(memberOrders, memberFilter);
   const filteredVisitorOrders = filterOrders(visitorOrders, visitorFilter);
 
+  // Update stats - since all orders are completed
   const memberStats = {
     totalOrders: memberOrders.length,
-    completedOrders: memberOrders.filter(o => 
-      o.order_status === 'delivered' || o.payment_status === 'completed'
-    ).length,
-    processingOrders: memberOrders.filter(o => 
-      o.order_status === 'processing' || o.order_status === 'confirmed'
-    ).length,
+    completedOrders: memberOrders.length, // All orders are completed
+    processingOrders: 0, // No processing orders shown
     totalRevenue: memberOrders.reduce((sum, order) => sum + (order.total_amount || 0), 0)
   };
 
   const visitorStats = {
     totalOrders: visitorOrders.length,
-    completedOrders: visitorOrders.filter(o => 
-      o.order_status === 'delivered' || o.payment_status === 'completed'
-    ).length,
-    processingOrders: visitorOrders.filter(o => 
-      o.order_status === 'processing' || o.order_status === 'confirmed'
-    ).length,
+    completedOrders: visitorOrders.length, // All orders are completed
+    processingOrders: 0, // No processing orders shown
     totalRevenue: visitorOrders.reduce((sum, order) => sum + (order.total_amount || 0), 0)
   };
 
@@ -154,7 +153,7 @@ const Orders = () => {
       <div className="flex items-center justify-center min-h-screen">
         <div className="flex flex-col items-center space-y-4">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
-          <div className="text-lg text-gray-700">Loading orders...</div>
+          <div className="text-lg text-gray-700">Loading completed orders...</div>
         </div>
       </div>
     );
@@ -182,14 +181,50 @@ const Orders = () => {
     );
   }
 
+  const totalAllOrders = memberOrders.length + visitorOrders.length;
+  const totalAllRevenue = memberStats.totalRevenue + visitorStats.totalRevenue;
+
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
       <div className="max-w-7xl mx-auto">
-        <h1 className="text-3xl font-bold text-gray-900 mb-8">Order Management</h1>
+        <h1 className="text-3xl font-bold text-gray-900 mb-2">Order Management</h1>
+        <p className="text-gray-600 mb-6">Showing completed orders only</p>
+
+        {/* Overall Summary Card */}
+        <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg shadow-lg p-6 mb-8 text-white">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-xl font-semibold mb-2">Total Orders Summary</h2>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="text-center">
+                  <div className="text-2xl font-bold">{totalAllOrders}</div>
+                  <div className="text-sm opacity-90">Total Completed Orders</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold">{memberOrders.length}</div>
+                  <div className="text-sm opacity-90">Member Orders</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold">{visitorOrders.length}</div>
+                  <div className="text-sm opacity-90">Visitor Orders</div>
+                </div>
+                <div className="text-center">
+                  <div className="text-2xl font-bold">Rs {totalAllRevenue.toFixed(2)}</div>
+                  <div className="text-sm opacity-90">Total Revenue</div>
+                </div>
+              </div>
+            </div>
+            <div className="hidden md:block">
+              <svg className="w-16 h-16 opacity-30" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+              </svg>
+            </div>
+          </div>
+        </div>
 
         {/* Member Orders */}
         <div className="mb-10">
-          <h2 className="text-2xl font-bold text-blue-900 mb-4">Member Orders</h2>
+          <h2 className="text-2xl font-bold text-blue-900 mb-4">Member Orders (Completed)</h2>
           
           <StatusBadgeBoxes 
             stats={memberStats} 
@@ -201,13 +236,14 @@ const Orders = () => {
             <div className="px-6 py-4 bg-gray-50 border-b border-gray-200">
               <div className="flex items-center justify-between">
                 <h3 className="text-lg font-medium text-gray-900">
-                  {memberFilter === 'all' ? 'All Member Orders' : 
-                   memberFilter === 'completed' ? 'Completed Member Orders' : 
-                   'Processing Member Orders'}
+                  Completed Member Orders
                 </h3>
                 <div className="flex items-center space-x-4">
                   <span className="text-sm text-gray-500">
-                    {filteredMemberOrders.length} total orders
+                    {filteredMemberOrders.length} completed orders
+                  </span>
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                    Completed Only
                   </span>
                   <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                     10 per page
@@ -225,7 +261,7 @@ const Orders = () => {
 
         {/* Visitor Orders */}
         <div>
-          <h2 className="text-2xl font-bold text-purple-900 mb-4">Visitor Orders</h2>
+          <h2 className="text-2xl font-bold text-purple-900 mb-4">Visitor Orders (Completed)</h2>
           
           <StatusBadgeBoxes 
             stats={visitorStats} 
@@ -237,13 +273,14 @@ const Orders = () => {
             <div className="px-6 py-4 bg-gray-50 border-b border-gray-200">
               <div className="flex items-center justify-between">
                 <h3 className="text-lg font-medium text-gray-900">
-                  {visitorFilter === 'all' ? 'All Visitor Orders' : 
-                   visitorFilter === 'completed' ? 'Completed Visitor Orders' : 
-                   'Processing Visitor Orders'}
+                  Completed Visitor Orders
                 </h3>
                 <div className="flex items-center space-x-4">
                   <span className="text-sm text-gray-500">
-                    {filteredVisitorOrders.length} total orders
+                    {filteredVisitorOrders.length} completed orders
+                  </span>
+                  <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                    Completed Only
                   </span>
                   <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
                     10 per page
@@ -258,6 +295,14 @@ const Orders = () => {
             />
           </div>
         </div>
+
+        {/* No Orders Message */}
+        {memberOrders.length === 0 && visitorOrders.length === 0 && (
+          <div className="bg-white rounded-lg shadow p-8 text-center mt-8">
+            <div className="text-gray-500 text-lg mb-2">No completed orders found</div>
+            <div className="text-gray-400 text-sm">Completed orders will appear here once customers finish their purchases.</div>
+          </div>
+        )}
       </div>
     </div>
   );

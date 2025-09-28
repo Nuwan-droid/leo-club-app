@@ -160,8 +160,8 @@ export const initiatePayHerePayment = async (req, res) => {
 
     const payherePayload = {
       merchant_id: PAYHERE_MERCHANT_ID,
-      return_url: `${process.env.FRONTEND_URL}/payment-success?order_id=${order_id}&name=${customerData.first_name}`,
-      cancel_url: `${process.env.FRONTEND_URL}/payment-cancel`,
+      return_url: `${process.env.FRONTEND_URL}/order-success?order_id=${order_id}&name=${encodeURIComponent(customerData.first_name)}&amount=${normalizedAmount}&payment_success=true`,
+      cancel_url: `${process.env.FRONTEND_URL}/payment-cancel?order_id=${order_id}`,
       notify_url: `${BASE_URL}/api/payment/payhere-notify`,
       order_id,
       items: itemsSummary,
@@ -201,13 +201,6 @@ export const initiatePayHerePayment = async (req, res) => {
       .toUpperCase();
 
     payherePayload.hash = md5sig;
-     await sendEmail(
-        order.customer.email,
-        "Leo Club Registration Successful",
-        `<h2>Hi ${order.customer.firstName}!</h2>
-         <p>Your registration request is under review by admin. You have successfully registered and your payment is confirmed.</p>
-         <p>Thank you for joining Leo Club!</p>`
-      );
 
     console.log(`Payment initialized for order: ${order_id}, Customer type: ${customerType}, Amount: ${normalizedAmount}`);
 
@@ -225,9 +218,12 @@ export const initiatePayHerePayment = async (req, res) => {
   }
 };
 
-// Handle PayHere IPN callback
+// Handle PayHere IPN callback - FIXED VERSION
 export const handlePayHereNotification = async (req, res) => {
   try {
+    console.log("\n=== PAYHERE NOTIFICATION RECEIVED ===");
+    console.log("Full body:", JSON.stringify(req.body, null, 2));
+    
     const {
       merchant_id,
       order_id,
@@ -241,8 +237,14 @@ export const handlePayHereNotification = async (req, res) => {
       payhere_reference
     } = req.body;
 
-    console.log("PayHere notification received:", { order_id, status_code, custom_1 });
+    if (!order_id) {
+      console.log("❌ No order_id in notification");
+      return res.sendStatus(200);
+    }
 
+    console.log(`Processing notification for order: ${order_id}, status: ${status_code}`);
+
+    // Verify signature
     const merchantSecretMd5 = crypto
       .createHash("md5")
       .update(PAYHERE_MERCHANT_SECRET || "")
@@ -264,26 +266,31 @@ export const handlePayHereNotification = async (req, res) => {
 
     if (localMd5 !== String(md5sig).toUpperCase()) {
       console.log(`❌ Invalid signature for order ${order_id}`);
+      console.log(`Expected: ${localMd5}, Received: ${md5sig}`);
       return res.sendStatus(200);
     }
 
-    // Find and update the order
+    // Find the order
     const order = await Order.findOne({ order_id });
     if (!order) {
-      console.error("Order not found:", order_id);
+      console.error(`❌ Order not found: ${order_id}`);
       return res.sendStatus(200);
     }
+
+    console.log(`Order found: ${order_id}, current status: ${order.orderStatus}, payment: ${order.payment.status}`);
 
     // Update order based on payment status
     let paymentStatus = 'pending';
     let orderStatus = 'processing';
 
-    if (Number(status_code) === 2) {
+    const statusCodeNum = Number(status_code);
+
+    if (statusCodeNum === 2) {
       // Payment successful
       paymentStatus = 'completed';
-      orderStatus = 'confirmed';
+      orderStatus = 'delivered';
       console.log(`✅ Payment successful for order ${order_id}`);
-    } else if (Number(status_code) === 0) {
+    } else if (statusCodeNum === 0) {
       // Payment pending
       paymentStatus = 'pending';
       orderStatus = 'processing';
@@ -300,20 +307,38 @@ export const handlePayHereNotification = async (req, res) => {
     order.payment.paymentId = payment_id;
     order.payment.transactionId = payhere_reference;
     order.orderStatus = orderStatus;
+    order.updatedAt = new Date();
     
     await order.save();
 
-    console.log(`Order ${order_id} updated: Payment ${paymentStatus}, Order ${orderStatus}`);
+    console.log(`✅ Order ${order_id} updated successfully:`);
+    console.log(`   Payment Status: ${paymentStatus}`);
+    console.log(`   Order Status: ${orderStatus}`);
+    console.log(`   Payment ID: ${payment_id}`);
+    console.log(`   Transaction ID: ${payhere_reference}`);
 
-    // For successful payments, you could send confirmation emails here
-    if (Number(status_code) === 2) {
-      console.log(`Payment successful for ${custom_1}: ${order.customer.email}`);
-      // TODO: Send confirmation email to customer
-      // TODO: Notify admin of new order
+    // Send confirmation email for successful payments
+    if (statusCodeNum === 2) {
+      try {
+        await sendEmail(
+          order.customer.email,
+          "Order Confirmation - Leo Club",
+          `<h2>Hi ${order.customer.firstName}!</h2>
+           <p>Your order has been successfully processed and confirmed.</p>
+           <p><strong>Order ID:</strong> ${order_id}</p>
+           <p><strong>Amount:</strong> Rs ${payhere_amount}</p>
+           <p><strong>Payment ID:</strong> ${payment_id}</p>
+           <p>Thank you for your purchase from Leo Club!</p>`
+        );
+        console.log(`📧 Confirmation email sent to ${order.customer.email}`);
+      } catch (emailError) {
+        console.error("Error sending confirmation email:", emailError);
+      }
     }
 
-    // PayHere requires 200 OK always
+    // PayHere requires 200 OK response
     return res.sendStatus(200);
+
   } catch (err) {
     console.error("handlePayHereNotification error:", err);
     return res.sendStatus(200);
@@ -345,7 +370,8 @@ export const getPaymentStatus = async (req, res) => {
         order_status: order.orderStatus,
         amount: order.payment.amount,
         customer_type: order.customer.type,
-        created_date: order.createdAt
+        created_date: order.createdAt,
+        updated_date: order.updatedAt
       }
     });
 

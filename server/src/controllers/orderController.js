@@ -10,7 +10,8 @@ export const createOrder = async (req, res) => {
       items, 
       customer_info, 
       payment_amount,
-      customer_type // 'member' or 'visitor'
+      customer_type, // 'member' or 'visitor'
+      payment_success = false // Add this to indicate if payment was successful
     } = req.body;
 
     // Validate required fields
@@ -133,6 +134,10 @@ export const createOrder = async (req, res) => {
       });
     }
 
+    // Determine order status and payment status based on payment success
+    const orderStatus = payment_success ? 'delivered' : 'processing';
+    const paymentStatus = payment_success ? 'completed' : 'pending';
+
     // Create the order
     const order = new Order({
       order_id,
@@ -140,24 +145,27 @@ export const createOrder = async (req, res) => {
       items: processedItems,
       payment: {
         amount: payment_amount,
-        status: 'pending'
-      }
+        status: paymentStatus
+      },
+      orderStatus: orderStatus
     });
 
     await order.save();
 
     console.log(`Order created: ${order_id} for ${customer_type}:`, 
-      customer_type === 'member' ? req.user.email : customerData.email);
+      customer_type === 'member' ? req.user.email : customerData.email,
+      `Status: ${orderStatus}, Payment: ${paymentStatus}`);
 
     res.status(201).json({
       success: true,
-      message: "Order created successfully",
+      message: payment_success ? "Order completed successfully" : "Order created successfully",
       order: {
         id: order._id,
         order_id: order.order_id,
         customer_type: customer_type,
         total_amount: payment_amount,
-        status: order.orderStatus
+        status: order.orderStatus,
+        payment_status: order.payment.status
       }
     });
 
@@ -174,6 +182,103 @@ export const createOrder = async (req, res) => {
     res.status(500).json({ 
       success: false, 
       message: "Server error while creating order" 
+    });
+  }
+};
+
+// Complete order after successful payment - IMPROVED VERSION
+export const completeOrder = async (req, res) => {
+  try {
+    const { order_id, payment_id, transaction_id } = req.body;
+
+    console.log(`\n=== ORDER COMPLETION REQUEST ===`);
+    console.log(`Order ID: ${order_id}`);
+    console.log(`Payment ID: ${payment_id || 'Auto-generated'}`);
+    console.log(`Transaction ID: ${transaction_id || 'Auto-generated'}`);
+
+    if (!order_id) {
+      return res.status(400).json({ 
+        success: false, 
+        message: "Order ID is required" 
+      });
+    }
+
+    // Find the order first to check its current status
+    const existingOrder = await Order.findOne({ order_id: order_id });
+    
+    if (!existingOrder) {
+      console.log(`❌ Order not found: ${order_id}`);
+      return res.status(404).json({ 
+        success: false, 
+        message: "Order not found" 
+      });
+    }
+
+    console.log(`Found order: ${order_id}`);
+    console.log(`Current status: ${existingOrder.orderStatus}`);
+    console.log(`Current payment status: ${existingOrder.payment.status}`);
+
+    // Check if order is already completed
+    if (existingOrder.orderStatus === 'delivered' && existingOrder.payment.status === 'completed') {
+      console.log(`✅ Order ${order_id} already completed`);
+      return res.json({
+        success: true,
+        message: "Order already completed",
+        order: {
+          id: existingOrder._id,
+          order_id: existingOrder.order_id,
+          order_status: existingOrder.orderStatus,
+          payment_status: existingOrder.payment.status
+        }
+      });
+    }
+
+    // Update the order to completed status
+    const updateData = {
+      orderStatus: 'delivered',
+      'payment.status': 'completed',
+      updatedAt: new Date()
+    };
+
+    // Add payment details if provided
+    if (payment_id) {
+      updateData['payment.paymentId'] = payment_id;
+    }
+    if (transaction_id) {
+      updateData['payment.transactionId'] = transaction_id;
+    }
+
+    const order = await Order.findOneAndUpdate(
+      { order_id: order_id },
+      updateData,
+      { new: true }
+    );
+
+    console.log(`✅ Order ${order_id} successfully completed!`);
+    console.log(`   Order Status: ${order.orderStatus}`);
+    console.log(`   Payment Status: ${order.payment.status}`);
+    console.log(`   Updated At: ${order.updatedAt}`);
+
+    // Send success response
+    res.json({
+      success: true,
+      message: "Order completed successfully",
+      order: {
+        id: order._id,
+        order_id: order.order_id,
+        order_status: order.orderStatus,
+        payment_status: order.payment.status,
+        customer_email: order.customer.email,
+        total_amount: order.payment.amount
+      }
+    });
+
+  } catch (error) {
+    console.error("❌ Error completing order:", error);
+    res.status(500).json({ 
+      success: false, 
+      message: "Server error while completing order",
+      error: process.env.NODE_ENV === 'development' ? error.message : undefined
     });
   }
 };
@@ -311,20 +416,20 @@ export const getAllOrders = async (req, res) => {
         order_id: order.order_id,
         customer: {
           type: order.customer.type,
-          firstName: order.customer.firstName,  // Keep separate fields
-          lastName: order.customer.lastName,    // Keep separate fields
+          firstName: order.customer.firstName,
+          lastName: order.customer.lastName,
           name: `${order.customer.firstName || ''} ${order.customer.lastName || ''}`.trim(),
           email: order.customer.email,
           mobile: order.customer.mobile,
-          address: order.customer.address  // Make sure address is included
+          address: order.customer.address
         },
-        items: order.items || [],  // Include full items array
+        items: order.items || [],
         items_count: order.items ? order.items.length : 0,
         total_amount: order.payment.amount,
         payment_status: order.payment.status,
         order_status: order.orderStatus,
         created_date: order.createdAt,
-        createdAt: order.createdAt  // Include both for compatibility
+        createdAt: order.createdAt
       })),
       pagination: {
         current_page: parseInt(page),
@@ -343,6 +448,7 @@ export const getAllOrders = async (req, res) => {
     });
   }
 };
+
 // Get order details by ID
 export const getOrderById = async (req, res) => {
   try {

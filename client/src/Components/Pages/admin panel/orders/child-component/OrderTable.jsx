@@ -132,9 +132,16 @@ const OrderPagination = ({
 };
 
 const OrderTable = ({ orders, adminView = false }) => {
+  // IMPORTANT: Move all hooks to the top, before any conditional returns
   const [currentPage, setCurrentPage] = React.useState(1);
   const ordersPerPage = 10;
 
+  // Reset to page 1 when orders change (when filters are applied)
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [orders.length]);
+
+  // Early return AFTER all hooks have been declared
   if (!Array.isArray(orders) || orders.length === 0) {
     return (
       <div className="bg-white rounded-lg shadow">
@@ -162,11 +169,6 @@ const OrderTable = ({ orders, adminView = false }) => {
       }
     }
   };
-
-  // Reset to page 1 when orders change (when filters are applied)
-  React.useEffect(() => {
-    setCurrentPage(1);
-  }, [orders.length]);
 
   return (
     <div className="order-table-container">

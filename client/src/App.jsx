@@ -26,7 +26,7 @@ import AccountManage from "./Components/Pages/memberportal/accountManagement/acc
 import Membernotification from "./Components/Pages/memberportal/Notification/request";
 import PaymentSuccess from "./Components/Elements/PaymentSuccess";
 import PaymentCancel from "./Components/Elements/PaymentCancel";
-
+import OrderSuccess from "./Components/Elements/Product Shop/OrderSuccess";
 
 function App() {
   const location = useLocation();
@@ -60,6 +60,7 @@ function App() {
         <Route path="/memberportal/event-volunteer" element={<EventVolunteerPage />} />
         <Route path="/memberportal/account-manage" element={<AccountManage/>} />
         <Route path="/memberportal/notifications" element={<Membernotification/>} />
+        <Route path="/order-success" element={<OrderSuccess />} />
         <Route path="/chatbot" element={<Chatbot />} />
         {/* Admin routes - use wildcard to handle nested routing */}
         <Route path="/admin/*" element={<Admin />} />
