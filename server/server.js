@@ -72,3 +72,26 @@ app.use((err, req, res, next) => {
     error: process.env.NODE_ENV === 'development' ? err.message : 'Something went wrong'
   });
 });
+
+
+export const callOrderWebhook = async (webhookData) => {
+  try {
+    console.log("Calling order webhook with data:", webhookData);
+    
+    const response = await fetch(`${process.env.BASE_URL}/api/orders/webhook/payhere`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(webhookData)
+    });
+
+    if (response.ok) {
+      console.log("Order webhook called successfully");
+    } else {
+      console.error("Order webhook failed:", response.status);
+    }
+  } catch (error) {
+    console.error("Error calling order webhook:", error);
+  }
+};
