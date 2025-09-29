@@ -1,50 +1,35 @@
+// backend/models/LearningHub.js
 import mongoose from 'mongoose';
 
-const learningHubSchema = new mongoose.Schema({
-  content_id: {
-    type: Number,
-    required: true,
-    unique: true
+const lessonSchema = mongoose.Schema(
+  {
+    title: {
+      type: String,
+      required: true,
+    },
+    description: {
+      type: String,
+      required: true,
+    },
+    type: {
+      type: String,
+      required: true,
+      enum: ['pdf', 'mp4'],
+    },
+    image: {
+      type: String,
+      default: null,
+    },
+    sourceFile: {
+      type: String,
+      required: true,
+    },
   },
-  type: {
-    type: String,
-    required: false,
-    maxlength: 255
-  },
-  title: {
-    type: String,
-    required: false,
-    maxlength: 255
-  },
-  description: {
-    type: String,
-    required: false,
-    maxlength: 255
-  },
-  image_path: {
-    type: String,
-    required: false,
-    maxlength: 255
-  },
-  pass_score: {
-    type: Date,
-    required: false
-  },
-  created_at: {
-    type: Date,
-    default: Date.now
-  },
-  updated_at: {
-    type: Date,
-    default: Date.now
+  {
+    timestamps: true,
   }
-});
+);
 
-// Pre-save middleware to update updated_at
-learningHubSchema.pre('save', function(next) {
-  this.updated_at = Date.now();
-  next();
-});
+const Lesson = mongoose.model('Lesson', lessonSchema);
 
-export default mongoose.model('LearningHub', learningHubSchema);
-v
+export default Lesson;
