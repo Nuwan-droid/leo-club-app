@@ -21,6 +21,7 @@ import cartRoutes from './src/routes/cartRoutes.js';
 import newsletterRoutes from "./src/routes/newsletterRoutes.js";
 import { handleMulterError } from "./src/config/upload.js";
 import adminRequestRoutes from "./src/routes/admin_requestRoutes.js";
+import learningHubRoutes from "./src/routes/learninghubRoutes.js"; // Learning Hub routes 
 
 dotenv.config();
 connectDB();
@@ -58,6 +59,7 @@ app.use("/api/donation-projects", donationRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/admin-requests", adminRequestRoutes);
 app.use("/api/newsletters", newsletterRoutes);
+app.use("/api/learninghub", learningHubRoutes); 
 
 // ✅ Multer error handler
 app.use(handleMulterError);
