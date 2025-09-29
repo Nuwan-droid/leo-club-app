@@ -6,6 +6,8 @@ import { fileURLToPath } from "url";
 import cookieParser from "cookie-parser";
 
 import paymentRoutes from "./src/routes/paymentRoutes.js";
+
+import registrationPaymentRoutes from "./src/routes/registrationPaymentRoutes.js";
 import executiveMemberRoutes from "./src/routes/executiveMembers.js";
 import connectDB from "./src/config/database.js";
 import authRoutes from "./src/routes/authRoutes.js";
@@ -21,7 +23,7 @@ import cartRoutes from './src/routes/cartRoutes.js';
 import newsletterRoutes from "./src/routes/newsletterRoutes.js";
 import { handleMulterError } from "./src/config/upload.js";
 import adminRequestRoutes from "./src/routes/admin_requestRoutes.js";
-import learningHubRoutes from "./src/routes/learninghubRoutes.js"; // Learning Hub routes 
+import learningHubRoutes from "./src/routes/learningHubRoutes.js"; // Learning Hub routes 
 
 dotenv.config();
 connectDB();
@@ -49,6 +51,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/executive-members", executiveMemberRoutes);
 app.use("/api/payment", paymentRoutes);
+app.use("/api/registration", registrationPaymentRoutes);
 app.use("/api", eventRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/comments", commentRoutes);
