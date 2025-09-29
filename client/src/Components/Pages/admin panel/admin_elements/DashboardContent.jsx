@@ -8,28 +8,50 @@ const DashboardContent = () => {
   const [projectCount, setProjectCount] = useState(0);
   const [orderCount, setOrderCount] = useState(0);
   const [showAwardModal, setShowAwardModal] = useState(false);
+useEffect(() => {
+  const fetchStats = async () => {
+    try {
+      // Fetch users
+      const resUsers = await fetch("http://localhost:5001/api/users/members/count");
+      const dataUsers = await resUsers.json();
+      setUserCount(dataUsers.count);
 
-  useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const resUsers = await fetch("http://localhost:5001/api/users/members/count");
-        const dataUsers = await resUsers.json();
-        setUserCount(dataUsers.count);
+      // Fetch projects
+      const resProjects = await fetch("http://localhost:5001/api/projects/allprojects");
+      const dataProjects = await resProjects.json();
+      setProjectCount(dataProjects.length);
 
-        const resProjects = await fetch("http://localhost:5001/api/projects/allprojects");
-        const dataProjects = await resProjects.json();
-        setProjectCount(dataProjects.length);
+      // Fetch member & visitor orders
+      const headers = { "Content-Type": "application/json" };
 
-        const resOrders = await fetch("http://localhost:5001/api/orders");
-        const dataOrders = await resOrders.json();
-        setOrderCount(dataOrders.length);
-      } catch (err) {
-        console.error("Error fetching dashboard stats:", err);
-      }
-    };
+      const memberRes = await fetch("http://localhost:5001/api/orders/all?customer_type=member&limit=999999", { headers });
+      const visitorRes = await fetch("http://localhost:5001/api/orders/all?customer_type=visitor&limit=999999", { headers });
 
-    fetchStats();
-  }, []);
+      const memberData = await memberRes.json();
+      const visitorData = await visitorRes.json();
+
+      const memberOrders = memberData.success ? memberData.orders : [];
+      const visitorOrders = visitorData.success ? visitorData.orders : [];
+
+      // ✅ Same filtering logic as Orders page
+      const isOrderCompleted = (order) =>
+        order.order_status === "delivered" ||
+        order.order_status === "completed" ||
+        order.order_status === "confirmed" ||
+        order.payment_status === "completed";
+
+      const completedOrders = [...memberOrders, ...visitorOrders].filter(isOrderCompleted);
+
+      setOrderCount(completedOrders.length);
+
+    } catch (err) {
+      console.error("Error fetching dashboard stats:", err);
+    }
+  };
+
+  fetchStats();
+}, []);
+
 
   const statsData = [
     { title: "Total Users", value: userCount, icon: <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-2.239"/></svg>, iconBg: "bg-blue-100", textColor: "text-gray-900" },

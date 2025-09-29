@@ -62,14 +62,6 @@ const UserTableRow = ({
 
   return (
     <tr className={`hover:bg-gray-50 ${isInactive ? 'bg-red-50' : ''}`}>
-      <td className="px-6 py-4 whitespace-nowrap">
-        <input
-          type="checkbox"
-          checked={isSelected}
-          onChange={(e) => onSelect(e.target.checked)}
-          className="rounded border-gray-300"
-        />
-      </td>
 
       <td className="px-6 py-4 whitespace-nowrap">
         <div className="flex items-center">

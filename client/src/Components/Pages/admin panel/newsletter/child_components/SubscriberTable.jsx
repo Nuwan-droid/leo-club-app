@@ -25,21 +25,10 @@ const SubscriberTable = ({
           <thead className="bg-gray-600 text-white">
             <tr>
               <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
-                <input
-                  type="checkbox"
-                  checked={selectedSubscribers.length === subscribers.length && subscribers.length > 0}
-                  onChange={(e) => onSelectAll(e.target.checked)}
-                  className="rounded border-gray-300"
-                />
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
                 Full Name & Score
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
                 Email
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
-                Username
               </th>
               <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">
                 Role

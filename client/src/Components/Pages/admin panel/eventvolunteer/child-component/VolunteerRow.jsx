@@ -1,16 +1,11 @@
 import React from 'react';
 
-const VolunteerRow = ({ volunteer, isSelected, onSelect, onAddScore, onAddContribution }) => {
+const VolunteerRow = ({ volunteer, onAddScore, onAddContribution }) => {
+   if (volunteer.role !== "member") {
+    return null;
+  }
   return (
     <tr className="hover:bg-gray-50">
-      <td className="px-6 py-4 whitespace-nowrap">
-        <input
-          type="checkbox"
-          checked={isSelected}
-          onChange={(e) => onSelect(e.target.checked)}
-          className="rounded border-gray-300"
-        />
-      </td>
       <td className="px-6 py-4 whitespace-nowrap">
         <div className="flex items-center">
           <div className="flex-shrink-0 h-10 w-10">
@@ -32,9 +27,6 @@ const VolunteerRow = ({ volunteer, isSelected, onSelect, onAddScore, onAddContri
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
         {volunteer.email}
-      </td>
-      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-        {volunteer.username}
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
         {volunteer.role}

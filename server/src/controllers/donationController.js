@@ -121,8 +121,8 @@ export const createDonation = async (req, res) => {
     });
   }
 };
+// Update your initiateDonationPayment function in donationController.js
 
-// Initiate PayHere payment for donation
 export const initiateDonationPayment = async (req, res) => {
   try {
     const { donation_id } = req.body;
@@ -151,7 +151,10 @@ export const initiateDonationPayment = async (req, res) => {
     }
 
     const { PAYHERE_MERCHANT_ID, PAYHERE_MERCHANT_SECRET } = process.env;
-    const BASE_URL = process.env.BASE_URL || 'http://localhost:5173';
+    
+    // Use FRONTEND_URL for user redirects, BASE_URL for webhook notifications
+    const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
+    const BASE_URL = process.env.BASE_URL || 'http://localhost:5001';
 
     // Format amount to 2 decimal places
     const normalizedAmount = Number(donation.amount).toFixed(2);
@@ -159,9 +162,9 @@ export const initiateDonationPayment = async (req, res) => {
     // Create PayHere payload
     const payherePayload = {
       merchant_id: PAYHERE_MERCHANT_ID,
-      return_url: `${BASE_URL}/donation-success`,
-      cancel_url: `${BASE_URL}/donation`,
-      notify_url: `${BASE_URL}/api/donation-projects/payment-notify`,
+      return_url: `${FRONTEND_URL}/donation-success?order_id=${donation.payment.order_id}`, // Changed to FRONTEND_URL
+      cancel_url: `${FRONTEND_URL}/donation?cancelled=true`, // Changed to FRONTEND_URL
+      notify_url: `${BASE_URL}/api/donation-projects/payment-notify`, // Keep BASE_URL for webhook
       order_id: donation.payment.order_id,
       items: donation.donation_type === 'project' 
         ? `Donation to Project #${donation.donation_project_id}` 
@@ -204,6 +207,7 @@ export const initiateDonationPayment = async (req, res) => {
     payherePayload.hash = md5sig;
 
     console.log(`Donation payment initialized: ${donation.payment.order_id}, Amount: ${normalizedAmount}`);
+    console.log(`Frontend URL: ${FRONTEND_URL}, Backend URL: ${BASE_URL}`);
 
     res.json({
       success: true,

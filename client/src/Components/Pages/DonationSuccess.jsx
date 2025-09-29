@@ -25,6 +25,7 @@ const DonationSuccess = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
+      <div className="h-[100px]"></div>
       <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-8 text-center">
         {/* Success Icon */}
         <div className="w-16 h-16 bg-green-500 rounded-full flex items-center justify-center mx-auto mb-4">

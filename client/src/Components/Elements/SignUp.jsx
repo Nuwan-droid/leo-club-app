@@ -199,7 +199,7 @@ export default function SignUp({ onClose, onSwitchToAdmin }) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/10 z-50 flex items-center justify-center px-2 sm:px-0">
+    <div className="fixed inset-0 bg-white z-50 flex items-center justify-center px-2 sm:px-0">
       <div className="relative top-[10px] rounded-xl shadow-2xl w-full max-w-6xl flex flex-col md:flex-row overflow-hidden bg-white">
         <button
           onClick={onClose}
@@ -271,7 +271,7 @@ export default function SignUp({ onClose, onSwitchToAdmin }) {
             {leoStatus === "member" && (
               <Input
                 type="text"
-                placeholder="Leo ID (optional for registration)"
+                placeholder="Leo ID "
                 name="leo_Id"
                 value={formData.leo_Id}
                 onChange={handleChange}
@@ -306,7 +306,7 @@ export default function SignUp({ onClose, onSwitchToAdmin }) {
               />
               <Input
                 type="text"
-                placeholder="Enrollment No *"
+                placeholder="uwucst21067*"
                 name="enrollmentNo"
                 value={formData.enrollmentNo}
                 onChange={handleChange}
