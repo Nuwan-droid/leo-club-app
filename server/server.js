@@ -36,10 +36,13 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+// ✅ Static file serving
 app.use("/images", express.static(path.join(__dirname, "upload/images")));
 app.use("/uploads", express.static(path.join(__dirname, "uploads"))); 
 app.use("/receipts", express.static(path.join(__dirname, "upload/receipts"))); 
+app.use("/profiles", express.static(path.join(__dirname, "upload/profiles"))); // ✅ new for profile images
 
+// ✅ Routes
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
@@ -50,23 +53,27 @@ app.use("/api/projects", projectRoutes);
 app.use("/api/comments", commentRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/cart', cartRoutes);
-
 app.use("/api/awards", awardRoutes);
 app.use("/api/donation-projects", donationRoutes); 
-app.use("/api/user",userRoutes);
-app.use("/api/admin-requests",adminRequestRoutes);
-
+app.use("/api/user", userRoutes);
+app.use("/api/admin-requests", adminRequestRoutes);
 app.use("/api/newsletters", newsletterRoutes);
+
+// ✅ Multer error handler
 app.use(handleMulterError);
 
+// ✅ Root endpoint
 app.get("/", (req, res) => {
   res.json({ message: "LEO Club API is running ✅" });
 });
 
+// ✅ Start server
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
   console.log(`🤖 Chatbot API: http://localhost:${PORT}/api/chatbot`);
 });
+
+// ✅ Global error handler
 app.use((err, req, res, next) => {
   console.error('Global error handler:', err);
   res.status(500).json({ 
@@ -75,7 +82,7 @@ app.use((err, req, res, next) => {
   });
 });
 
-
+// ✅ Webhook helper
 export const callOrderWebhook = async (webhookData) => {
   try {
     console.log("Calling order webhook with data:", webhookData);
