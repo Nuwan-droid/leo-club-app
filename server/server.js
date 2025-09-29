@@ -42,7 +42,7 @@ app.use("/images", express.static(path.join(__dirname, "upload/images")));
 app.use("/uploads", express.static(path.join(__dirname, "uploads"))); 
 app.use("/receipts", express.static(path.join(__dirname, "upload/receipts"))); 
 app.use("/profiles", express.static(path.join(__dirname, "upload/profiles"))); // ✅ new for profile images
-
+app.use("/events", express.static(path.join(__dirname, "upload/events"))); //
 // ✅ Routes
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
