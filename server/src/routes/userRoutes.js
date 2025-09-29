@@ -1,6 +1,8 @@
 import express from 'express';
 import { protect } from '../middleware/authMiddleware.js';
 import UserController from "../controllers/userController.js";
+import { upload } from '../middleware/upload.js'; // ✅ import upload middleware
+import userController from '../controllers/userController.js';
 
 const router = express.Router();
 
@@ -23,4 +25,10 @@ router.patch("/toggleUserStatus/:id", UserController.toggleUserStatus);
 router.patch("/addScore/:id", UserController.addnewsletterScore);
 router.post("/uploadSubmission/:id", UserController.uploadNewsletterSubmission);
 router.post("/uploadnewslettersubmission/:id", UserController.uploadNewsletterSubmission);
+
+//profile and password management
+router.put("/profile", upload.single("profilePic"), userController.updateUserProfile); // Use upload middleware
+router.put("/change-password", userController.changePassword);
+
+
 export default router;

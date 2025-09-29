@@ -1,7 +1,10 @@
 import User from "../models/User.js";
 import InactiveUser from "../models/InactiveUser.js";
 import dotenv from "dotenv";
+import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import multer from "multer";
+
 dotenv.config();
 
 
@@ -65,6 +68,68 @@ const getUserProfile = async (req, res) => {
   } catch (err) {
     console.error("❌ JWT Verify error:", err.message);
     return res.status(401).json({ message: "Invalid or expired token" });
+  }
+};
+
+// ======================== UPDATE PROFILE ========================
+ const updateUserProfile = async (req, res) => {
+  try {
+    const token = req.headers.authorization?.split(" ")[1];
+    if (!token) return res.status(401).json({ message: "No token" });
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const { firstName, lastName, email, phone } = req.body;
+
+    const updateData = {
+      firstName,
+      lastName,
+      email,
+      mobile: phone,
+    };
+
+    if (req.file) {
+      updateData.userImage = `/uploads/${req.file.filename}`;
+    }
+
+    const user = await User.findByIdAndUpdate(decoded.id, updateData, {
+      new: true,
+      runValidators: true,
+    }).select("-password");
+
+    res.json({ message: "Profile updated", user });
+  } catch (err) {
+    console.error("❌ Update profile error:", err.message);
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+// ======================== CHANGE PASSWORD ========================
+ const changePassword = async (req, res) => {
+  try {
+    const token = req.headers.authorization?.split(" ")[1];
+    if (!token) return res.status(401).json({ message: "No token" });
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const { currentPassword, newPassword } = req.body;
+
+    const user = await User.findById(decoded.id);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    const isMatch = await bcrypt.compare(currentPassword, user.password);
+    if (!isMatch) return res.status(400).json({ message: "Current password is incorrect" });
+
+    if (newPassword.length < 6) {
+      return res.status(400).json({ message: "Password must be at least 6 characters" });
+    }
+
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(newPassword, salt);
+    await user.save();
+
+    res.json({ message: "Password updated successfully" });
+  } catch (err) {
+    console.error("❌ Change password error:", err.message);
+    res.status(500).json({ message: "Server error" });
   }
 };
 
@@ -496,6 +561,8 @@ const uploadNewsletterSubmission = async (req, res) => {
 export default { 
   me, 
   getUserProfile, 
+  updateUserProfile,
+  changePassword,
   getMemberCount, 
   getAllUsers, 
   toggleUserStatus,
