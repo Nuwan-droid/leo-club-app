@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import EventDetailsPopup from "./EventDetailsPopup";
 import RequestEventPopup from "./RequestEventPopup";
 import Navbar from "../memberportal/memberportalnav";
@@ -8,19 +8,34 @@ const EventVolunteerPage = () => {
   const [showEventDetails, setShowEventDetails] = useState(false);
   const [showRequestForm, setShowRequestForm] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const [upcomingEvents, setUpcomingEvents] = useState([]); 
+  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const upcomingEvents = [
-    {
-      id: 1,
-      date: "July 28",
-      day: "Monday",
-      time: "10:00 AM",
-      title: "Seeds for Hope",
-      location: "Nika/wari/ Katupatha M.V.",
-      type: "Service projects",
-      image: "/event1.png", // ✅ fixed public path
-    },
-  ];
+  useEffect(() => {
+    const fetchEvents = async () => {
+      try {
+        setIsLoading(true);
+        const response = await fetch('http://localhost:5001/api/eventVolunteerRoutes');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        console.log('API response:', data); 
+    
+        const eventsData = data.events || (Array.isArray(data) ? data : []);
+        setUpcomingEvents(eventsData);
+      } catch (err) {
+        console.error('Failed to fetch events:', err);
+        setError('Failed to load events. Please try again later.');
+        setUpcomingEvents([]); 
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchEvents();
+  }, []);
 
   const handleEventClick = (event) => {
     setSelectedEvent(event);
@@ -34,7 +49,7 @@ const EventVolunteerPage = () => {
       {/* Hero Section */}
       <div className="relative h-64 bg-gradient-to-r from-blue-400 to-green-400">
         <img
-          src="/homebuilding.png" // ✅ fixed public path
+          src="/homebuilding.png"
           alt="Leo Club Building"
           className="w-full h-full object-cover"
         />
@@ -52,49 +67,58 @@ const EventVolunteerPage = () => {
         <div className="flex flex-col lg:flex-row gap-8">
           {/* Left Column - Events */}
           <div className="flex-1">
-
             {/* Upcoming Events */}
             <div className="mb-8">
               <h2 className="text-xl font-semibold text-gray-900 mb-4">
                 Upcoming Events
               </h2>
-              {upcomingEvents.map((event) => (
-                <div
-                  key={event.id}
-                  className="bg-white rounded-lg shadow-sm border p-6 mb-4 cursor-pointer hover:shadow-md transition-shadow"
-                  onClick={() => handleEventClick(event)}
-                >
-                  <div className="flex items-start justify-between">
-                    <div className="flex-1">
-                      <div className="flex items-center mb-2">
-                        <span className="text-lg font-semibold text-gray-900 mr-2">
-                          {event.date}
-                        </span>
-                        <span className="text-gray-600">{event.day}</span>
-                      </div>
-                      <div className="mb-2">
-                        <span className="text-sm text-gray-600">
-                          {event.time}
-                        </span>
-                      </div>
-                      <h3 className="text-lg font-medium text-gray-900 mb-1">
-                        {event.title}
-                      </h3>
-                      <p className="text-gray-600 text-sm mb-2">
-                        {event.location}
-                      </p>
-                      <span className="inline-block px-3 py-1 bg-blue-100 text-blue-700 text-xs rounded-full">
-                        {event.type}
-                      </span>
-                    </div>
-                    <img
-                      src={event.image}
-                      alt={event.title}
-                      className="w-24 h-24 object-cover rounded-lg ml-4"
-                    />
-                  </div>
+              {isLoading ? (
+                <p className="text-gray-600">Loading events...</p>
+              ) : error ? (
+                <div className="bg-red-100 text-red-700 p-4 rounded-lg mb-4">
+                  {error}
                 </div>
-              ))}
+              ) : upcomingEvents.length === 0 ? (
+                <p className="text-gray-600">No upcoming events found.</p>
+              ) : (
+                upcomingEvents.map((event) => (
+                  <div
+                    key={event.id || event._id} 
+                    className="bg-white rounded-lg shadow-sm border p-6 mb-4 cursor-pointer hover:shadow-md transition-shadow"
+                    onClick={() => handleEventClick(event)}
+                  >
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <div className="flex items-center mb-2">
+                          <span className="text-lg font-semibold text-gray-900 mr-2">
+                            {event.date}
+                          </span>
+                          <span className="text-gray-600">{event.day}</span>
+                        </div>
+                        <div className="mb-2">
+                          <span className="text-sm text-gray-600">
+                            {event.time}
+                          </span>
+                        </div>
+                        <h3 className="text-lg font-medium text-gray-900 mb-1">
+                          {event.title || event.name}
+                        </h3>
+                        <p className="text-gray-600 text-sm mb-2">
+                          {event.location}
+                        </p>
+                        <span className="inline-block px-3 py-1 bg-blue-100 text-blue-700 text-xs rounded-full">
+                          {event.type || "Service projects"}
+                        </span>
+                      </div>
+                      <img
+                        src={event.image || event.coverImage || '/default-event.png'}
+                        alt={event.title || event.name}
+                        className="w-24 h-24 object-cover rounded-lg ml-4"
+                      />
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
           </div>
 

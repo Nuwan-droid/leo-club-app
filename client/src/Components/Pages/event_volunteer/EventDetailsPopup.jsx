@@ -1,5 +1,6 @@
+// EventDetailsPopup.jsx
 import React, { useState, useEffect } from 'react';
-import { Calendar, Clock, MapPin, User, X, ChevronLeft, Share2, Heart, Users } from 'lucide-react';
+import { Calendar, Clock, MapPin, X, Share2, Heart, Users } from 'lucide-react';
 
 const EventDetailsPopup = ({ event, onClose }) => {
   const [isJoined, setIsJoined] = useState(false);
@@ -33,11 +34,21 @@ const EventDetailsPopup = ({ event, onClose }) => {
 
   const handleJoinRequest = async () => {
     setIsLoading(true);
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    setIsJoined(true);
-    setAttendeeCount(prev => prev + 1);
-    setIsLoading(false);
+    try {
+      const response = await fetch(`/api/events/${event.id}/join`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      });
+      if (!response.ok) {
+        throw new Error('Failed to send join request');
+      }
+      setIsJoined(true);
+      setAttendeeCount(prev => prev + 1);
+    } catch (error) {
+      console.error('Join request error:', error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleLike = () => {
@@ -47,7 +58,7 @@ const EventDetailsPopup = ({ event, onClose }) => {
   const handleShare = () => {
     if (navigator.share) {
       navigator.share({
-        title: 'Seeds for Hope Event',
+        title: `${event.title} Event`,
         text: 'Join me at this amazing community event!',
         url: window.location.href
       });
@@ -57,7 +68,7 @@ const EventDetailsPopup = ({ event, onClose }) => {
     }
   };
 
-  const eventDescription = "Join us for a transformative community initiative focused on sustainable agriculture and environmental conservation. This event brings together passionate individuals to plant seeds of hope for our future generations. Experience hands-on learning, connect with like-minded people, and contribute to meaningful change in our community. Activities include seed planting workshops, environmental education sessions, and collaborative planning for future sustainability projects.";
+  const eventDescription = event.description || "Join us for a transformative community initiative focused on sustainable agriculture and environmental conservation. This event brings together passionate individuals to plant seeds of hope for our future generations. Experience hands-on learning, connect with like-minded people, and contribute to meaningful change in our community. Activities include seed planting workshops, environmental education sessions, and collaborative planning for future sustainability projects.";
 
   const truncatedDescription = eventDescription.slice(0, 150) + "...";
 
@@ -66,15 +77,11 @@ const EventDetailsPopup = ({ event, onClose }) => {
       <div className="bg-white rounded-2xl max-w-lg w-full max-h-[95vh] overflow-hidden shadow-2xl transform transition-all duration-300 scale-100">
         {/* Header with Image */}
         <div className="relative">
-          <div className="h-56 bg-blue-800 flex items-center justify-center">
-            <div className="text-center text-white">
-              <div className="w-20 h-20 bg-white bg-opacity-20 rounded-full flex items-center justify-center mb-4 mx-auto backdrop-blur-sm">
-                <span className="text-3xl">🌱</span>
-              </div>
-              <h1 className="text-2xl font-bold mb-2">Seeds for Hope</h1>
-              <p className="text-green-100 text-sm"> Environmental Community</p>
-            </div>
-          </div>
+          <img
+            src={event.image}
+            alt={event.title}
+            className="w-full h-56 object-cover"
+          />
           
           {/* Header Actions */}
           <div className="absolute top-4 right-4 flex gap-2">
@@ -110,15 +117,21 @@ const EventDetailsPopup = ({ event, onClose }) => {
 
         {/* Content */}
         <div className="p-6 overflow-y-auto max-h-[60vh]">
+          {/* Event Title and Type */}
+          <div className="text-center mb-6">
+            <h1 className="text-2xl font-bold mb-2">{event.title}</h1>
+            <p className="text-gray-600 text-sm">{event.type}</p>
+          </div>
+
           {/* Date & Time */}
           <div className="flex flex-wrap gap-4 mb-6">
             <div className="flex items-center gap-2 text-gray-600">
               <Calendar size={18} className="text-blue-500" />
-              <span className="font-medium">Monday, July 28</span>
+              <span className="font-medium">{event.day}, {event.date}</span>
             </div>
             <div className="flex items-center gap-2 text-gray-600">
               <Clock size={18} className="text-blue-500" />
-              <span>5:30 PM - 8:30 PM</span>
+              <span>Starts at {event.time}</span>
             </div>
           </div>
 
@@ -127,7 +140,7 @@ const EventDetailsPopup = ({ event, onClose }) => {
             <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-xl">
               <MapPin size={20} className="text-blue-500 mt-0.5 flex-shrink-0" />
               <div>
-                <p className="font-semibold text-gray-900">Nika/wari/ Katupatha M.V.</p>
+                <p className="font-semibold text-gray-900">{event.location}</p>
                 <p className="text-gray-600 text-sm">Nikaweratiya, North Western Province</p>
               </div>
             </div>
@@ -152,18 +165,6 @@ const EventDetailsPopup = ({ event, onClose }) => {
                 <div className="w-8 h-8 bg-gray-300 rounded-full border-2 border-white flex items-center justify-center">
                   <span className="text-gray-600 text-xs">+{attendeeCount - 4}</span>
                 </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Organizer */}
-          <div className="mb-6">
-            <div className="flex items-center gap-3 p-4 bg-green-50 rounded-xl">
-              <div className="w-12 h-12 bg-gradient-to-br from-green-400 to-blue-500 rounded-full flex items-center justify-center">
-                <User size={20} className="text-white" />
-              </div>
-              <div>
-                <p className="font-medium text-gray-900">Organized by Thilina Adikari</p>
               </div>
             </div>
           </div>
@@ -203,12 +204,14 @@ const EventDetailsPopup = ({ event, onClose }) => {
               <p className="text-gray-700 leading-relaxed text-sm">
                 {showFullDescription ? eventDescription : truncatedDescription}
               </p>
-              <button 
-                onClick={() => setShowFullDescription(!showFullDescription)}
-                className="text-blue-500 font-medium text-sm mt-2 hover:text-blue-600 transition-colors"
-              >
-                {showFullDescription ? 'Show Less' : 'Read More'}
-              </button>
+              {eventDescription.length > 150 && (
+                <button 
+                  onClick={() => setShowFullDescription(!showFullDescription)}
+                  className="text-blue-500 font-medium text-sm mt-2 hover:text-blue-600 transition-colors"
+                >
+                  {showFullDescription ? 'Show Less' : 'Read More'}
+                </button>
+              )}
             </div>
           </div>
 

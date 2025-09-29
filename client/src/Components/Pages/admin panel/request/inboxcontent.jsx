@@ -1,12 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import Button from "./button";
-import Input from "./input";
 
 const InboxContent = () => {
   const [messages, setMessages] = useState([]);
   const [showApproveModal, setShowApproveModal] = useState(false);
-  const [leoIdInput, setLeoIdInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [fetching, setFetching] = useState(true); // For initial loading state
   const [approvingId, setApprovingId] = useState(null); // Track the request being approved
@@ -14,13 +12,17 @@ const InboxContent = () => {
   const fetchPendingRequests = async () => {
     setFetching(true);
     try {
-      const res = await fetch("http://localhost:5001/api/admin-requests/pending-requests", {
-        headers: {
-          Authorization: `Bearer ${sessionStorage.getItem("adminToken")}`,
-        },
-      });
+      const res = await fetch(
+        "http://localhost:5001/api/admin-requests/pending-requests",
+        {
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem("adminToken")}`,
+          },
+        }
+      );
       if (!res.ok) throw new Error("Failed to fetch pending requests");
       const data = await res.json();
+
       // Format to show only full name and request type
       const formattedMessages = data.map((user) => ({
         id: user._id,
@@ -43,12 +45,15 @@ const InboxContent = () => {
   const handleReject = async (id) => {
     setIsLoading(true);
     try {
-      const res = await fetch(`http://localhost:5001/api/admin-requests/reject/${id}`, {
-        method: "PUT",
-        headers: {
-          Authorization: `Bearer ${sessionStorage.getItem("adminToken")}`,
-        },
-      });
+      const res = await fetch(
+        `http://localhost:5001/api/admin-requests/reject/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem("adminToken")}`,
+          },
+        }
+      );
       if (!res.ok) throw new Error("Failed to reject request");
       toast.success("Request rejected successfully.");
       fetchPendingRequests();
@@ -62,25 +67,21 @@ const InboxContent = () => {
 
   const handleOpenApproveModal = (id) => {
     setApprovingId(id);
-    setLeoIdInput("");
     setShowApproveModal(true);
   };
 
   const handleApproveConfirm = async () => {
-    if (!leoIdInput.trim()) {
-      toast.error("LEO ID is required.");
-      return;
-    }
     setIsLoading(true);
     try {
-      const res = await fetch(`http://localhost:5001/api/admin-requests/approve/${approvingId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${sessionStorage.getItem("adminToken")}`,
-        },
-        body: JSON.stringify({ leo_Id: leoIdInput.trim() }),
-      });
+      const res = await fetch(
+        `http://localhost:5001/api/admin-requests/approve/${approvingId}`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem("adminToken")}`,
+          },
+        }
+      );
       const data = await res.json();
       if (res.ok) {
         toast.success("Request approved successfully.");
@@ -101,7 +102,9 @@ const InboxContent = () => {
   return (
     <div className="flex-1 bg-gray-100 min-h-screen overflow-auto">
       <div className="p-6 max-w-4xl mx-auto">
-        <h2 className="text-2xl font-bold text-gray-800 mb-6">Pending Requests</h2>
+        <h2 className="text-2xl font-bold text-gray-800 mb-6">
+          Pending Requests
+        </h2>
 
         {fetching ? (
           <div className="flex items-center justify-center py-10">
@@ -109,7 +112,9 @@ const InboxContent = () => {
             <span className="ml-3 text-gray-600">Loading...</span>
           </div>
         ) : messages.length === 0 ? (
-          <div className="text-center py-10 text-gray-500">No pending requests found.</div>
+          <div className="text-center py-10 text-gray-500">
+            No pending requests found.
+          </div>
         ) : (
           <div className="space-y-4">
             {messages.map((message) => (
@@ -118,8 +123,12 @@ const InboxContent = () => {
                 className="flex items-center justify-between p-4 bg-white rounded-lg shadow-sm hover:shadow-lg transition-shadow duration-200 border border-gray-200"
               >
                 <div className="flex flex-col">
-                  <span className="text-lg font-medium text-gray-900">{message.fullName}</span>
-                  <span className="text-sm text-gray-500">{message.requestType}</span>
+                  <span className="text-lg font-medium text-gray-900">
+                    {message.fullName}
+                  </span>
+                  <span className="text-sm text-gray-500">
+                    {message.requestType}
+                  </span>
                 </div>
                 <div className="flex gap-3">
                   <Button
@@ -146,16 +155,14 @@ const InboxContent = () => {
         {showApproveModal && (
           <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50 p-4">
             <div className="bg-white rounded-lg shadow-xl p-6 max-w-md w-full">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4">Approve Request</h3>
-              <p className="text-gray-600 mb-4">Enter LEO ID for the selected member:</p>
-              <Input
-                type="text"
-                placeholder="LEO ID *"
-                value={leoIdInput}
-                onChange={(e) => setLeoIdInput(e.target.value)}
-                required
-                className="mb-4"
-              />
+              <h3 className="text-lg font-semibold text-gray-800 mb-4">
+                Approve Request
+              </h3>
+
+              <p className="text-sm text-gray-600 mb-6">
+                Are you sure you want to approve this request?
+              </p>
+
               <div className="flex justify-end gap-2">
                 <Button
                   label="Cancel"

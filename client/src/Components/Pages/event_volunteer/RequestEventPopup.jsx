@@ -1,5 +1,6 @@
+// RequestEventPopup.jsx
 import React, { useState, useEffect } from 'react';
-import { X, Calendar, Clock, MapPin, FileText, Upload, Check } from 'lucide-react';
+import { X, Calendar, Clock, MapPin, FileText, Check } from 'lucide-react';
 
 const RequestEventPopup = ({ onClose }) => {
   const [formData, setFormData] = useState({
@@ -84,8 +85,6 @@ const RequestEventPopup = ({ onClose }) => {
     }
   };
 
-  
-
   const handleSubmit = async () => {
     if (!validateForm()) {
       return;
@@ -94,9 +93,24 @@ const RequestEventPopup = ({ onClose }) => {
     setIsSubmitting(true);
     
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      console.log('Form submitted:', formData);
+      const response = await fetch('http://localhost:5001/api/events/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          eventName: formData.eventName,
+          startDate: formData.startDate,
+          startTime: formData.startTime,
+          location: formData.location,
+          description: formData.description,
+          // category and end* ignored by backend
+        })
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to submit event request');
+      }
+      
+      console.log('Event request submitted successfully');
       onClose();
     } catch (error) {
       console.error('Submission error:', error);
