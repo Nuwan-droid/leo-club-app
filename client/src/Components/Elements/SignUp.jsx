@@ -153,7 +153,7 @@ export default function SignUp({ onClose, onSwitchToAdmin }) {
     try {
       const orderId = `LEO-${Date.now()}`;
       const response = await fetch(
-        "http://localhost:5001/api/payment/payhere-init",
+        "http://localhost:5001/api/registration/initiate",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
