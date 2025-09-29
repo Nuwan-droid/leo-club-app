@@ -31,6 +31,8 @@ const useCalendarLogic = () => {
               date: ev.date,
               time: ev.time,
               location: ev.location,
+              description: ev.description,
+              coverImage: ev.coverImage,
               color: 'bg-blue-100 text-blue-800 border-l-4 border-blue-400'
             }))
           );
