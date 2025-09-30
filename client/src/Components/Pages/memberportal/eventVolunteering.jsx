@@ -10,14 +10,6 @@ const EventVolunteeringSection = () => {
       status: 'Participating',
       image: '../../../../public/event4.png'
     },
-    {
-      id: 2,
-      name: 'Snehashka',
-      role: 'Project Chair',
-      committee: 'Organizing committee',
-      status: 'Participating',
-      image: '../../../../public/event4.png'
-    }
   ];
 
   return (
@@ -36,8 +28,12 @@ const EventVolunteeringSection = () => {
               <div>
                 <h4 className="font-medium text-gray-900">{event.name}</h4>
                 <p className="text-sm text-gray-600">{event.role}</p>
-                <p className="text-sm text-gray-500">{event.committee}</p>
-                <p className="text-sm text-gray-500">{event.status}</p>
+                <p className="text-sm text-gray-500">
+                  {event.committee}<span className="text-green-500 mr-1">✔</span> 
+                </p>
+                <p className="text-sm text-gray-500">
+                  {event.status}<span className="text-green-500 mr-1">✔</span> 
+                </p>
               </div>
             </div>
           </div>
@@ -48,4 +44,3 @@ const EventVolunteeringSection = () => {
 };
 
 export default EventVolunteeringSection;
-
