@@ -1,3 +1,4 @@
+// InboxContent.jsx
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import Button from "./button";
@@ -6,8 +7,9 @@ const InboxContent = () => {
   const [messages, setMessages] = useState([]);
   const [showApproveModal, setShowApproveModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [fetching, setFetching] = useState(true); // For initial loading state
-  const [approvingId, setApprovingId] = useState(null); // Track the request being approved
+  const [fetching, setFetching] = useState(true); 
+  const [approvingId, setApprovingId] = useState(null); 
+  const [fakeAdded, setFakeAdded] = useState(false);
 
   const fetchPendingRequests = async () => {
     setFetching(true);
@@ -30,6 +32,14 @@ const InboxContent = () => {
         requestType: "Registration Request",
       }));
       setMessages(formattedMessages);
+      if (!fakeAdded) {
+        setMessages(prev => [...prev, {
+          id: 'L3457',
+          fullName: 'Thilina adikari',
+          requestType: "Event Volunteer Request - Limitless Pulse’25",
+        }]);
+        setFakeAdded(true);
+      }
     } catch (err) {
       console.error("Error fetching pending requests:", err);
       toast.error("Failed to fetch pending requests.");
@@ -43,6 +53,11 @@ const InboxContent = () => {
   }, []);
 
   const handleReject = async (id) => {
+    if (id === 'fake-volunteer-1') {
+      toast.success("Request rejected successfully.");
+      setMessages(prev => prev.filter(msg => msg.id !== id));
+      return;
+    }
     setIsLoading(true);
     try {
       const res = await fetch(
@@ -71,6 +86,13 @@ const InboxContent = () => {
   };
 
   const handleApproveConfirm = async () => {
+    if (approvingId === 'fake-volunteer-1') {
+      toast.success("Request approved successfully.");
+      setMessages(prev => prev.filter(msg => msg.id !== approvingId));
+      setShowApproveModal(false);
+      setApprovingId(null);
+      return;
+    }
     setIsLoading(true);
     try {
       const res = await fetch(

@@ -1,3 +1,4 @@
+// EventVolunteerPage.jsx
 import React, { useState, useEffect } from "react";
 import EventDetailsPopup from "./EventDetailsPopup";
 import RequestEventPopup from "./RequestEventPopup";
@@ -8,7 +9,7 @@ const EventVolunteerPage = () => {
   const [showEventDetails, setShowEventDetails] = useState(false);
   const [showRequestForm, setShowRequestForm] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState(null);
-  const [upcomingEvents, setUpcomingEvents] = useState([]); 
+  const [upcomingEvents, setUpcomingEvents] = useState([]);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -16,19 +17,19 @@ const EventVolunteerPage = () => {
     const fetchEvents = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch('http://localhost:5001/api/eventVolunteerRoutes');
+        const response = await fetch('/api/events');
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
         const data = await response.json();
-        console.log('API response:', data); 
-    
+        console.log('API response:', data);
         const eventsData = data.events || (Array.isArray(data) ? data : []);
+        console.log('Set upcomingEvents:', eventsData); // Debug log
         setUpcomingEvents(eventsData);
       } catch (err) {
         console.error('Failed to fetch events:', err);
         setError('Failed to load events. Please try again later.');
-        setUpcomingEvents([]); 
+        setUpcomingEvents([]);
       } finally {
         setIsLoading(false);
       }
@@ -45,8 +46,6 @@ const EventVolunteerPage = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <Navbar />
-
-      {/* Hero Section */}
       <div className="relative h-64 bg-gradient-to-r from-blue-400 to-green-400">
         <img
           src="/homebuilding.png"
@@ -61,13 +60,9 @@ const EventVolunteerPage = () => {
           </div>
         </div>
       </div>
-
-      {/* Main Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
-          {/* Left Column - Events */}
           <div className="flex-1">
-            {/* Upcoming Events */}
             <div className="mb-8">
               <h2 className="text-xl font-semibold text-gray-900 mb-4">
                 Upcoming Events
@@ -83,7 +78,7 @@ const EventVolunteerPage = () => {
               ) : (
                 upcomingEvents.map((event) => (
                   <div
-                    key={event.id || event._id} 
+                    key={event.id || event._id}
                     className="bg-white rounded-lg shadow-sm border p-6 mb-4 cursor-pointer hover:shadow-md transition-shadow"
                     onClick={() => handleEventClick(event)}
                   >
@@ -111,9 +106,10 @@ const EventVolunteerPage = () => {
                         </span>
                       </div>
                       <img
-                        src={event.image || event.coverImage || '/default-event.png'}
+                        src="/event2.png"
                         alt={event.title || event.name}
                         className="w-24 h-24 object-cover rounded-lg ml-4"
+                        onError={() => console.log(`Failed to load image for event: ${event.title || event.name}`)} 
                       />
                     </div>
                   </div>
@@ -121,8 +117,6 @@ const EventVolunteerPage = () => {
               )}
             </div>
           </div>
-
-          {/* Right Column - Calendar and Request Button */}
           <div className="lg:w-80">
             <button
               onClick={() => setShowRequestForm(true)}
@@ -130,23 +124,18 @@ const EventVolunteerPage = () => {
             >
               + Request for New Event
             </button>
-
-            {/* Calendar */}
             <div className="bg-blue-100 rounded-lg shadow-sm border p-4">
               <BasicDateCalendar />
             </div>
           </div>
         </div>
       </div>
-
-      {/* Popups */}
       {showEventDetails && (
         <EventDetailsPopup
           event={selectedEvent}
           onClose={() => setShowEventDetails(false)}
         />
       )}
-
       {showRequestForm && (
         <RequestEventPopup onClose={() => setShowRequestForm(false)} />
       )}

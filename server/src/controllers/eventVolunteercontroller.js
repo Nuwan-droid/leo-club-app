@@ -14,17 +14,18 @@ const getAllEvents = async (req, res) => {
         date: monthDay,
         day,
         time: event.time,
-        title: event.name,
+        title: event.name, // Use 'title' to match frontend
         location: event.location,
         type: "Service projects",
-        image: event.coverImage || '/default-event.png',
-        description: event.description
+        image: event.coverImage || '/default-event.png', // Use 'image' to match frontend
+        description: event.description || ''
       };
     });
-    res.status(200).json(formattedEvents);
+    console.log('Sending events:', formattedEvents); // Debug log
+    res.status(200).json({ events: formattedEvents, success: true }); // Wrap in { events, success }
   } catch (error) {
     console.error('Error fetching events:', error);
-    res.status(500).json({ error: error.message });
+    res.status(500).json({ error: error.message, success: false });
   }
 };
 
@@ -51,14 +52,15 @@ const createEvent = async (req, res) => {
       date: monthDay,
       day,
       time: newEvent.time,
-      title: newEvent.name,
+      title: newEvent.name, // Use 'title' to match frontend
       location: newEvent.location,
       type: "Service projects",
-      image: newEvent.coverImage,
-      description: newEvent.description
+      image: newEvent.coverImage, // Use 'image' to match frontend
+      description: newEvent.description || ''
     });
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    console.error('Error creating event:', error);
+    res.status(400).json({ error: error.message, success: false });
   }
 };
 
@@ -67,11 +69,12 @@ const requestToJoinEvent = async (req, res) => {
     const { id } = req.params;
     const event = await Event.findById(id);
     if (!event) {
-      return res.status(404).json({ error: 'Event not found' });
+      return res.status(404).json({ error: 'Event not found', success: false });
     }
-    res.status(200).json({ message: 'Join request sent successfully' });
+    res.status(200).json({ message: 'Join request sent successfully', success: true });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('Error joining event:', error);
+    res.status(500).json({ error: error.message, success: false });
   }
 };
 

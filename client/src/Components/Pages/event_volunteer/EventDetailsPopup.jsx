@@ -1,6 +1,8 @@
 // EventDetailsPopup.jsx
 import React, { useState, useEffect } from 'react';
 import { Calendar, Clock, MapPin, X, Share2, Heart, Users } from 'lucide-react';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const EventDetailsPopup = ({ event, onClose }) => {
   const [isJoined, setIsJoined] = useState(false);
@@ -9,7 +11,6 @@ const EventDetailsPopup = ({ event, onClose }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [showFullDescription, setShowFullDescription] = useState(false);
 
-  // Close on escape key
   useEffect(() => {
     if (!event) return;
     
@@ -20,7 +21,6 @@ const EventDetailsPopup = ({ event, onClose }) => {
     return () => document.removeEventListener('keydown', handleEscape);
   }, [event, onClose]);
 
-  // Prevent body scroll when popup is open
   useEffect(() => {
     if (!event) return;
     
@@ -32,39 +32,58 @@ const EventDetailsPopup = ({ event, onClose }) => {
 
   if (!event) return null;
 
-  const handleJoinRequest = async () => {
+  const handleJoinRequest = () => {
     setIsLoading(true);
-    try {
-      const response = await fetch(`/api/events/${event.id}/join`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-      });
-      if (!response.ok) {
-        throw new Error('Failed to send join request');
-      }
+    // Simulate join request (fake)
+    setTimeout(() => {
       setIsJoined(true);
       setAttendeeCount(prev => prev + 1);
-    } catch (error) {
-      console.error('Join request error:', error);
-    } finally {
+      toast.success('Join request sent successfully!', {
+        position: 'top-right',
+        autoClose: 3000,
+      });
       setIsLoading(false);
-    }
+    }, 1000); // Simulate 1-second delay
   };
 
   const handleLike = () => {
-    setIsLiked(!isLiked);
+    const newIsLiked = !isLiked;
+    setIsLiked(newIsLiked);
+    toast.success(newIsLiked ? 'Event liked!' : 'Event unliked!', {
+      position: 'top-right',
+      autoClose: 3000,
+    });
   };
 
   const handleShare = () => {
     if (navigator.share) {
       navigator.share({
-        title: `${event.title} Event`,
+        title: `${event.title || event.name} Event`,
         text: 'Join me at this amazing community event!',
-        url: window.location.href
+        url: window.location.href,
+      }).then(() => {
+        toast.success('Event shared successfully!', {
+          position: 'top-right',
+          autoClose: 3000,
+        });
+      }).catch(() => {
+        toast.error('Failed to share event.', {
+          position: 'top-right',
+          autoClose: 3000,
+        });
       });
     } else {
-      // Fallback for browsers that don't support Web Share API
-      navigator.clipboard.writeText(window.location.href);
+      navigator.clipboard.writeText(window.location.href).then(() => {
+        toast.success('Link copied to clipboard!', {
+          position: 'top-right',
+          autoClose: 3000,
+        });
+      }).catch(() => {
+        toast.error('Failed to copy link.', {
+          position: 'top-right',
+          autoClose: 3000,
+        });
+      });
     }
   };
 
@@ -75,15 +94,13 @@ const EventDetailsPopup = ({ event, onClose }) => {
   return (
     <div className="fixed inset-0 bg-transparent bg-opacity-60 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
       <div className="bg-white rounded-2xl max-w-lg w-full max-h-[95vh] overflow-hidden shadow-2xl transform transition-all duration-300 scale-100">
-        {/* Header with Image */}
         <div className="relative">
           <img
-            src={event.image}
-            alt={event.title}
+            src="/event2.png"
+            alt={event.title || event.name}
             className="w-full h-56 object-cover"
+            onError={() => console.log(`Failed to load popup image for event: ${event.title || event.name}`)}
           />
-          
-          {/* Header Actions */}
           <div className="absolute top-4 right-4 flex gap-2">
             <button 
               onClick={handleShare}
@@ -106,24 +123,17 @@ const EventDetailsPopup = ({ event, onClose }) => {
               <X size={16} className="text-gray-700" />
             </button>
           </div>
-
-          {/* Status Badge */}
           <div className="absolute bottom-4 left-4">
             <span className="bg-green-500 text-white px-3 py-1 rounded-full text-xs font-medium shadow-lg">
               Registration Open
             </span>
           </div>
         </div>
-
-        {/* Content */}
         <div className="p-6 overflow-y-auto max-h-[60vh]">
-          {/* Event Title and Type */}
           <div className="text-center mb-6">
-            <h1 className="text-2xl font-bold mb-2">{event.title}</h1>
-            <p className="text-gray-600 text-sm">{event.type}</p>
+            <h1 className="text-2xl font-bold mb-2">{event.title || event.name}</h1>
+            <p className="text-gray-600 text-sm">{event.type || "Service projects"}</p>
           </div>
-
-          {/* Date & Time */}
           <div className="flex flex-wrap gap-4 mb-6">
             <div className="flex items-center gap-2 text-gray-600">
               <Calendar size={18} className="text-blue-500" />
@@ -134,8 +144,6 @@ const EventDetailsPopup = ({ event, onClose }) => {
               <span>Starts at {event.time}</span>
             </div>
           </div>
-
-          {/* Location */}
           <div className="mb-6">
             <div className="flex items-start gap-3 p-4 bg-gray-50 rounded-xl">
               <MapPin size={20} className="text-blue-500 mt-0.5 flex-shrink-0" />
@@ -145,8 +153,6 @@ const EventDetailsPopup = ({ event, onClose }) => {
               </div>
             </div>
           </div>
-
-          {/* Attendees */}
           <div className="mb-6">
             <div className="flex items-center justify-between p-4 bg-blue-50 rounded-xl">
               <div className="flex items-center gap-3">
@@ -168,8 +174,6 @@ const EventDetailsPopup = ({ event, onClose }) => {
               </div>
             </div>
           </div>
-
-          {/* Join Button */}
           <div className="mb-6">
             {!isJoined ? (
               <button 
@@ -196,8 +200,6 @@ const EventDetailsPopup = ({ event, onClose }) => {
               </div>
             )}
           </div>
-
-          {/* About Event */}
           <div className="mb-6">
             <h3 className="font-bold text-gray-900 mb-3 text-lg">About This Event</h3>
             <div className="bg-gray-50 rounded-xl p-4">
@@ -214,8 +216,6 @@ const EventDetailsPopup = ({ event, onClose }) => {
               )}
             </div>
           </div>
-
-          {/* Map Section */}
           <div>
             <h3 className="font-bold text-gray-900 mb-3 text-lg">Location</h3>
             <div className="bg-gray-50 rounded-xl p-4">

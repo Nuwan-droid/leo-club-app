@@ -17,7 +17,6 @@ const RequestEventPopup = ({ onClose }) => {
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Set default dates
   useEffect(() => {
     const now = new Date();
     const today = now.toISOString().split('T')[0];
@@ -76,7 +75,6 @@ const RequestEventPopup = ({ onClose }) => {
       [name]: value
     }));
     
-    // Clear error when user starts typing
     if (errors[name]) {
       setErrors(prev => ({
         ...prev,
@@ -93,7 +91,7 @@ const RequestEventPopup = ({ onClose }) => {
     setIsSubmitting(true);
     
     try {
-      const response = await fetch('http://localhost:5001/api/events/', {
+      const response = await fetch('/api/events', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -102,18 +100,20 @@ const RequestEventPopup = ({ onClose }) => {
           startTime: formData.startTime,
           location: formData.location,
           description: formData.description,
-          // category and end* ignored by backend
+          coverImage: '/default-event.png' // Ensure default image
         })
       });
       
       if (!response.ok) {
-        throw new Error('Failed to submit event request');
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Failed to submit event request');
       }
       
       console.log('Event request submitted successfully');
       onClose();
     } catch (error) {
       console.error('Submission error:', error);
+      setErrors({ submit: error.message });
     } finally {
       setIsSubmitting(false);
     }
@@ -131,7 +131,6 @@ const RequestEventPopup = ({ onClose }) => {
       onClick={handleBackdropClick}
     >
       <div className="bg-white rounded-2xl max-w-4xl w-full max-h-[95vh] overflow-hidden shadow-2xl transform transition-all duration-300 animate-in slide-in-from-bottom-4">
-        {/* Header */}
         <div className="relative bg-blue-800 p-8 text-white">
           <button 
             onClick={onClose}
@@ -139,26 +138,22 @@ const RequestEventPopup = ({ onClose }) => {
           >
             <X size={20} className="text-white" />
           </button>
-          
           <div className="flex items-center space-x-4 mb-6">
-            
             <div>
               <h2 className="text-3xl font-bold">Request Event</h2>
               <p className="text-blue-100 mt-1">Fill out the details to submit your event request</p>
             </div>
           </div>
         </div>
-
-        {/* Form Content */}
         <div className="p-8 overflow-y-auto max-h-[calc(95vh-120px)]">
           <div className="space-y-8">
-          
-
-            {/* Event Details Grid */}
+            {errors.submit && (
+              <div className="bg-red-100 text-red-700 p-4 rounded-lg">
+                {errors.submit}
+              </div>
+            )}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {/* Left Column */}
               <div className="space-y-6">
-                {/* Event Name */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Event Name *
@@ -177,8 +172,6 @@ const RequestEventPopup = ({ onClose }) => {
                     <p className="mt-1 text-sm text-red-600">{errors.eventName}</p>
                   )}
                 </div>
-
-                {/* Category */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     Event Category
@@ -196,8 +189,6 @@ const RequestEventPopup = ({ onClose }) => {
                     ))}
                   </select>
                 </div>
-
-                {/* Location */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     <MapPin size={16} className="inline mr-1" />
@@ -218,10 +209,7 @@ const RequestEventPopup = ({ onClose }) => {
                   )}
                 </div>
               </div>
-
-              {/* Right Column */}
               <div className="space-y-6">
-                {/* Start Date/Time */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     <Calendar size={16} className="inline mr-1" />
@@ -253,8 +241,6 @@ const RequestEventPopup = ({ onClose }) => {
                     </p>
                   )}
                 </div>
-
-                {/* End Date/Time */}
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-2">
                     <Clock size={16} className="inline mr-1" />
@@ -288,8 +274,6 @@ const RequestEventPopup = ({ onClose }) => {
                 </div>
               </div>
             </div>
-
-            {/* Description */}
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
                 <FileText size={16} className="inline mr-1" />
@@ -304,8 +288,6 @@ const RequestEventPopup = ({ onClose }) => {
                 placeholder="Describe your event, its purpose, and any special requirements..."
               />
             </div>
-
-            {/* Submit Button */}
             <div className="flex items-center justify-end space-x-4 pt-6 border-t">
               <button
                 type="button"
