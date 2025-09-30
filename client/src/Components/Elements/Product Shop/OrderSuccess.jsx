@@ -6,7 +6,6 @@ const OrderSuccess = () => {
   const [orderCompleted, setOrderCompleted] = useState(false);
   const [completionStatus, setCompletionStatus] = useState('loading'); // loading, success, error
 
-  // Get URL parameters (you'll need to implement this based on your routing)
   const getUrlParam = (param) => {
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get(param);
@@ -16,7 +15,6 @@ const OrderSuccess = () => {
   const name = getUrlParam('name');
   const amount = getUrlParam('amount');
 
-  // Function to mark order as completed
   const completeOrder = async () => {
     if (!orderId) {
       console.error('No order ID found in URL');
@@ -55,19 +53,16 @@ const OrderSuccess = () => {
     }
   };
 
-  // Complete order when component mounts
   useEffect(() => {
     if (orderId && !orderCompleted) {
       completeOrder();
     }
   }, [orderId, orderCompleted]);
 
-  // Countdown timer
   useEffect(() => {
     const timer = setInterval(() => {
       setCountdown(prev => {
         if (prev <= 1) {
-          // Navigate to shop (implement based on your routing solution)
           window.location.href = '/shop';
           return 0;
         }
@@ -108,14 +103,14 @@ const OrderSuccess = () => {
           )}
         </div>
         
-        {/* Status-based Title */}
+     
         <h1 className="text-2xl font-bold text-gray-900 mb-4">
           {completionStatus === 'loading' && 'Processing Order...'}
           {completionStatus === 'success' && 'Order Completed Successfully!'}
           {completionStatus === 'error' && 'Payment Received!'}
         </h1>
         
-        {/* Status-based Message */}
+        
         <p className="text-gray-600 mb-6">
           {completionStatus === 'loading' && (
             <>
@@ -138,7 +133,7 @@ const OrderSuccess = () => {
           )}
         </p>
         
-        {/* Order Details */}
+       
         <div className="bg-gray-50 rounded-lg p-4 mb-6 space-y-2">
           {orderId && (
             <div className="flex justify-between items-center">
@@ -166,7 +161,7 @@ const OrderSuccess = () => {
           </div>
         </div>
         
-        {/* Action Buttons */}
+       
         <div className="space-y-3">
           <button
             onClick={goToShop}
@@ -176,27 +171,21 @@ const OrderSuccess = () => {
             <span>Continue Shopping</span>
           </button>
           
-          <button
-            onClick={goToProfile}
-            className="w-full bg-gray-100 text-gray-700 py-3 px-4 rounded-lg hover:bg-gray-200 transition-colors flex items-center justify-center space-x-2"
-          >
-            <Package size={18} />
-            <span>View My Orders</span>
-          </button>
+  
           
           <p className="text-sm text-gray-500">
             Redirecting to shop in {countdown} seconds...
           </p>
         </div>
         
-        {/* Footer Message */}
+       
         <div className="mt-8 pt-6 border-t border-gray-200">
           <p className="text-xs text-gray-500">
             Thank you for shopping with the Leo Club of Uva Wellassa University. 
             Your purchase supports our community initiatives.
           </p>
           
-          {/* Additional status message */}
+          
           {completionStatus === 'error' && (
             <p className="text-xs text-orange-600 mt-2">
               If you have any concerns about your order, please contact our support team 

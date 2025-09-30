@@ -6,7 +6,6 @@ import ProductGrid from '../Elements/Product Shop/ProductGrid';
 import ProductDetail from '../Elements/Product Shop/ProductDetail';
 import CartSidebar from '../Elements/Product Shop/CartSidebar';
 
-// Utility for unique cart item id (fixes duplicate key bug)
 function getCartItemId(item) {
   let prodId = typeof item.productId === 'object' && item.productId !== null
     ? item.productId._id || item.productId.id || JSON.stringify(item.productId)
@@ -33,7 +32,6 @@ const Shop = () => {
   useEffect(() => {
     const checkAuthStatus = async () => {
       try {
-        // Check for tokens in sessionStorage (matching Login component)
         const memberToken = sessionStorage.getItem('memberToken');
         const adminToken = sessionStorage.getItem('adminToken');
         const storedToken = memberToken || adminToken;
@@ -58,7 +56,6 @@ const Shop = () => {
           await loadPersistentCart(storedToken);
           await syncLocalCartWithServer(storedToken);
         } else {
-          // Invalid tokens, remove them
           sessionStorage.removeItem('memberToken');
           sessionStorage.removeItem('adminToken');
           loadLocalCart();
@@ -138,7 +135,7 @@ const Shop = () => {
           toast.success('Your cart has been updated!');
         }
       }
-    } catch (error) { /* ignore */ }
+    } catch (error) {  }
   };
 
   useEffect(() => {
@@ -153,7 +150,7 @@ const Shop = () => {
           additionalImages: Array.isArray(product.additionalImages) ? product.additionalImages : []
         }));
         setProducts(transformedProducts);
-      } catch (err) { /* ignore */ }
+      } catch (err) {  }
     };
     fetchProducts();
   }, []);
@@ -211,9 +208,9 @@ const Shop = () => {
           toast.success('Item added to cart!');
         }
       } else {
-        // If server fails, fall back to local cart
+     
         if (response.status === 401) {
-          // Token expired
+  
           sessionStorage.removeItem('memberToken');
           sessionStorage.removeItem('adminToken');
           setUserInfo(null);

@@ -209,7 +209,6 @@ const proceedToPay = async (info) => {
           </button>
         </div>
 
-        {/* Middle section is scrollable */}
         <div className="flex-1 overflow-y-auto p-6 bg-white" style={{ maxHeight: "calc(100vh - 184px)" }}>
           {cartItems.length === 0 ? (
             <div className="text-center mt-16 text-black">
@@ -263,7 +262,7 @@ const proceedToPay = async (info) => {
                   </div>
                 );
               })}
-              {/* Render visitor form in scroll area so you can scroll to it */}
+             
               {cartItems.length > 0 && showVisitorForm && !userInfo && (
                 <VisitorForm
                   visitorInfo={visitorInfo}
@@ -276,7 +275,7 @@ const proceedToPay = async (info) => {
           )}
         </div>
 
-        {/* Sticky footer */}
+
         {cartItems.length > 0 && (
           <div className="bg-white border-t border-gray-200 sticky bottom-0 w-full" style={{ zIndex: 51 }}>
             <div className="p-6">
@@ -284,7 +283,7 @@ const proceedToPay = async (info) => {
                 <span>Total Amount:</span>
                 <span className="text-xl text-blue-800">Rs {totalAmount}.00</span>
               </div>
-              {/* Buy Now always visible at bottom */}
+             
               {!showVisitorForm || userInfo ? (
                 <button
                   className={`w-full bg-yellow-400 text-black font-bold py-4 rounded-xl hover:bg-yellow-500 transition transform hover:scale-105 active:scale-95 flex items-center justify-center space-x-2 ${

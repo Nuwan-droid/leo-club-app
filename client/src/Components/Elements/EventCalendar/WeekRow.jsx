@@ -22,7 +22,7 @@ const WeekRow = ({ week, weekIndex, getEventsForDate, isToday, monthName, onEven
             events={dayEvents}
             isToday={todayCheck}
             monthName={monthName}
-            onEventClick={onEventClick} // Pass onEventClick prop
+            onEventClick={onEventClick} 
           />
         );
       })}

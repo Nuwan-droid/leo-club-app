@@ -14,11 +14,11 @@ export default function ProjectShowcasePage() {
   const [token, setToken] = useState(null);
   const [loadingAuth, setLoadingAuth] = useState(true);
 
-  // Check authentication status on component mount
+ 
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
-        // Check for tokens in sessionStorage (matching Login component)
+    
         const memberToken = sessionStorage.getItem('memberToken');
         const adminToken = sessionStorage.getItem('adminToken');
         const storedToken = memberToken || adminToken;
@@ -33,7 +33,7 @@ export default function ProjectShowcasePage() {
 
         console.log('Found token, verifying with API...');
 
-        // Verify token by fetching user profile
+       
         const res = await fetch("http://localhost:5001/api/user/profile", {
           headers: {
             Authorization: `Bearer ${storedToken}`,
@@ -51,7 +51,7 @@ export default function ProjectShowcasePage() {
         } else {
           const errorData = await res.text();
           console.log('Profile API error:', errorData);
-          // Token is invalid, remove both tokens
+     
           sessionStorage.removeItem('memberToken');
           sessionStorage.removeItem('adminToken');
           setUser(null);
@@ -71,7 +71,7 @@ export default function ProjectShowcasePage() {
     fetchUserDetails();
   }, []);
 
-  // Fetch all projects
+
   useEffect(() => {
     fetch("http://localhost:5001/api/projects/allprojects")
       .then((res) => res.json())
@@ -119,7 +119,7 @@ export default function ProjectShowcasePage() {
       console.log('Add comment API response data:', data);
       
       if (res.ok && data.success) {
-        // Update reviews immediately
+     
         setReviews((prev) => ({
           ...prev,
           [projectId]: [data.comment, ...(prev[projectId] || [])]
@@ -127,7 +127,7 @@ export default function ProjectShowcasePage() {
         return data.comment;
       } else {
         if (res.status === 401) {
-          // Token expired or invalid
+       
           console.log('Token expired, clearing session');
           sessionStorage.removeItem('memberToken');
           sessionStorage.removeItem('adminToken');

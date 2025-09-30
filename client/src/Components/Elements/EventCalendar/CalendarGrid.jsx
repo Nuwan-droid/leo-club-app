@@ -7,7 +7,7 @@ const CalendarGrid = ({ weeks, getEventsForDate, isToday, monthName, onEventClic
 
   return (
     <div className="bg-white">
-      {/* Header with day names */}
+    
       <div className="grid grid-cols-8 bg-gray-50 border-b border-gray-200">
         <div className="p-3 text-xs font-semibold text-gray-500 text-center border-r border-gray-200">
           Week
@@ -19,7 +19,7 @@ const CalendarGrid = ({ weeks, getEventsForDate, isToday, monthName, onEventClic
         ))}
       </div>
 
-      {/* Calendar weeks */}
+    
       {weeks.map((week, weekIndex) => (
         <WeekRow
           key={weekIndex}
@@ -28,7 +28,7 @@ const CalendarGrid = ({ weeks, getEventsForDate, isToday, monthName, onEventClic
           getEventsForDate={getEventsForDate}
           isToday={isToday}
           monthName={monthName}
-          onEventClick={onEventClick} // Pass onEventClick prop
+          onEventClick={onEventClick} 
         />
       ))}
     </div>

@@ -168,7 +168,6 @@ const ProductDetail = ({
         totalAmount: totalAmount
       };
 
-      // Add visitor info only if not a member
       if (!userInfo) {
         paymentPayload.first_name = info.firstName;
         paymentPayload.last_name = info.lastName;
@@ -177,7 +176,6 @@ const ProductDetail = ({
         paymentPayload.address = info.address;
       }
 
-      // Prepare headers - include token if user is logged in (member)
       const headers = {
         "Content-Type": "application/json"
       };
@@ -203,7 +201,6 @@ const ProductDetail = ({
         return;
       }
 
-      // Create and submit PayHere form
       const form = document.createElement("form");
       form.method = "POST";
       form.action = "https://sandbox.payhere.lk/pay/checkout";

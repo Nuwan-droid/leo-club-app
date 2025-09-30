@@ -17,7 +17,7 @@ const useCalendarLogic = () => {
 
   const startingDay = (firstDayOfMonth.getDay() + 6) % 7;
 
-  // 🔄 Fetch events from backend
+ 
   useEffect(() => {
     const fetchEvents = async () => {
       try {
@@ -69,7 +69,6 @@ const useCalendarLogic = () => {
     );
   };
 
-  // 🧮 Calendar grid logic
   const calendarDays = [];
 
   const prevMonth = new Date(year, month - 1, 0);

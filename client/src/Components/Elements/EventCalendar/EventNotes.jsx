@@ -9,7 +9,7 @@ const EventNotes = ({ events, selectedEvent, onEventClick }) => {
     }
   }, [selectedEvent]);
 
-  // Reorder events to put selected event first
+  
   const orderedEvents = useMemo(() => {
     if (!selectedEvent) return events;
     
@@ -37,7 +37,7 @@ const EventNotes = ({ events, selectedEvent, onEventClick }) => {
         ) : (
           orderedEvents.map((event, index) => (
             <div key={event.id}>
-              {/* Event Summary */}
+             
               <div 
                 onClick={() => onEventClick(event)}
                 className={`group relative p-4 rounded-xl border-l-4 transition-all duration-300 hover:shadow-md hover:-translate-y-1 ${

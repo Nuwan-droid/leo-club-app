@@ -31,7 +31,7 @@ const DayCell = ({ dayObj, events, isToday, monthName, onEventClick }) => {
           <Event 
             key={event.id} 
             event={event} 
-            onEventClick={onEventClick} // Pass onEventClick prop
+            onEventClick={onEventClick} 
           />
         ))}
       </div>
