@@ -15,7 +15,7 @@ const DonateMoney = () => {
   const donationContext = location.state || {};
   const { donationType: stateDonationType, projectTitle: stateProjectTitle } = donationContext;
   
-  // Determine donation type and project info
+
   const donationType = projectId ? 'project' : 'club_fund';
   const projectTitle = project?.title || stateProjectTitle;
 
@@ -58,7 +58,7 @@ const DonateMoney = () => {
     fetchProject();
   }, [projectId]);
 
-  // Check if user is logged in and pre-fill form
+
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
@@ -82,7 +82,7 @@ const DonateMoney = () => {
             const userData = await response.json();
             console.log('👤 User profile fetched from API:', userData);
             
-            // Parse name into first and last names
+            
             const fullName = userData.name || '';
             const nameParts = fullName.trim().split(' ');
             const firstName = nameParts[0] || '';
@@ -102,7 +102,7 @@ const DonateMoney = () => {
             console.log('📋 Available user fields:', Object.keys(userData));
           } else {
             console.log('❌ Failed to fetch user profile from API, trying localStorage...');
-            // Fallback to localStorage user data
+            
             const storedUserData = localStorage.getItem('user');
             if (storedUserData) {
               const userData = JSON.parse(storedUserData);
@@ -140,12 +140,12 @@ const DonateMoney = () => {
     setFormData((prev) => ({ ...prev, file: e.target.files[0] }));
   };
 
-  // Helper function to get the current auth token
+
   const getAuthToken = () => {
     return sessionStorage.getItem('memberToken') || localStorage.getItem('token');
   };
 
-  // Helper function to get input class with auto-fill indicator
+  
   const getInputClass = (fieldName) => {
     const baseClass = "w-full p-3 border rounded focus:outline-none focus:border-blue-500";
     const isPreFilled = user && formData[fieldName] && formData[fieldName].trim() !== '';
@@ -156,7 +156,7 @@ const DonateMoney = () => {
     return `${baseClass} border-gray-300`;
   };
 
-  // Validate form data
+
   const validateForm = () => {
     if (!formData.firstName.trim()) {
       toast.error('First name is required');
@@ -189,13 +189,13 @@ const DonateMoney = () => {
     return true;
   };
 
-  // Handle online payment
+
   const proceedToPayment = async () => {
     if (!validateForm()) return;
 
     setLoading(true);
     try {
-      // Create donation record
+     
       const donationResponse = await fetch('http://localhost:5001/api/donation-projects/donate', {
         method: 'POST',
         headers: {

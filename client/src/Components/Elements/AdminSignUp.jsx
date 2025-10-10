@@ -13,9 +13,9 @@ export default function AdminSignUp({ onClose, onSwitchToMember }) {
 
   const handleClose = () => {
     if (onClose) {
-      onClose(); // call parent handler if provided
+      onClose(); 
     } else {
-      setVisible(false); // otherwise hide locally
+      setVisible(false); 
     }
   };
 
@@ -128,7 +128,7 @@ export default function AdminSignUp({ onClose, onSwitchToMember }) {
       console.log("Admin signup response:", data);
 
       if (res.ok) {
-        handleClose(); // close modal on success
+        handleClose(); 
         toast.success("🎉 Admin registered successfully!", {
           position: "top-right",
           autoClose: 4000,

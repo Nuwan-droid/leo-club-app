@@ -29,7 +29,7 @@ const DonateItems = () => {
     clothes: 0
   });
 
-  // Fetch project details
+
   useEffect(() => {
     const fetchProject = async () => {
       try {
@@ -57,11 +57,11 @@ const DonateItems = () => {
     }
   }, [projectId]);
 
-  // Check if user is logged in and auto-fill form data
+  
   useEffect(() => {
     const fetchUserProfile = async () => {
       try {
-        // Check both storage methods to be compatible with different parts of the app
+     
         const memberToken = sessionStorage.getItem("memberToken");
         const fallbackToken = localStorage.getItem('token');
         const token = memberToken || fallbackToken;

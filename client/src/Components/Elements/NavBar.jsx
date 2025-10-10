@@ -15,19 +15,19 @@ export default function Navbar() {
 
   const navigate = useNavigate();
 
-  // ✅ Check if token exists in localStorage
+
   useEffect(() => {
     const checkToken = () => {
       const token = sessionStorage.getItem("memberToken");
       setHasToken(token);
     };
 
-    checkToken(); // run at mount
+    checkToken(); 
     window.addEventListener("storage", checkToken); // update if storage changes
     return () => window.removeEventListener("storage", checkToken);
   }, []);
 
-  // ✅ Handle screen resize (hamburger toggle)
+
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth;
@@ -40,7 +40,7 @@ export default function Navbar() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // ✅ Close mobile nav on scroll
+  
   useEffect(() => {
     const handleScroll = () => {
       if (isOpen && showHamburger) {
@@ -52,14 +52,14 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [isOpen, showHamburger]);
 
-  // ✅ Handler for Member Portal
+ 
  const handleMemberPortalClick = async (e) => {
-  e.preventDefault(); // prevent default first
+  e.preventDefault(); 
 
   const token = sessionStorage.getItem("memberToken");
 
   if (!token) {
-    setShowAuthPopup1(true); // show Login popup
+    setShowAuthPopup1(true); 
     return;
   }
 
@@ -79,13 +79,13 @@ export default function Navbar() {
     const role = data.role;
 
     if (role === "member") {
-      navigate("/memberportal"); // redirect members
+      navigate("/memberportal");
     } else {
       toast.error("Only members can access the member portal!");
     }
   } catch (err) {
     console.error(err);
-    setShowAuthPopup1(true); // show login popup on error
+    setShowAuthPopup1(true); 
   }
 };
 
@@ -126,7 +126,7 @@ export default function Navbar() {
             {/* Desktop Menu */}
             <div className="hidden xl:flex items-center space-x-6 ml-auto">
               <div className="flex space-x-6">
-                {/* ✅ Protected Member Portal */}
+                {/*  Protected Member Portal */}
                 <Link
                   to="/memberportal"
                   className="link"

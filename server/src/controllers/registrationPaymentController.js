@@ -122,7 +122,7 @@ export const initiateRegistrationPayment = async (req, res) => {
   }
 };
 
-// Handle PayHere IPN callback
+
 export const handleRegistrationNotification = async (req, res) => {
   try {
     const { merchant_id, order_id, payhere_amount, payhere_currency, status_code, md5sig, payment_id, payhere_reference } = req.body;
@@ -162,7 +162,7 @@ export const handleRegistrationNotification = async (req, res) => {
   }
 };
 
-// Get registration payment status
+
 export const getRegistrationPaymentStatus = async (req, res) => {
   try {
     const { orderId } = req.params;

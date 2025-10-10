@@ -10,7 +10,7 @@ function Content() {
   const [hovered, setHovered] = useState(null);
   const [awards, setAwards] = useState([]);
   
-  // Refs for scroll animations
+
   const containerRef = useRef(null);
   const headingRef = useRef(null);
   const introRef = useRef(null);
@@ -18,24 +18,24 @@ function Content() {
   const missionRef = useRef(null);
   const awardsRef = useRef(null);
   
-  // Use scroll progress
+  
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start end", "end start"]
   });
   
-  // Check if elements are in view
+ 
   const isHeadingInView = useInView(headingRef, { once: true, margin: "-100px" });
   const isIntroInView = useInView(introRef, { once: true, margin: "-100px" });
   const isVisionInView = useInView(visionRef, { once: true, margin: "-100px" });
   const isMissionInView = useInView(missionRef, { once: true, margin: "-100px" });
   const isAwardsInView = useInView(awardsRef, { once: true, margin: "-100px" });
   
-  // Transform values based on scroll
+ 
   const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
   const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0.3, 1, 1, 0.3]);
 
-  // Fetch awards from backend
+
   useEffect(() => {
     const fetchAwards = async () => {
       try {
@@ -49,7 +49,7 @@ function Content() {
     fetchAwards();
   }, []);
 
-  // Animation variants
+  
   const fadeInUp = {
     hidden: { 
       opacity: 0, 

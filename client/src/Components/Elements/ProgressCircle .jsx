@@ -1,20 +1,20 @@
 import React from 'react';
 
 const ProgressCircle = ({ score = 0, maxScore = 100, size = 24 }) => {
-  // Calculate percentage
+  
   const percentage = Math.min((score / maxScore) * 100, 100);
   
-  // Calculate stroke dash array for the progress circle
-  const radius = (size * 4) / 2.4; // Adjust radius based on size
+ 
+  const radius = (size * 4) / 2.4; 
   const circumference = 2 * Math.PI * radius;
   const strokeDasharray = `${(percentage / 100) * circumference} ${circumference}`;
   
-  // Determine color based on score percentage
+ 
   const getProgressColor = (percent) => {
-    if (percent >= 80) return '#10b981'; // Green for excellent
-    if (percent >= 60) return '#3b82f6'; // Blue for good
-    if (percent >= 40) return '#f59e0b'; // Yellow for average
-    return '#ef4444'; // Red for needs improvement
+    if (percent >= 80) return '#10b981'; 
+    if (percent >= 60) return '#3b82f6'; 
+    if (percent >= 40) return '#f59e0b'; 
+    return '#ef4444';
   };
 
   const progressColor = getProgressColor(percentage);

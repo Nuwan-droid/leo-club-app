@@ -11,7 +11,7 @@ export default function EventCard({
   originalName,
   onViewDetails
 }) {
-  // Function to handle download
+
   const handleDownload = async () => {
     if (!pdfUrl) return;
 
@@ -67,7 +67,7 @@ export default function EventCard({
           />
         )}
 
-        {/* ✅ Centered overlay button */}
+        {/*  Centered overlay button */}
         {onViewDetails && (
           <div
             className="absolute inset-0 flex items-center justify-center 

@@ -14,7 +14,7 @@ export default function ImageSlider() {
 
   const [index, setIndex] = useState(0);
 
-  // Auto-slide every 5 seconds
+ 
   useEffect(() => {
     const timer = setInterval(() => {
       setIndex((prevIndex) => (prevIndex + 1) % images.length);
@@ -22,7 +22,7 @@ export default function ImageSlider() {
     return () => clearInterval(timer);
   }, [images.length]);
 
-  // Manual slide control
+ 
   const goToPrevious = () => {
     setIndex((prevIndex) =>
       prevIndex === 0 ? images.length - 1 : prevIndex - 1

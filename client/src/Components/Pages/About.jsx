@@ -11,7 +11,7 @@ const About = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Fetch executive members from API
+ 
   useEffect(() => {
     const fetchExecutiveMembers = async () => {
       try {
@@ -51,7 +51,7 @@ const About = () => {
     fetchExecutiveMembers();
   }, []);
 
-  // Loading state
+ 
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">
@@ -63,7 +63,7 @@ const About = () => {
     );
   }
 
-  // Error state
+ 
   if (error) {
     return (
       <div className="min-h-screen bg-gray-100 flex items-center justify-center">

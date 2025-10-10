@@ -1,4 +1,4 @@
-// Updated Sign-up JSX (sign-up .jsx) - Minimal changes, already handles approval message
+
 import { useState, useEffect } from "react";
 import Button from "./Button";
 import Input from "./Input";

@@ -12,7 +12,7 @@ function EventCardSlider() {
   const [startIndex, setStartIndex] = useState(0);
   const visibleCount = 3;
 
-  // Fetch newsletters from backend
+ 
 useEffect(() => {
   const fetchNewsletters = async () => {
     try {
@@ -20,7 +20,7 @@ useEffect(() => {
       const res = await axios.get("http://localhost:5001/api/newsletters");
       const data = res.data.newsletters;
 
-      // Map backend data
+    
       const mappedEvents = data.map((n) => {
         const pdfUrl = `http://localhost:5001${n.filePath}`;
         return {
@@ -36,7 +36,7 @@ useEffect(() => {
         };
       });
 
-      // ✅ Sort newsletters by year and month (latest first)
+    
       const monthOrder = {
         January: 1,
         February: 2,

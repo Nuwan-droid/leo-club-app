@@ -18,7 +18,7 @@ const generateToken = (userId,userRole,res) => {
         maxAge: 24 * 60 * 60 * 1000,
     });
 
-    // Optional: Only if you need to send token via header too
+   
     res.header("Authorization", `Bearer ${token}`);
 
     return token;
