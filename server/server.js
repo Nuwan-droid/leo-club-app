@@ -67,6 +67,13 @@ app.get("/", (req, res) => {
   res.json({ message: "LEO Club API is running ✅" });
 });
 
+// ✅ frontend deployment
+app.use(express.static(path.join(__dirname, "../client/build")));
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../client/build/index.html"));
+});
+
+
 // ✅ Start server
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);
