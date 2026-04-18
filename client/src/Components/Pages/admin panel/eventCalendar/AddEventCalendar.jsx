@@ -1,34 +1,57 @@
 import React, { useState } from 'react';
-import { Calendar, Clock, MapPin, User } from 'lucide-react';
+import { Calendar, Clock, MapPin, User, FileText, Image } from 'lucide-react';
 
 const AddEventCalendar = () => {
   const [eventDetails, setEventDetails] = useState({
     name: '',
     date: '',
     time: '',
-    location: ''
+    location: '',
+    description: ''
   });
+  const [coverImage, setCoverImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
 
   const handleChange = (e) => {
     setEventDetails({ ...eventDetails, [e.target.name]: e.target.value });
   };
 
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setCoverImage(file);
+      setImagePreview(URL.createObjectURL(file));
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!coverImage) {
+      alert('Please upload a cover image');
+      return;
+    }
+
     try {
+      const formData = new FormData();
+      formData.append('name', eventDetails.name);
+      formData.append('date', eventDetails.date);
+      formData.append('time', eventDetails.time);
+      formData.append('location', eventDetails.location);
+      formData.append('description', eventDetails.description);
+      formData.append('coverImage', coverImage);
+
       const res = await fetch('http://localhost:5001/api/addevent', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(eventDetails),
+        body: formData,
       });
 
       const result = await res.json();
       if (result.success) {
         alert('Event added successfully!');
-        setEventDetails({ name: '', date: '', time: '', location: '' });
+        setEventDetails({ name: '', date: '', time: '', location: '', description: '' });
+        setCoverImage(null);
+        setImagePreview(null);
       } else {
         alert('Failed to add event.');
       }
@@ -47,7 +70,6 @@ const AddEventCalendar = () => {
         </h2>
         <div className="space-y-6">
           
-         
           <div className="relative">
             <label className="block text-sm font-semibold text-gray-700 mb-2">Event Name</label>
             <div className="relative">
@@ -64,26 +86,24 @@ const AddEventCalendar = () => {
             </div>
           </div>
 
-   
-          <div className="relative">
-            <label className="block text-sm font-semibold text-gray-700 mb-2">Date</label>
-            <div className="relative">
-              <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 pointer-events-none z-10" />
-              <input
-                value={eventDetails.date}
-                onChange={handleChange}
-                type="date"
-                name="date"
-                required
-                className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
-                style={{
-                  colorScheme: 'light'
-                }}
-              />
-            </div>
-          </div>
+  <div className="relative">
+  <label className="block text-sm font-semibold text-gray-700 mb-2">Date</label>
+  <div className="relative">
+    <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400 pointer-events-none z-10" />
+    <input
+      value={eventDetails.date}
+      onChange={handleChange}
+      type="date"
+      name="date"
+      required
+      min={new Date().toISOString().split("T")[0]}   // ✅ Prevent past dates
+      className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+      style={{ colorScheme: 'light' }}
+    />
+  </div>
+</div>
 
-       
+
           <div className="relative">
             <label className="block text-sm font-semibold text-gray-700 mb-2">Time</label>
             <div className="relative">
@@ -94,15 +114,12 @@ const AddEventCalendar = () => {
                 type="time"
                 name="time"
                 required
-                className="w-full pl-11 pr-4 py-3 border  border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
-                style={{
-                  colorScheme: 'light'
-                }}
+                className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
+                style={{ colorScheme: 'light' }}
               />
             </div>
           </div>
 
-        
           <div className="relative">
             <label className="block text-sm font-semibold text-gray-700 mb-2">Location</label>
             <div className="relative">
@@ -117,6 +134,54 @@ const AddEventCalendar = () => {
                 className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200"
               />
             </div>
+          </div>
+
+          <div className="relative">
+            <label className="block text-sm font-semibold text-gray-700 mb-2">Description</label>
+            <div className="relative">
+              <FileText className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+              <textarea
+                value={eventDetails.description}
+                onChange={handleChange}
+                name="description"
+                required
+                placeholder="Enter event description"
+                rows="4"
+                className="w-full pl-11 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-200 resize-none"
+              />
+            </div>
+          </div>
+
+          <div className="relative">
+            <label className="block text-sm font-semibold text-gray-700 mb-2">Cover Image</label>
+            <div className="relative">
+              <input
+                type="file"
+                accept="image/jpeg,image/jpg,image/png"
+                onChange={handleImageChange}
+                required
+                className="hidden"
+                id="coverImageInput"
+              />
+              <label
+                htmlFor="coverImageInput"
+                className="flex items-center justify-center w-full px-4 py-3 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer hover:border-blue-500 transition duration-200"
+              >
+                <Image className="h-5 w-5 text-gray-400 mr-2" />
+                <span className="text-gray-600">
+                  {coverImage ? coverImage.name : 'Click to upload cover image'}
+                </span>
+              </label>
+            </div>
+            {imagePreview && (
+              <div className="mt-4">
+                <img
+                  src={imagePreview}
+                  alt="Cover preview"
+                  className="w-full h-48 object-cover rounded-lg"
+                />
+              </div>
+            )}
           </div>
 
           <button

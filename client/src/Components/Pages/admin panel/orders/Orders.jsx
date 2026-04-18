@@ -191,7 +191,7 @@ const Orders = () => {
         <p className="text-gray-600 mb-6">Showing completed orders only</p>
 
         {/* Overall Summary Card */}
-        <div className="bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg shadow-lg p-6 mb-8 text-white">
+        <div className="bg-gradient-to-r bg-blue-500 rounded-lg shadow-lg p-6 mb-8 text-white">
           <div className="flex items-center justify-between">
             <div>
               <h2 className="text-xl font-semibold mb-2">Total Orders Summary</h2>

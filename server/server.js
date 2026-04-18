@@ -6,6 +6,8 @@ import { fileURLToPath } from "url";
 import cookieParser from "cookie-parser";
 
 import paymentRoutes from "./src/routes/paymentRoutes.js";
+
+import registrationPaymentRoutes from "./src/routes/registrationPaymentRoutes.js";
 import executiveMemberRoutes from "./src/routes/executiveMembers.js";
 import connectDB from "./src/config/database.js";
 import authRoutes from "./src/routes/authRoutes.js";
@@ -21,6 +23,9 @@ import cartRoutes from './src/routes/cartRoutes.js';
 import newsletterRoutes from "./src/routes/newsletterRoutes.js";
 import { handleMulterError } from "./src/config/upload.js";
 import adminRequestRoutes from "./src/routes/admin_requestRoutes.js";
+import learningHubRoutes from "./src/routes/learningHubRoutes.js"; 
+import eventVolunteerRoutes from "./src/routes/eventVolunterRoutes.js";
+
 
 dotenv.config();
 connectDB();
@@ -41,13 +46,14 @@ app.use("/images", express.static(path.join(__dirname, "upload/images")));
 app.use("/uploads", express.static(path.join(__dirname, "uploads"))); 
 app.use("/receipts", express.static(path.join(__dirname, "upload/receipts"))); 
 app.use("/profiles", express.static(path.join(__dirname, "upload/profiles"))); // ✅ new for profile images
-
+app.use("/events", express.static(path.join(__dirname, "upload/events"))); //
 // ✅ Routes
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/executive-members", executiveMemberRoutes);
 app.use("/api/payment", paymentRoutes);
+app.use("/api/registration", registrationPaymentRoutes);
 app.use("/api", eventRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/comments", commentRoutes);
@@ -58,7 +64,8 @@ app.use("/api/donation-projects", donationRoutes);
 app.use("/api/user", userRoutes);
 app.use("/api/admin-requests", adminRequestRoutes);
 app.use("/api/newsletters", newsletterRoutes);
-
+app.use("/api/learninghub", learningHubRoutes); 
+app.use("/api/eventVolunteerRoutes",eventVolunteerRoutes); 
 // ✅ Multer error handler
 app.use(handleMulterError);
 

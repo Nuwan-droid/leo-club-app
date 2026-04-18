@@ -1,693 +1,1567 @@
 {
-    "intents": [
-        {
-            "tag": "greeting",
-            "patterns": [
-                "Hi",
-                "Hello",
-                "Good morning",
-                "Hey Leo Club UWU",
-                "Greetings"
-            ],
-            "responses": [
-                "Hello! Welcome to the Leo Club of Uva Wellassa University. How can I help you today?"
-            ],
-            "context": [
-                ""
-            ]
-        },
-        {
-            "tag": "about_leo",
-            "patterns": [
-                "What is Leo Club?",
-                "Tell me about Leo Club UWU",
-                "What does LEO stand for?"
-            ],
-            "responses": [
-                "Leo Club UWU is a student-led volunteer organization under Lions Clubs International. We focus on leadership, experience, and opportunity through community service."
-            ],
-            "context": [
-                ""
-            ]
-        },
-        {
-            "tag": "leo_events",
-            "patterns": [
-                "What events do you organize?",
-                "Tell me about Leo Club activities",
-                "What kind of programs does Leo Club run?",
-                "Leo Club projects"
-            ],
-            "responses": [
-                "Leo Club organizes community service projects, leadership training sessions, awareness campaigns, and fun social events.",
-                "We engage in volunteering, environmental activities, youth empowerment programs, and more!"
-            ],
-            "context": [
-                ""
-            ]
-        },
-        {
-            "tag": "leo_benefits",
-            "patterns": [
-                "Why should I join Leo Club?",
-                "Benefits of being a Leo",
-                "What do I gain from Leo Club?"
-            ],
-            "responses": [
-                "You gain leadership skills, service experience, and the opportunity to connect with like-minded youth.",
-                "It's a great way to make a difference in your community and build a strong resume."
-            ],
-            "context": [
-                ""
-            ]
-        },
-        {
-            "tag": "leo_contact",
-            "patterns": [
-                "How can I contact Leo Club?",
-                "Leo Club contact details",
-                "Reach out to Leo Club"
-            ],
-            "responses": [
-                "You can contact us via our official email or visit the Contact Us section on our website.",
-                "Reach out on our social media pages or send an inquiry through our website."
-            ],
-            "context": [
-                ""
-            ]
-        },
-        {
-            "tag": "leo_collaboration",
-            "patterns": [
-                "Can we collaborate with Leo Club?",
-                "Partner with Leo Club",
-                "Work with Leo Club"
-            ],
-            "responses": [
-                "Yes! We're open to collaborating on community projects and initiatives. Please contact us with your proposal.",
-                "We welcome partnerships that align with our mission. Let's make a difference together!"
-            ],
-            "context": [
-                ""
-            ]
-        },
-        {
-            "tag": "leo_uwu_vision",
-            "patterns": [
-                "What is your vision?",
-                "Leo UWU vision",
-                "Club vision statement"
-            ],
-            "responses": [
-                "Our vision is: 'Let's build a team, Let's build a vision, Let's build a plan, Let's build success.' We are committed to a path of purposeful community impact and youth empowerment."
-            ],
-            "context": [
-                ""
-            ]
-        },
-        {
-            "tag": "leo_uwu_mission",
-            "patterns": [
-                "What is your mission?",
-                "Leo UWU mission",
-                "Club mission statement"
-            ],
-            "responses": [
-                "Our mission is to provide a unique platform for UWU undergraduates to develop leadership skills and create meaningful change through service. We aim to empower youth through impactful initiatives and global connections."
-            ],
-            "context": [
-                ""
-            ]
-        },
-        {
-            "tag": "history",
-            "patterns": [
-                "When did UWU Leo Club start?",
-                "History of UWU Leo Club"
-            ],
-            "responses": [
-                "The Leo Club of Uva Wellassa University (UWU Leos) was officially established on September 18, 2022. It was chartered during the \"Lumos '22\" installation ceremony, sponsored by the Lions Club of Uva Capital, held at the UWU campus in Badulla. Leo Club UWU was formed to inspire leadership and service among students. We are now one of the most active clubs in District 306 C2."
-            ],
-            "context": [
-                ""
-            ]
-        },
-        {
-            "tag": "vision",
-            "patterns": [
-                "What is the vision?",
-                "Leo Club UWU vision"
-            ],
-            "responses": [
-                "The club embraces the motto \"Servite Vel Relinquo\" (Latin for \"to serve or to leave\") and follows the theme:"
-            ],
-            "context": [
-                ""
-            ]
-        },
-        {
-            "tag": "mission",
-            "patterns": [
-                "What is the mission?",
-                "Why does Leo Club UWU exist?"
-            ],
-            "responses": [
-                "To provide a unique platform for undergraduates of Uva Wellassa University to develop leadership skills, nurture their personalities, and foster meaningful changes within their communities through impactful service initiatives. To create a friendly environment that offers infinite leadership experiences and opportunities for young people, forming new bonds within the global Leo and Lions network while focusing on community service."
-            ],
-            "context": [
-                ""
-            ]
-        },
-        {
-            "tag": "leadership",
-            "patterns": [
-                "Who leads the club?",
-                "Who is the president?"
-            ],
-            "responses": [
-                "The club is led by an Executive Committee, including President, Secretary, Treasurer, and Directors. For the Leoistic year 2025/26, the club is proudly led by Leo Deshan Thilakarathne as the President."
-            ],
-            "context": [
-                ""
-            ]
-        },
-        {
-            "tag": "membership",
-            "patterns": [
-                "How to join?",
-                "Join Leo Club"
-            ],
-            "responses": [
-                "Undergraduates at UWU can apply via our website and pay the membership fee."
-            ],
-            "context": [
-                ""
-            ]
-        },
-        {
-            "tag": "membership_fees",
-            "patterns": [
-                "Membership fees?",
-                "Renewal fees?"
-            ],
-            "responses": [
-                "Our annual membership fee Rs.500 and its affordable and used to support club activities. Renewals happen annually."
-            ],
-            "context": [
-                ""
-            ]
-        },
-        {
-            "tag": "benefits",
-            "patterns": [
-                "Benefits of joining?",
-                "Why join Leo Club?"
-            ],
-            "responses": [
-                "Members develop leadership, teamwork skills, earn certificates, and contribute to meaningful projects."
-            ],
-            "context": [
-                ""
-            ]
-        },
-        {
-            "tag": "projects",
-            "patterns": [
-                "What kind of projects?",
-                "What projects does the club do?"
-            ],
-            "responses": [
-                "Our projects include education, environment, health, blood donations, and charity work. There are a lot of project categories."
-            ],
-            "context": [
-                ""
-            ]
-        },
-        {
-            "tag": "annual_events",
-            "patterns": [
-                "Annual events?",
-                "Do you have yearly activities?"
-            ],
-            "responses": [
-                "Yes, we organize annual Installation Ceremony, Leo photoshoot, signature projects and Leo's night."
-            ],
-            "context": [
-                ""
-            ]
-        },
-        {
-            "tag": "achievements",
-            "patterns": [
-                "Achievements?",
-                "Awards won?"
-            ],
-            "responses": [
-                "We have been recognized within District 306 C2 for leadership, innovation, and outstanding service. The Leo Club of Uva Wellassa University proudly marked a number of remarkable achievements at Resiliencia'24, the 19th Annual District Award Ceremony of Leo District 306 C2, held on 7th July 2024. Leo Erandini Ambalampitiya was awarded as the Most Outstanding Zone Director (Winner) and also recognized as the 1st Runner-Up for Most Outstanding Immediate Past President. Leo Abishek Haththakage secured the 1st Runner-Up position for Most Outstanding Bulletin Editor. The club was honored as the 2nd Runner-Up for Most Outstanding University-Based Omega Leo Club. Among project recognitions, the club received 1st Runner-Up for Best Project in Peace, Religious and Cultural Activities for the project සොකරි නාඩගම by Leo Nimeshika Perera, 2nd Runner-Up for Best Project in Youth Empowerment for Fortune Secret by Leo Chathumali Lankeshvara, and 2nd Runner-Up for Best Project in Fellowship for Leo's Trophy by Leo Sahan Madushka. In addition, the District President's Appreciation Awards were presented to Lion Shiraz Khan (Club Advisor), Leo Erandini Ambalampitiya (Council Officer), Leo Kirula Pramod (Club President), Leo Nimeshika Perera, and Leo Hansi Shaneesha in recognition of their valuable contributions throughout the Leoistic year."
-            ],
-            "context": [
-                ""
-            ]
-        },
-        {
-            "tag": "volunteering",
-            "patterns": [
-                "Can non-members help?",
-                "Volunteer without membership?"
-            ],
-            "responses": [
-                "Thank you for your interest, but volunteering is limited to registered Leo Club members only."
-            ],
-            "context": [
-                ""
-            ]
-        },
-        {
-            "tag": "propose_project",
-            "patterns": [
-                "How to suggest a project?",
-                "Can I propose projects?"
-            ],
-            "responses": [
-                "Members can submit project ideas through our website or directly to the committee."
-            ],
-            "context": [
-                ""
-            ]
-        },
-        {
-            "tag": "leadership_programs",
-            "patterns": [
-                "Leadership programs?",
-                "Workshops for leadership?"
-            ],
-            "responses": [
-                "We organize leadership workshops, Leo Camps, and skills development programs regularly."
-            ],
-            "context": [
-                ""
-            ]
-        },
-        {
-            "tag": "upcoming_events",
-            "patterns": [
-                "Next event?",
-                "Upcoming projects?"
-            ],
-            "responses": [
-                "Check our 'Events' page on the website or our social media for upcoming activities."
-            ],
-            "context": [
-                ""
-            ]
-        },
-        {
-            "tag": "leoistic_year",
-            "patterns": [
-                "What is Leoistic year?",
-                "When does it start?"
-            ],
-            "responses": [
-                "The Leoistic year runs from July to June, following Lions Clubs International guidelines."
-            ],
-            "context": [
-                ""
-            ]
-        },
-        {
-            "tag": "leo_district",
-            "patterns": [
-                "What is Leo District 306 C2?",
-                "Which district is UWU Leo Club in?",
-                "Tell me about Leo District 306 C2"
-            ],
-            "responses": [
-                "The Leo Club of UWU belongs to Leo District 306 C2, which is part of Lions Clubs International in Sri Lanka. This district connects many Leo Clubs across the region, promoting leadership and service through collaborative projects."
-            ],
-            "context": [
-                ""
-            ]
-        },
-        {
-            "tag": "types_of_leo_clubs",
-            "patterns": [
-                "How many types of Leo Clubs are there?",
-                "Alpha or Omega Leo?",
-                "Difference between Alpha and Omega Leo Club"
-            ],
-            "responses": [
-                "There are two types of Leo Clubs: Alpha Leo Clubs for youth aged 12–18 and Omega Leo Clubs for young adults aged 18–30. Leo Club UWU is an Omega club."
-            ],
-            "context": [
-                ""
-            ]
-        },
-        {
-            "tag": "international_leo_day",
-            "patterns": [
-                "When is International Leo Day?",
-                "What is Leo Day?",
-                "Leo Day celebration?"
-            ],
-            "responses": [
-                "International Leo Day is celebrated every year on December 5th to recognize Leos around the world for their community service and leadership."
-            ],
-            "context": [
-                ""
-            ]
-        },
-        {
-            "tag": "about_leoism",
-            "patterns": [
-                "What is Leoism?",
-                "Define Leoism",
-                "Meaning of Leoism"
-            ],
-            "responses": [
-                "Leoism is the spirit of leadership, experience, and opportunity. It reflects the values of service, teamwork, and youth empowerment that guide all Leo Club activities."
-            ],
-            "context": [
-                ""
-            ]
-        },
-        {
-            "tag": "global_presence",
-            "patterns": [
-                "Is Leo Club international?",
-                "How big is Leo Club worldwide?",
-                "Leo Club in other countries?"
-            ],
-            "responses": [
-                "Yes, Leo Clubs are international! They exist in over 140 countries and have more than 170,000 members globally, all dedicated to service and leadership."
-            ],
-            "context": [
-                ""
-            ]
-        },
-        {
-            "tag": "leo_motto",
-            "patterns": [
-                "What is the motto of Leo Club?",
-                "Leo Club motto?",
-                "Leo mission statement?"
-            ],
-            "responses": [
-                "The official motto of Leo Club is 'Leadership – Experience – Opportunity.' It defines our goal to develop young leaders through service."
-            ],
-            "context": [
-                ""
-            ]
-        },
-        {
-            "tag": "leo_pins_and_awards",
-            "patterns": [
-                "Do Leos get pins or awards?",
-                "What are Leo Club recognitions?",
-                "Leo Club awards?"
-            ],
-            "responses": [
-                "Yes, active Leos can receive pins, certificates, and awards for their leadership, volunteering hours, and contribution to projects. These recognitions come from the club, district, or Lions International."
-            ],
-            "context": [
-                ""
-            ]
-        },
-        {
-            "tag": "leo_club_structure",
-            "patterns": [
-                "How is Leo Club organized?",
-                "What are the positions in a Leo Club?",
-                "Leo Club leadership roles?"
-            ],
-            "responses": [
-                "Leo Clubs are structured with an executive committee that includes a President, Vice President, Secretary, Treasurer, and Directors for specific areas like membership, projects, and IT."
-            ],
-            "context": [
-                ""
-            ]
-        },
-        {
-            "tag": "difference_leo_lions",
-            "patterns": [
-                "What's the difference between Leo and Lions Club?",
-                "Are Leo and Lions the same?",
-                "Leo vs Lions Club"
-            ],
-            "responses": [
-                "Leos are the youth wing (age 12–30) of Lions Clubs International. While Lions are adult volunteers, Leos are young leaders who serve under Lions' guidance and gradually transition to Lions as they grow."
-            ],
-            "context": [
-                ""
-            ]
-        },
-        {
-            "tag": "leo_transition_to_lions",
-            "patterns": [
-                "Can Leos become Lions?",
-                "How to join Lions after Leo?",
-                "Do Leos graduate into Lions?"
-            ],
-            "responses": [
-                "Yes! Leos are encouraged to become Lions after age 30. Their experience as Leos helps them take on stronger roles within Lions Clubs International."
-            ],
-            "context": [
-                ""
-            ]
-        },
-        {
-            "tag": "social_media",
-            "patterns": [
-                "Facebook page?",
-                "Instagram page?"
-            ],
-            "responses": [
-                "Youtube-https://youtube.com/@leoclubofuvawellassauniversity?si=9XEy22Km0TWDXcVg Facebook -https://www.facebook.com/leoclub.uwu?mibextid=LQQJ4d TikTok -https://www.tiktok.com/@uwuleos306c2?_t=8gt7VTTEbcv&_r=1 Instagram - https://instagram.com/leo_club_of_uwu?igshid=OGQ5ZDc2ODk2ZA== Linkedin-https://www.linkedin.com/company/leo-club-of-uva-wellassa-university/"
-            ],
-            "context": [
-                ""
-            ]
-        },
-        {
-            "tag": "faq_newsletter",
-            "patterns": [
-                "Newsletters?",
-                "Updates?"
-            ],
-            "responses": [
-                "We publish newsletters via our website and social media to share updates and achievements. As a member, you can also contribute by submitting your own newsletter entries. It's a great way to improve your score and stand out as the Most Outstanding Leo of the Month!"
-            ],
-            "context": [
-                ""
-            ]
-        },
-        {
-            "tag": "contact",
-            "patterns": [
-                "How to contact?",
-                "Contact details?"
-            ],
-            "responses": [
-                "Visit our 'Contact Us' page or message us on Facebook or Instagram."
-            ],
-            "context": [
-                ""
-            ]
-        },
-        {
-            "tag": "contact_hours",
-            "patterns": [
-                "Office hours?",
-                "Where is your office?"
-            ],
-            "responses": [
-                "We operate from Uva Wellassa University. Contact us via website, as we don't have a fixed office."
-            ],
-            "context": [
-                ""
-            ]
-        },
-        {
-            "tag": "financial_transparency",
-            "patterns": [
-                "How are funds used?",
-                "Donation transparency?"
-            ],
-            "responses": [
-                "Funds are documented and used transparently for community projects."
-            ],
-            "context": [
-                ""
-            ]
-        },
-        {
-            "tag": "donation",
-            "patterns": [
-                "How to donate?",
-                "Donation process?"
-            ],
-            "responses": [
-                "You can donate goods or funds through our website or at events. Real-time updates are available."
-            ],
-            "context": [
-                ""
-            ]
-        },
-        {
-            "tag": "merchandise_store",
-            "patterns": [
-                "How to buy T-shirts?",
-                "Merchandise store?"
-            ],
-            "responses": [
-                "Visit our website to browse and purchase club merchandise securely online."
-            ],
-            "context": [
-                ""
-            ]
-        },
-        {
-            "tag": "website_navigation",
-            "patterns": [
-                "How to use website?",
-                "Where is contact page?"
-            ],
-            "responses": [
-                "Use the menu for Contact, Events, Members, and Projects. It's all organized for easy access."
-            ],
-            "context": [
-                ""
-            ]
-        },
-        {
-            "tag": "member_portal",
-            "patterns": [
-                "How to login?",
-                "Member portal?"
-            ],
-            "responses": [
-                "Login through the Member Portal to access your profile."
-            ],
-            "context": [
-                ""
-            ]
-        },
-        {
-            "tag": "learning_hub",
-            "patterns": [
-                "What is Learning Hub?",
-                "Leadership lessons?"
-            ],
-            "responses": [
-                "Our Learning Hub offers short modules on leadership and teamwork for certified learning."
-            ],
-            "context": [
-                ""
-            ]
-        },
-        {
-            "tag": "chatbot_help",
-            "patterns": [
-                "How to use chatbot?",
-                "What can chatbot do?"
-            ],
-            "responses": [
-                "You can ask me about membership, events, donations, and anything about UWU Leo Club."
-            ],
-            "context": [
-                ""
-            ]
-        },
-        {
-            "tag": "register_event",
-            "patterns": [
-                "How to register for events?",
-                "Join an event?"
-            ],
-            "responses": [
-                "You can register for events through our website's Events page. It's simple and quick."
-            ],
-            "context": [
-                ""
-            ]
-        },
-        {
-            "tag": "leo_quotes",
-            "patterns": [
-                "Motivational quote?",
-                "Leo club quote?"
-            ],
-            "responses": [
-                "Leadership is not a position or title, it's action and example – That's what Leos believe."
-            ],
-            "context": [
-                ""
-            ]
-        },
-        {
-            "tag": "leo_facts",
-            "patterns": [
-                "Leo club facts?",
-                "Fun fact about Leo Club?"
-            ],
-            "responses": [
-                "Leo Clubs exist in over 140 countries with thousands of active members globally."
-            ],
-            "context": [
-                ""
-            ]
-        },
-        {
-            "tag": "leo_day",
-            "patterns": [
-                "When is International Leo Day?",
-                "Leo Day?"
-            ],
-            "responses": [
-                "International Leo Day is celebrated every year on December 5th."
-            ],
-            "context": [
-                ""
-            ]
-        },
-        {
-            "tag": "district_info",
-            "patterns": [
-                "What is District 306 C2?",
-                "District details?"
-            ],
-            "responses": [
-                "We belong to Lions District 306 C2, which connects Leo Clubs across Sri Lanka."
-            ],
-            "context": [
-                ""
-            ]
-        },
-        {
-            "tag": "collaborations",
-            "patterns": [
-                "Partnerships?",
-                "Collaborations?"
-            ],
-            "responses": [
-                "We collaborate with other Leo Clubs, schools, and community organizations for service."
-            ],
-            "context": [
-                ""
-            ]
-        },
-        {
-            "tag": "out_of_scope",
-            "patterns": [
-                "Tell me a joke",
-                "Weather today?",
-                "Favorite movie?"
-            ],
-            "responses": [
-                "I'm here to help with questions about Leo Club UWU, our members, projects, and activities."
-            ],
-            "context": [
-                ""
-            ]
-        }
-    ]
+  "intents": [
+    {
+      "tag": "greeting",
+      "patterns": [
+        "Hi",
+        "Hello",
+        "Good morning",
+        "Hey Leo Club UWU",
+        "Greetings"
+      ],
+      "responses": [
+        "Hello! Welcome to the Leo Club of Uva Wellassa University. How can I help you today?"
+      ]
+    },
+    {
+      "tag": "about_leo",
+      "patterns": [
+        "What is Leo Club?",
+        "Tell me about Leo Club UWU",
+        "What does LEO stand for?"
+      ],
+      "responses": [
+        "Leo Club UWU is a student-led volunteer organization under Lions Clubs International. We focus on leadership, experience, and opportunity through community service."
+      ]
+    },
+    {
+      "tag": "leo_events",
+      "patterns": [
+        "What events do you organize?",
+        "Tell me about Leo Club activities",
+        "What kind of programs does Leo Club run?",
+        "Leo Club projects"
+      ],
+      "responses": [
+        "Leo Club organizes community service projects, leadership training sessions, awareness campaigns, and fun social events.",
+        "We engage in volunteering, environmental activities, youth empowerment programs, and more!"
+      ]
+    },
+    {
+      "tag": "leo_benefits",
+      "patterns": [
+        "Why should I join Leo Club?",
+        "Benefits of being a Leo",
+        "What do I gain from Leo Club?"
+      ],
+      "responses": [
+        "You gain leadership skills, service experience, and the opportunity to connect with like-minded youth.",
+        "It's a great way to make a difference in your community and build a strong resume."
+      ]
+    },
+    {
+      "tag": "leo_contact",
+      "patterns": [
+        "How can I contact Leo Club?",
+        "Leo Club contact details",
+        "Reach out to Leo Club"
+      ],
+      "responses": [
+        "You can contact us via our official email or visit the Contact Us section on our website.",
+        "Reach out on our social media pages or send an inquiry through our website."
+      ]
+    },
+    {
+      "tag": "leo_collaboration",
+      "patterns": [
+        "Can we collaborate with Leo Club?",
+        "Partner with Leo Club",
+        "Work with Leo Club"
+      ],
+      "responses": [
+        "Yes! We're open to collaborating on community projects and initiatives. Please contact us with your proposal.",
+        "We welcome partnerships that align with our mission. Let's make a difference together!"
+      ]
+    },
+    {
+      "tag": "leo_uwu_vision",
+      "patterns": [
+        "What is your vision?",
+        "Leo UWU vision",
+        "Club vision statement"
+      ],
+      "responses": [
+        "Our vision is: 'Let's build a team, Let's build a vision, Let's build a plan, Let's build success.' We are committed to a path of purposeful community impact and youth empowerment."
+      ]
+    },
+    {
+      "tag": "leo_uwu_mission",
+      "patterns": [
+        "What is your mission?",
+        "Leo UWU mission",
+        "Club mission statement"
+      ],
+      "responses": [
+        "Our mission is to provide a unique platform for UWU undergraduates to develop leadership skills and create meaningful change through service. We aim to empower youth through impactful initiatives and global connections."
+      ]
+    },
+    {
+      "tag": "history",
+      "patterns": [
+        "When did UWU Leo Club start?",
+        "History of UWU Leo Club"
+      ],
+      "responses": [
+        "The Leo Club of Uva Wellassa University (UWU Leos) was officially established on September 18, 2022. It was chartered during the \"Lumos '22\" installation ceremony, sponsored by the Lions Club of Uva Capital, held at the UWU campus in Badulla. Leo Club UWU was formed to inspire leadership and service among students. We are now one of the most active clubs in District 306 C2."
+      ]
+    },
+    {
+      "tag": "vision",
+      "patterns": [
+        "What is the vision?",
+        "Leo Club UWU vision"
+      ],
+      "responses": [
+        "The club embraces the motto \"Servite Vel Relinquo\" (Latin for \"to serve or to leave\") and follows the theme:"
+      ]
+    },
+    {
+      "tag": "mission",
+      "patterns": [
+        "What is the mission?",
+        "Why does Leo Club UWU exist?"
+      ],
+      "responses": [
+        "To provide a unique platform for undergraduates of Uva Wellassa University to develop leadership skills, nurture their personalities, and foster meaningful changes within their communities through impactful service initiatives. To create a friendly environment that offers infinite leadership experiences and opportunities for young people, forming new bonds within the global Leo and Lions network while focusing on community service."
+      ]
+    },
+    {
+      "tag": "leadership",
+      "patterns": [
+        "Who leads the club?",
+        "Who is the president?"
+      ],
+      "responses": [
+        "The club is led by an Executive Committee, including President, Secretary, Treasurer, and Directors. For the Leoistic year 2025/26, the club is proudly led by Leo Deshan Thilakarathne as the President."
+      ]
+    },
+    {
+      "tag": "membership",
+      "patterns": [
+        "How to join?",
+        "Join Leo Club"
+      ],
+      "responses": [
+        "Undergraduates at UWU can apply via our website and pay the membership fee."
+      ]
+    },
+    {
+      "tag": "membership_fees",
+      "patterns": [
+        "Membership fees?",
+        "Renewal fees?"
+      ],
+      "responses": [
+        "Our annual membership fee Rs.500 and its affordable and used to support club activities. Renewals happen annually."
+      ]
+    },
+    {
+      "tag": "benefits",
+      "patterns": [
+        "Benefits of joining?",
+        "Why join Leo Club?"
+      ],
+      "responses": [
+        "Members develop leadership, teamwork skills, earn certificates, and contribute to meaningful projects."
+      ]
+    },
+    {
+      "tag": "projects",
+      "patterns": [
+        "What kind of projects?",
+        "What projects does the club do?"
+      ],
+      "responses": [
+        "Our projects include education, environment, health, blood donations, and charity work. There are a lot of project categories."
+      ]
+    },
+    {
+      "tag": "annual_events",
+      "patterns": [
+        "Annual events?",
+        "Do you have yearly activities?"
+      ],
+      "responses": [
+        "Yes, we organize annual Installation Ceremony, Leo photoshoot, signature projects and Leo's night."
+      ]
+    },
+    {
+      "tag": "achievements",
+      "patterns": [
+        "Achievements?",
+        "Awards won?"
+      ],
+      "responses": [
+        "We have been recognized within District 306 C2 for leadership, innovation, and outstanding service. The Leo Club of Uva Wellassa University proudly marked a number of remarkable achievements at Resiliencia'24, the 19th Annual District Award Ceremony of Leo District 306 C2, held on 7th July 2024. Leo Erandini Ambalampitiya was awarded as the Most Outstanding Zone Director (Winner) and also recognized as the 1st Runner-Up for Most Outstanding Immediate Past President. Leo Abishek Haththakage secured the 1st Runner-Up position for Most Outstanding Bulletin Editor. The club was honored as the 2nd Runner-Up for Most Outstanding University-Based Omega Leo Club. Among project recognitions, the club received 1st Runner-Up for Best Project in Peace, Religious and Cultural Activities for the project සූකර නාඩගම by Leo Nimeshika Perera, 2nd Runner-Up for Best Project in Youth Empowerment for Fortune Secret by Leo Chathumali Lankeshvara, and 2nd Runner-Up for Best Project in Fellowship for Leo's Trophy by Leo Sahan Madushka. In addition, the District President's Appreciation Awards were presented to Lion Shiraz Khan (Club Advisor), Leo Erandini Ambalampitiya (Council Officer), Leo Kirula Pramod (Club President), Leo Nimeshika Perera, and Leo Hansi Shaneesha in recognition of their valuable contributions throughout the Leoistic year."
+      ]
+    },
+    {
+      "tag": "volunteering",
+      "patterns": [
+        "Can non-members help?",
+        "Volunteer without membership?"
+      ],
+      "responses": [
+        "Thank you for your interest, but volunteering is limited to registered Leo Club members only."
+      ]
+    },
+    {
+      "tag": "propose_project",
+      "patterns": [
+        "How to suggest a project?",
+        "Can I propose projects?"
+      ],
+      "responses": [
+        "Members can submit project ideas through our website or directly to the committee."
+      ]
+    },
+    {
+      "tag": "leadership_programs",
+      "patterns": [
+        "Leadership programs?",
+        "Workshops for leadership?"
+      ],
+      "responses": [
+        "We organize leadership workshops, Leo Camps, and skills development programs regularly."
+      ]
+    },
+    {
+      "tag": "upcoming_events",
+      "patterns": [
+        "Next event?",
+        "Upcoming projects?"
+      ],
+      "responses": [
+        "Check our 'Events' page on the website or our social media for upcoming activities."
+      ]
+    },
+    {
+      "tag": "leoistic_year",
+      "patterns": [
+        "What is Leoistic year?",
+        "When does it start?"
+      ],
+      "responses": [
+        "The Leoistic year runs from July to June, following Lions Clubs International guidelines."
+      ]
+    },
+    {
+      "tag": "leo_district",
+      "patterns": [
+        "What is Leo District 306 C2?",
+        "Which district is UWU Leo Club in?",
+        "Tell me about Leo District 306 C2"
+      ],
+      "responses": [
+        "The Leo Club of UWU belongs to Leo District 306 C2, which is part of Lions Clubs International in Sri Lanka. This district connects many Leo Clubs across the region, promoting leadership and service through collaborative projects."
+      ]
+    },
+    {
+      "tag": "types_of_leo_clubs",
+      "patterns": [
+        "How many types of Leo Clubs are there?",
+        "Alpha or Omega Leo?",
+        "Difference between Alpha and Omega Leo Club"
+      ],
+      "responses": [
+        "There are two types of Leo Clubs: Alpha Leo Clubs for youth aged 12–18 and Omega Leo Clubs for young adults aged 18–30. Leo Club UWU is an Omega club."
+      ]
+    },
+    {
+      "tag": "international_leo_day",
+      "patterns": [
+        "When is International Leo Day?",
+        "What is Leo Day?",
+        "Leo Day celebration?"
+      ],
+      "responses": [
+        "International Leo Day is celebrated every year on December 5th to recognize Leos around the world for their community service and leadership."
+      ]
+    },
+    {
+      "tag": "about_leoism",
+      "patterns": [
+        "What is Leoism?",
+        "Define Leoism",
+        "Meaning of Leoism"
+      ],
+      "responses": [
+        "Leoism is the spirit of leadership, experience, and opportunity. It reflects the values of service, teamwork, and youth empowerment that guide all Leo Club activities."
+      ]
+    },
+    {
+      "tag": "global_presence",
+      "patterns": [
+        "Is Leo Club international?",
+        "How big is Leo Club worldwide?",
+        "Leo Club in other countries?"
+      ],
+      "responses": [
+        "Yes, Leo Clubs are international! They exist in over 140 countries and have more than 170,000 members globally, all dedicated to service and leadership."
+      ]
+    },
+    {
+      "tag": "leo_motto",
+      "patterns": [
+        "What is the motto of Leo Club?",
+        "Leo Club motto?",
+        "Leo mission statement?"
+      ],
+      "responses": [
+        "The official motto of Leo Club is 'Leadership – Experience – Opportunity.' It defines our goal to develop young leaders through service."
+      ]
+    },
+    {
+      "tag": "leo_pins_and_awards",
+      "patterns": [
+        "Do Leos get pins or awards?",
+        "What are Leo Club recognitions?",
+        "Leo Club awards?"
+      ],
+      "responses": [
+        "Yes, active Leos can receive pins, certificates, and awards for their leadership, volunteering hours, and contribution to projects. These recognitions come from the club, district, or Lions International."
+      ]
+    },
+    {
+      "tag": "leo_club_structure",
+      "patterns": [
+        "How is Leo Club organized?",
+        "What are the positions in a Leo Club?",
+        "Leo Club leadership roles?"
+      ],
+      "responses": [
+        "Leo Clubs are structured with an executive committee that includes a President, Vice President, Secretary, Treasurer, and Directors for specific areas like membership, projects, and IT."
+      ]
+    },
+    {
+      "tag": "difference_leo_lions",
+      "patterns": [
+        "What's the difference between Leo and Lions Club?",
+        "Are Leo and Lions the same?",
+        "Leo vs Lions Club"
+      ],
+      "responses": [
+        "Leos are the youth wing (age 12–30) of Lions Clubs International. While Lions are adult volunteers, Leos are young leaders who serve under Lions' guidance and gradually transition to Lions as they grow."
+      ]
+    },
+    {
+      "tag": "leo_transition_to_lions",
+      "patterns": [
+        "Can Leos become Lions?",
+        "How to join Lions after Leo?",
+        "Do Leos graduate into Lions?"
+      ],
+      "responses": [
+        "Yes! Leos are encouraged to become Lions after age 30. Their experience as Leos helps them take on stronger roles within Lions Clubs International."
+      ]
+    },
+    {
+      "tag": "social_media",
+      "patterns": [
+        "Facebook page?",
+        "Instagram page?"
+      ],
+      "responses": [
+        "Youtube-https://youtube.com/@leoclubofuvawellassauniversity?si=9XEy22Km0TWDXcVg Facebook -https://www.facebook.com/leoclub.uwu?mibextid=LQQJ4d TikTok -https://www.tiktok.com/@uwuleos306c2?_t=8gt7VTTEbcv&_r=1 Instagram - https://instagram.com/leo_club_of_uwu?igshid=OGQ5ZDc2ODk2ZA== Linkedin-https://www.linkedin.com/company/leo-club-of-uva-wellassa-university/"
+      ]
+    },
+    {
+      "tag": "faq_newsletter",
+      "patterns": [
+        "Newsletters?",
+        "Updates?"
+      ],
+      "responses": [
+        "We publish newsletters via our website and social media to share updates and achievements. As a member, you can also contribute by submitting your own newsletter entries. It's a great way to improve your score and stand out as the Most Outstanding Leo of the Month!"
+      ]
+    },
+    {
+      "tag": "contact",
+      "patterns": [
+        "How to contact?",
+        "Contact details?"
+      ],
+      "responses": [
+        "Visit our 'Contact Us' page or message us on Facebook or Instagram."
+      ]
+    },
+    {
+      "tag": "contact_hours",
+      "patterns": [
+        "Office hours?",
+        "Where is your office?"
+      ],
+      "responses": [
+        "We operate from Uva Wellassa University. Contact us via website, as we don't have a fixed office."
+      ]
+    },
+    {
+      "tag": "financial_transparency",
+      "patterns": [
+        "How are funds used?",
+        "Donation transparency?"
+      ],
+      "responses": [
+        "Funds are documented and used transparently for community projects."
+      ]
+    },
+    {
+      "tag": "donation",
+      "patterns": [
+        "How to donate?",
+        "Donation process?"
+      ],
+      "responses": [
+        "You can donate goods or funds through our website or at events. Real-time updates are available."
+      ]
+    },
+    {
+      "tag": "merchandise_store",
+      "patterns": [
+        "How to buy T-shirts?",
+        "Merchandise store?"
+      ],
+      "responses": [
+        "Visit our website to browse and purchase club merchandise securely online."
+      ]
+    },
+    {
+      "tag": "website_navigation",
+      "patterns": [
+        "How to use website?",
+        "Where is contact page?"
+      ],
+      "responses": [
+        "Use the menu for Contact, Events, Members, and Projects. It's all organized for easy access."
+      ]
+    },
+    {
+      "tag": "member_portal",
+      "patterns": [
+        "How to login?",
+        "Member portal?"
+      ],
+      "responses": [
+        "Login through the Member Portal to access your profile."
+      ]
+    },
+    {
+      "tag": "learning_hub",
+      "patterns": [
+        "What is Learning Hub?",
+        "Leadership lessons?"
+      ],
+      "responses": [
+        "Our Learning Hub offers short modules on leadership and teamwork for certified learning."
+      ]
+    },
+    {
+      "tag": "chatbot_help",
+      "patterns": [
+        "How to use chatbot?",
+        "What can chatbot do?"
+      ],
+      "responses": [
+        "You can ask me about membership, events, donations, and anything about UWU Leo Club."
+      ]
+    },
+    {
+      "tag": "register_event",
+      "patterns": [
+        "How to register for events?",
+        "Join an event?"
+      ],
+      "responses": [
+        "You can register for events through our website's Events page. It's simple and quick."
+      ]
+    },
+    {
+      "tag": "leo_quotes",
+      "patterns": [
+        "Motivational quote?",
+        "Leo club quote?"
+      ],
+      "responses": [
+        "Leadership is not a position or title, it's action and example – That's what Leos believe."
+      ]
+    },
+    {
+      "tag": "leo_facts",
+      "patterns": [
+        "Leo club facts?",
+        "Fun fact about Leo Club?"
+      ],
+      "responses": [
+        "Leo Clubs exist in over 140 countries with thousands of active members globally."
+      ]
+    },
+    {
+      "tag": "leo_day",
+      "patterns": [
+        "When is International Leo Day?",
+        "Leo Day?"
+      ],
+      "responses": [
+        "International Leo Day is celebrated every year on December 5th."
+      ]
+    },
+    {
+      "tag": "district_info",
+      "patterns": [
+        "What is District 306 C2?",
+        "District details?"
+      ],
+      "responses": [
+        "We belong to Lions District 306 C2, which connects Leo Clubs across Sri Lanka."
+      ]
+    },
+    {
+      "tag": "collaborations",
+      "patterns": [
+        "Partnerships?",
+        "Collaborations?"
+      ],
+      "responses": [
+        "We collaborate with other Leo Clubs, schools, and community organizations for service."
+      ]
+    },
+    {
+      "tag": "out_of_scope",
+      "patterns": [
+        "Tell me a joke",
+        "Weather today?",
+        "Favorite movie?",
+        "What's the latest news from Sri Lanka?",
+        "How is Sri Lanka's economy doing in 2025?",
+        "How do you calculate tax?",
+        "What is set theory?",
+        "How do you solve inequalities?",
+        "What is binary numbers?",
+        "How do you calculate distance?",
+        "What is matrix multiplication?",
+        "How do you solve systems of equations?",
+           "Tell me about the Asia Cup 2025 cricket match",
+    "What's happening with tourism in Sri Lanka?",
+    "Any updates on Sri Lanka's president Anura Kumara Dissanayake?",
+    "How is the poverty situation in Sri Lanka this year?",
+    "What's the weather like in Colombo?",
+    "Tell me about world news today",
+    "What's the latest on global climate change efforts?",
+    "How is the Ukraine conflict progressing?",
+    "Any news on AI regulations worldwide?",
+    "What's happening with US tariffs in 2025?",
+    "Tell me about the UN General Assembly this year",
+    "How are humanitarian crises around the world?",
+    "What's new in global health, like pandemics?",
+    "Any updates on international trade wars?",
+    "Tell me a fact about space exploration",
+    "What are some famous Sri Lankan foods?",
+    "Tell me about Sigiriya Rock Fortress",
+    "How's the tea industry in Sri Lanka?",
+    "What's the story behind the Temple of the Tooth?",
+    "Who is Angelo Mathews in cricket?",
+    "Tell me about Sri Lanka's independence day",
+    "What's Kandy famous for?",
+    "How do you make a traditional Sri Lankan curry?",
+    "What's the best time to visit Galle?",
+    "Tell me about the Yala National Park",
+    "Who won the Sri Lanka presidential election in 2024?",
+    "What's happening with Sri Lanka's debt restructuring?",
+    "Tell me about Sri Lankan festivals like Vesak",
+    "How's the rubber export from Sri Lanka?",
+    "What's the history of cinnamon in Sri Lanka?",
+    "Tell me about the civil war in Sri Lanka",
+    "What's the population of Colombo?",
+    "How's the gem mining in Ratnapura?",
+    "Tell me about Sri Lanka's wildlife, like elephants",
+    "What's the deal with the Online Safety Act?",
+    "How's the education system in Sri Lanka?",
+    "Tell me about the Arugam Bay surf spot",
+    "What's the weather in Kandy today?",
+    "How's the apparel export industry doing?",
+    "Tell me about the Esala Perahera procession",
+    "What's the impact of tourism on local communities?",
+    "How do you pronounce 'Sri Lanka' correctly?",
+    "Tell me about the Dutch forts in Sri Lanka",
+    "What's the best Sri Lankan tea to try?",
+    "How's the unemployment rate in Sri Lanka?",
+    "Tell me about the Sinharaja rainforest",
+    "What's happening with coal imports for power?",
+    "How's the inflation in Sri Lanka now?",
+    "Tell me about the Adam's Peak hike",
+    "What's the role of Buddhism in Sri Lanka?",
+    "How's the fishing industry affected by weather?",
+    "Tell me about the Jaffna Tamil culture",
+    "What's the latest on drug rehabilitation programs?",
+    "How do you get from Colombo to Trincomalee?",
+    "Tell me about the Ramayana trail in Sri Lanka",
+    "What's the cost of living in Colombo?",
+    "How's the renewable energy push in Sri Lanka?",
+    "Tell me about the Kandyan dance",
+    "What's the story of the Portuguese in Sri Lanka?",
+    "How's the spice trade history?",
+    "Tell me about the Polonnaruwa ancient city",
+    "What's the best beach in Mirissa?",
+    "How's the garment workers' rights situation?",
+    "Tell me about the Lotus Tower in Colombo",
+    "What's the weather forecast for Galle?",
+    "How do you celebrate Thai Pongal in Sri Lanka?",
+    "Tell me about the elephant orphanage in Pinnawala",
+    "What's the latest on corruption investigations?",
+    "How's the public transport in Colombo?",
+    "Tell me about the Anuradhapura stupas",
+    "What's the impact of the 2022 economic crisis?",
+    "How's the coconut industry doing?",
+    "Tell me about the Hikkaduwa coral reef",
+    "What's the role of the IMF in Sri Lanka?",
+    "How do you make hoppers?",
+    "Tell me about the Dambulla cave temple",
+    "What's the unemployment among youth?",
+    "How's the tourism recovery post-COVID?",
+    "Tell me about the Udawalawe National Park",
+    "What's the latest on PTA repeal?",
+    "How's the education funding in 2025?",
+    "Tell me about the Batik textile art",
+    "What's the weather in Jaffna?",
+    "How do you travel by train in Sri Lanka?",
+    "Tell me about the Wilpattu National Park",
+    "What's the history of the Mahavamsa?",
+    "How's the rice farming challenges?",
+    "Tell me about the Maskeliya tea estates",
+    "What's the best place for Ayurveda?",
+    "How's the women's participation in politics?",
+    "Tell me about the Ruwanwelisaya stupa",
+    "What's the latest on Expo 2025 Osaka for Sri Lanka?",
+    "How do you bargain in markets?",
+    "Tell me about the Sinhala New Year",
+    "What's the impact of climate change on coasts?",
+    "How's the gem trade regulations?",
+    "Tell me about the Bentota beach resorts?",
+    "What's the story of King Dutugemunu?",
+    "How's the foreign remittance inflow?",
+    "Tell me about the Nuwara Eliya hill country",
+    "What's the best time for whale watching?",
+    "How do you respect local customs?",
+    "Tell me about the Mannar bird sanctuary",
+    "What's the latest on energy appliances efficiency?",
+    "How's the healthcare access in rural areas?",
+    "Tell me about the Kataragama pilgrimage",
+    "What's the weather in Trincomalee?",
+    "How's the apparel export decline?",
+    "Tell me about the Portuguese forts like Colombo?",
+    "What's the role of the Central Bank Governor?",
+    "How do you try string hoppers?",
+    "Tell me about the Horton Plains National Park",
+    "What's the impact of the MSC shipwreck?",
+    "How's the labor force decline?",
+    "Tell me about the Galle Face Green protests",
+    "What's the latest on tax revenue hikes?",
+    "How's the VAT changes affecting prices?",
+    "Tell me about the Ritigala ancient ruins",
+    "What's the best festival for cultural shows?",
+    "How do you visit the tea factory?",
+    "Tell me about the Sri Lanka Day celebrations",
+    "What's the weather in Nuwara Eliya?",
+    "How's the poverty rate trends?",
+    "Tell me about the Avurudu traditions",
+    "What's the latest on UN Human Rights monitoring?",
+    "How's the child stunting issue?",
+    "Tell me about the Mirissa dolphin watches",
+    "What's the role of India in Sri Lanka's economy?",
+    "How do you learn basic Sinhala phrases?",
+    "Tell me about the Yapahuwa rock fortress",
+    "What's the impact of tariffs on exports?",
+    "How's the tourism arrivals in September?",
+    "Tell me about the Deepavali in Sri Lanka",
+    "What's the latest on cryptocurrency investing?",
+    "How do you avoid tourist scams?",
+    "Tell me about the Wasgamuwa National Park",
+    "What's the weather forecast for Matara?",
+    "How's the education below O/L levels?",
+    "Tell me about the Kandy Lake",
+    "What's the story of the Sacred Tooth Relic?",
+    "How's the global franchise forum in Colombo?",
+    "Tell me about the junior netball team",
+    "What's the latest on SVAT scrapping?",
+    "How do you pay with cards in Sri Lanka?",
+    "Tell me about the Thissamaharama stupa",
+    "What's the impact of high-interest rates?",
+    "How's the women's rugby in Asia?",
+    "Tell me about the Ella train ride",
+    "What's the best place for cashew nuts?",
+    "How do you celebrate Christmas in Colombo?",
+    "Tell me about the Mihintale historical site",
+    "What's the latest on income tax payments?",
+    "How's the fishing boat incidents?",
+    "Tell me about the Bundala National Park",
+    "What's the weather in Anuradhapura?",
+    "How's the DEI awards for companies?",
+    "Tell me about the Sri Dalada Perahera",
+    "What's the role of Japan in bilateral ties?",
+    "How do you try ambul thiyal?",
+    "Tell me about the Lunuganga estate",
+    "What's the latest on GSP+ with EU?",
+    "How's the memory wars post-civil war?",
+    "Tell me about the Pidurangala Rock",
+    "What's the impact of Quad on region?",
+    "How do you visit the turtle hatchery?",
+    "Tell me about the Alu Viharaya cave",
+    "What's the weather in Batticaloa?",
+    "How's the nursing workforce shortage?",
+    "Tell me about the Lahugala National Park",
+    "What's the latest on digital health strategy?",
+    "How do you make seeni sambol?",
+    "Tell me about the Parakrama Samudra lake",
+    "What's the role of China in infrastructure?",
+    "How's the lung health resolution impact?",
+    "Tell me about the Kumana National Park",
+    "What's the weather in Hambantota?",
+    "How do you hike Little Adam's Peak?",
+    "Tell me about the Gal Oya National Park",
+    "What's the latest on controlled medicines policy?",
+    "How's the cervical cancer elimination day?",
+    "Tell me about the Madu River boat safari",
+    "What's the impact of Expo 2025 on tourism?",
+    "How do you celebrate Maha Sivarathri?",
+    "Tell me about the Somawathiya stupa",
+    "What's the weather in Ratnapura?",
+    "How's the dementia action plan extension?",
+    "Tell me about the Kalpitiya lagoon",
+    "What's the latest on AI-powered agriculture?",
+    "How do you try pol sambol?",
+    "Tell me about the Degaldoruwa temple",
+    "What's the role of UAE in exports?",
+    "How's the rubber tire expo participation?",
+    "Tell me about the Knuckles Mountain Range",
+    "What's the weather in Badulla?",
+    "How do you visit the spice garden?",
+    "Tell me about the Wasantha Sanakeliya festival",
+    "What's the latest on companies amendment bill?",
+    "How's the Indonesian ambassador visit?",
+    "Tell me about the Muthurajawela marsh",
+    "What's the impact of typhoon on fisheries?",
+    "How do you make kottu roti?",
+    "Tell me about the Bellanwila temple",
+    "What's the role of UN Secretary-General meeting?",
+    "How's the global humanitarian overview?",
+    "Tell me about the Dedduwa lake",
+    "What's the latest on nuclear disarmament talks?",
+    "How do you hike the Pekoe Trail?",
+    "Tell me about the Ingiriya forest reserve",
+    "What's the weather in Kurunegala?",
+    "How's the drone flight bans nearby?",
+    "Tell me about the Ridi Viharaya temple",
+    "What's the impact of North Korea-China meet?",
+    "How do you try wambatu moju?",
+    "Tell me about the Madatugama hot springs",
+    "What's the latest on Syrian transition?",
+    "How's the global risks report on misinformation?",
+    "Tell me about the Kalutara Bodhiya tree",
+    "What's the role of G20 in South Africa?",
+    "How do you visit the mask museum?",
+    "Tell me about the Panama Canal impact on trade?",
+    "What's the weather in Gampaha?",
+    "How's the Ryder Cup golf drama?",
+    "Tell me about the Arankele monastery",
+    "What's the latest on women's rugby world cup?",
+    "How do you make devilled prawns?",
+    "Tell me about the Veheragala temple",
+    "What's the impact of Project 2025 on aid?",
+    "How's the state budgets caution?",
+    "Tell me about the Na Uyana aranya",
+    "What's the latest on non-communicable diseases meeting?",
+    "How do you try egg hoppers?",
+    "Tell me about the Maha Oya caves",
+    "What's the role of WHO in lung health?",
+    "How's the global nursing report?",
+    "Tell me about the Kosgoda turtle hatchery",
+    "What's the weather in Puttalam?",
+    "How do you celebrate the Unduvap Poya?",
+    "Tell me about the Munneswaram temple",
+    "What's the latest on mental health assembly?",
+    "How's the nuclear weapons threat discussion?",
+    "Tell me about the Chillaw lagoon",
+    "What's the impact of AI on news consumption?",
+    "How do you make lamprais?",
+    "Tell me about the Dedigama inscription",
+    "What's the role of podcasting in news?",
+    "How's the video news trend?",
+    "Tell me about the Aluth Nuwara temple",
+    "What's the latest on typhoon Bualoi?",
+    "How do you hike the Bambarakanda falls?",
+    "Tell me about the Ravana falls",
+    "What's the weather in Monaragala?",
+    "How's the Danish drone sightings?",
+    "Tell me about the Diyaluma falls",
+    "What's the impact of British-French arsenals?",
+    "How do you try black pork curry?",
+    "Tell me about the Baker's falls",
+    "What's the latest on Gaza field hospitals?",
+    "How's the Iranian missile displays?",
+    "Tell me about the St. Clair's falls",
+    "What's the role of Red Tail pilots history?",
+    "How do you visit the Devon falls?",
+    "Tell me about the Great Western falls",
+    "What's the weather in Kegalle?",
+    "How's the migrant detainee stories?",
+    "Tell me about the Pundaluoya falls",
+    "What's the latest on Portland troop deployments?",
+    "How do you make dhal curry?",
+    "Tell me about the Dunhinda falls",
+    "What's the impact of unruly golf fans?",
+    "How's the global franchise growth?",
+    "Tell me about the Rawana Ella falls",
+    "What's the role of Expo 2025 themes?",
+    "How do you try coconut sambol?",
+    "Tell me about the Bopath Ella falls",
+    "What's the latest on MWC 2025 tech?",
+    "How's the Munich Security Conference?",
+    "Tell me about the Aberdeen falls",
+    "What's the weather in Matale?",
+    "How do you celebrate the Binara Poya?",
+    "Tell me about the Laksapana falls",
+    "What's the impact of climate on economy?",
+    "How's the AI governance push?",
+    "Tell me about the Seethawaka falls",
+    "What's the latest on Ukraine diplomacy?",
+    "How do you make parippu?",
+    "Tell me about the Virginia falls",
+    "What's the role of Syrian Druze?",
+    "How's the global health resourcing?",
+    "Tell me about the Oya falls",
+    "What's the weather in Polonnaruwa?",
+    "How do you try aloo bonda?",
+    "Tell me about the Malawatte falls",
+    "What's the latest on financial reforms?",
+    "How's the pandemic accord finalizing?",
+    "Tell me about the Bomburu falls",
+    "What's the impact of UNGA80 youth?",
+    "How do you visit the Hakgala falls?",
+    "Tell me about the Doowa falls",
+    "What's the role of Cuba's UN address?",
+    "How's the NCDs promotion?",
+    "Tell me about the Nanu Oya falls",
+    "What's the latest on peace unfinished lessons?",
+    "How do you make gotu kola sambol?",
+    "Tell me about the Pussellawa falls",
+    "What's the weather in Dambulla?",
+    "How's the ecological collapse threats?",
+    "Tell me about the Agra Bokkan falls",
+    "What's the impact of digital threats?",
+    "How do you try jackfruit curry?",
+    "Tell me about the Kithulgala falls",
+    "What's the role of UN turning 80?",
+    "How's the global issues flames?",
+    "Tell me about the Millaniya falls",
+    "What's the latest on inequality conflicts?",
+    "How do you celebrate the Vap Poya?",
+    "Tell me about the Galaboda falls",
+    "What's the weather in Sigiriya?",
+    "How's the Dallas ICE facility?",
+    "Tell me about the Hal falls",
+    "What's the impact of Trump tariffs?",
+    "How do you make beetroot curry?",
+    "Tell me about the Hedeniya falls",
+    "What's the role of Noh drama?",
+    "How's the leftist movement in politics?",
+    "Tell me about the Gurugoda falls",
+    "What's the latest on women's politics rally?",
+    "How do you try pumpkin curry?",
+    "Tell me about the Koskandana falls",
+    "What's the weather in Habarana?",
+    "How's the hidden history play?",
+    "Tell me about the Mawanella falls",
+    "What's the impact of post-colonial history?",
+    "How do you visit the Ginigathhena falls?",
+    "Tell me about the Attanagoda falls",
+    "What's the role of family conversations?",
+    "How's the civil war memory wars?",
+    "Tell me about the Weddagala falls",
+    "What's the latest on PTA pledges?",
+    "How do you make wing beans?",
+    "Tell me about the Talagala falls",
+    "What's the weather in Ritigala?",
+    "How's the economic mismanagement ruling?",
+    "Tell me about the Dunsinane falls",
+    "What's the impact of poverty doubling?",
+    "How do you try ash plantain?",
+    "Tell me about the Norton falls",
+    "What's the role of stunting increase?",
+    "How's the UNHRC mandate extension?",
+    "Tell me about the Kehelgamuwa falls",
+    "What's the latest on Online Safety Act?",
+    "How do you celebrate the Ill Poya?",
+    "Tell me about the Maha Eliya falls",
+    "What's the weather in Yapahuwa?",
+    "How's the chilling effect on expression?",
+    "Tell me about the Dark falls",
+    "What's the impact of digital economy?",
+    "How do you make cashew curry?",
+    "Tell me about the Amarawila falls",
+    "What's the role of Google Apple Meta?",
+    "How's the amendment pledge?",
+    "Tell me about the Uduwela falls",
+    "What's the latest on China-US rivalry?",
+    "How do you try drumstick sambar?",
+    "Tell me about the Pitawala falls",
+    "What's the weather in Ritigala?",
+    "How's the strategic influence context?",
+    "Tell me about the Ramboda falls",
+    "What's the impact of Quad countering?",
+    "How do you visit the Ali falls?",
+    "Tell me about the Bridal falls",
+    "What's the role of GSP+ obligations?",
+    "How's the EU tariff-free access?",
+    "Tell me about the Lovers Leap falls",
+    "What's the latest on PTA repeal commitment?",
+    "How do you make brinjal moju?",
+    "Tell me about the Nahal falls",
+    "What's the weather in Dambulla?",
+    "How's the human rights violations surveillance?",
+    "Tell me about the Peaberry falls",
+    "What's the impact of intelligence intimidation?",
+    "How do you try okra curry?",
+    "Tell me about the Rajagala falls",
+    "What's the role of UNHRC description?",
+    "How's the freedom of expression restrictions?",
+    "Tell me about the Bambarabatu Oya falls",
+    "What's the latest on excessive force?",
+    "How do you celebrate the Esala Poya?",
+    "Tell me about the Kalupahana falls",
+    "What's the weather in Mihintale?",
+    "How's the counterterrorism against protesters?",
+    "Tell me about the Kitulgala falls",
+    "What's the impact of social media blocking?",
+    "How do you make snake gourd curry?",
+    "Tell me about the Maha Karawita falls",
+    "What's the role of peaceful assemblies?",
+    "How's the government policies demonstrations?",
+    "Tell me about the Oya Ganga falls",
+    "What's the latest on bus crash deaths?",
+    "How do you try lebbai buthiri?",
+    "Tell me about the Pitakanda Gelioya falls",
+    "What's the weather in Polonnaruwa?",
+    "How's the mountainous region accident?",
+    "Tell me about the Rawana Ella falls",
+    "What's the impact of India-Sri Lanka cricket?",
+    "How do you visit the Seven Virgins falls?",
+    "Tell me about the Thudugala Ella falls",
+    "What's the role of Super Fours match?",
+    "How's the Asia Cup final hopes?",
+    "Tell me about the Uda Rawana falls",
+    "What's the latest on Afghanistan elimination?",
+    "How do you make polos ambula?",
+    "Tell me about the Velar falls",
+    "What's the weather in Anuradhapura?",
+    "How's the Luton to Sri Lanka trip?",
+    "Tell me about the Wambugala falls",
+    "What's the impact of second hand Ford journey?",
+    "How do you try ambul banana?",
+    "Tell me about the Yoda Ela falls",
+    "What's the role of Peter Taylor story?",
+    "How's the 90 year old recount?",
+    "Tell me about the Dunsinane falls",
+    "What's the latest on Zimbabwe tour results?",
+    "How do you celebrate the Nikini Poya?",
+    "Tell me about the Galaha falls",
+    "What's the weather in Kandy?",
+    "How's the ODIs and T20Is scorecards?",
+    "Tell me about the Ginigathena falls",
+    "What's the impact of premature Asia Cup end?",
+    "How do you make green bean curry?",
+    "Tell me about the Hatton falls",
+    "What's the role of island nation failure?",
+    "How's the T20 defence heartbreak?",
+    "Tell me about the Kalawella falls",
+    "What's the latest on regulatory unpredictability?",
+    "How do you try potato curry?",
+    "Tell me about the Kotapola falls",
+    "What's the weather in Ella?",
+    "How's the bureaucratic red tape?",
+    "Tell me about the Labookellie falls",
+    "What's the impact of US caution?",
+    "How do you visit the Madolsima falls?",
+    "Tell me about the Maha Oya falls",
+    "What's the role of selective transparency?",
+    "How's the export performance decline?",
+    "Tell me about the Mathale falls",
+    "What's the latest on JAAF statement?",
+    "How do you make long bean curry?",
+    "Tell me about the Nuwara Eliya falls",
+    "What's the weather in Nuwara Eliya?",
+    "How's the August 2025 marginal decline?",
+    "Tell me about the Pundaluoya falls",
+    "What's the impact of same period last year?",
+    "How do you try marrow curry?",
+    "Tell me about the Rambod falls",
+    "What's the role of ACCA and ICC events?",
+    "How's the LMD awards night?",
+    "Tell me about the Rawan falls",
+    "What's the latest on DEI leadership award?",
+    "How do you celebrate the Binara full moon?",
+    "Tell me about the St. Clair falls",
+    "What's the weather in Hatton?",
+    "How's the corporate sector honors?",
+    "Tell me about the Talawakelle falls",
+    "What's the impact of WIM and directors?",
+    "How do you make ash pumpkin?",
+    "Tell me about the Teesage Oya falls",
+    "What's the role of MBA alumni association?",
+    "How's the national award for DEI?",
+    "Tell me about the Ukuwela falls",
+    "What's the latest on Osaka Expo highlights?",
+    "How do you try breadfruit?",
+    "Tell me about the Velangoda falls",
+    "What's the weather in Talawakelle?",
+    "How's the Sri Lanka pavilion showcase?",
+    "Tell me about the Yoda falls",
+    "What's the impact of gems tea spices?",
+    "How do you visit the cultural performances?",
+    "Tell me about the cultural program audience?",
+    "What's the role of Japanese minister?",
+    "How's the Expo vision address?",
+    "Tell me about the friendship bonds speech?",
+    "What's the latest on bilateral ties renewal?",
+    "How do you make gotu kola mallum?",
+    "Tell me about the global platform sharing?",
+    "What's the weather in Gampola?",
+    "How's the innovation human values?",
+    "Tell me about the Osaka expo drawing crowds?",
+    "What's the impact of 18 million visitors?",
+    "How do you try mukunuwenna?",
+    "Tell me about the mid-April opening?",
+    "What's the role of chief guest president?",
+    "How's the Saturday celebration?",
+    "Tell me about the consulate UAE pavilion?",
+    "What's the latest on rubber tire expo?",
+    "How do you celebrate the Vap full moon?",
+    "Tell me about the EDB collaboration?",
+    "What's the weather in Matale?",
+    "How's the Middle East expo?",
+    "Tell me about the country pavilion organization?",
+    "What's the impact on exports?",
+    "How do you make kale curry?",
+    "Tell me about the IMF working paper?",
+    "What's the role of September 2025 paper?",
+    "How's the debt restructuring nearing completion?",
+    "Tell me about the caution on fiscal?",
+    "What's the latest on webinar ICTA?",
+    "How do you try spinach mallum?",
+    "Tell me about the Microimage founder?",
+    "What's the weather in Kegalle?",
+    "How's the Saturday webinar?",
+    "Tell me about the Harsha Purasinghe?",
+    "What's the impact of digital health?",
+    "How do you visit the UN meeting president?",
+    "Tell me about the Thursday UN headquarters?",
+    "What's the role of António Guterres?",
+    "How's the president Anura meeting?",
+    "Tell me about the foreign employment minister?",
+    "What's the latest on Vijitha Herath?",
+    "How do you make lebbai?",
+    "Tell me about the Japanese ambassador?",
+    "What's the weather in Balangoda?",
+    "How's the Akio Isomata?",
+    "Tell me about the Sri Lankan ambassador?",
+    "What's the impact of Pivithuru Janak?",
+    "How do you try thalana arakku?",
+    "Tell me about the senior officials join?",
+    "What's the role of foreign affairs ministry?",
+    "How's the Osaka expo address?",
+    "Tell me about the national day celebrations?",
+    "What's the latest on friendship valuable bonds?",
+    "How do you celebrate the Ill full moon?",
+    "Tell me about the humanity unites speech?",
+    "What's the weather in Rakwana?",
+    "How's the communities cultures transcend?",
+    "Tell me about the boundaries fosters relationships?",
+    "What's the impact of common goals world?",
+    "How do you make mukku wambu?",
+    "Tell me about the expo demonstration vision?",
+    "What's the role of better world opportunity?",
+    "How's the pavilion common hall A?",
+    "Tell me about the culture tradition gems?",
+    "What's the latest on tea spices tourism?",
+    "How do you try nivithi?",
+    "Tell me about the showcased variety performances?",
+    "What's the weather in Deniyaya?",
+    "How's the reflecting Lankan identity?",
+    "Tell me about the large audience attracted?",
+    "What's the impact of Japanese nationals?",
+    "How do you visit the international visitors?",
+    "Tell me about the president address expo?",
+    "What's the role of global platform vision?",
+    "How's the bright future culture?",
+    "Tell me about the innovation human values?",
+    "What's the latest on Nisthar Cassim Osaka?",
+    "How do you make polpala?",
+    "Tell me about the shipwreck conversation?",
+    "What's the weather in Galle?",
+    "How's the August 30 2025 event?",
+    "Tell me about the powerful conversation damages?",
+    "What's the impact of devastating shipping disaster?",
+    "How do you try thalana bata?",
+    "Tell me about the waters hit Sri Lanka?",
+    "What's the role of Greenpeace South Asia?",
+    "How's the auditorium Ocean University?",
+    "Tell me about the Rainbow Warrior Colombo?",
+    "What's the latest on port pass through?",
+    "How do you celebrate the Navam full moon?",
+    "Tell me about the petitions sign impact?",
+    "What's the weather in Matara?",
+    "How's the 22k likes talking?",
+    "Tell me about the tourism autumn surge?",
+    "What's the impact of 31 percent arrivals?",
+    "How do you make nivithi sambol?",
+    "Tell me about the 111823 tourists September?",
+    "What's the role of first three weeks?",
+    "How's the CBSL governor statement?",
+    "Tell me about the cryptocurrency transactions ban?",
+    "What's the latest on investing no impediment?",
+    "How do you try ambul kevum?",
+    "Tell me about the virtual currency laws absence?",
+    "What's the weather in Hambantota?",
+    "How's the non-existence regulations?",
+    "Tell me about the drug addicts study?",
+    "What's the impact of most below O/L?",
+    "How do you visit the burden state rehabilitation?",
+    "Tell me about the unemployed intense needs?",
+    "What's the role of recent study revealed?",
+    "How's the ICE addicts included?",
+    "Tell me about the CBSL OPR decision?",
+    "What's the latest on maintain 7.75 percent?",
+    "How do you make kokis?",
+    "Tell me about the Monday monetary board?",
+    "What's the weather in Tissamaharama?",
+    "How's the yesterday 23 meeting held?",
+    "Tell me about the IRD notification taxpayers?",
+    "What's the impact of final income tax?",
+    "How do you try aluwa?",
+    "Tell me about the 2024/2025 assessment September 30?",
+    "What's the role of on or before payments?",
+    "How's the court ordered release?",
+    "Tell me about the four Indian fishermen?",
+    "What's the latest on sentenced one year?",
+    "How do you celebrate the Medin full moon?",
+    "Tell me about the Rameswaram violation boundaries?",
+    "What's the weather in Kataragama?",
+    "How's the repeated maritime sentenced?",
+    "Tell me about the SLSEA statement energy loss?",
+    "What's the impact of inefficient appliances?",
+    "How do you make kiribath?",
+    "Tell me about the refrigerators over 10 years?",
+    "What's the role of significant portion loss?",
+    "How's the country caused by?",
+    "Tell me about the Nuwara Eliya Wasantha?",
+    "What's the latest on began yesterday April 1?",
+    "How do you try milk toffee?",
+    "Tell me about the colorful cultural performances?",
+    "What's the weather in Nuwara Eliya?",
+    "How's the Sanakeliya 2025?",
+    "Tell me about the speaker endorsed certificate?",
+    "What's the impact of companies amendment bill?",
+    "How do you visit the Dr Jagath Wickramaratne?",
+    "Tell me about the Indonesian ambassador met?",
+    "What's the role of H.E Dewi Gustina Tobing?",
+    "How's the parliament speaker?",
+    "Tell me about the cabinet decisions 15.09.2025?",
+    "What's the latest on Ceylon Chamber commends?",
+    "How do you make love cake?",
+    "Tell me about the government negotiation team?",
+    "What's the weather in Colombo?",
+    "How's the successful US discussions outcome?",
+    "Tell me about the further red...?",
+    "What's the impact of prosperity improved quality?",
+    "How do you try watalappan?",
+    "Tell me about the president addressing Sri Lanka Day?",
+    "What's the role of EXPO 2025 Osaka?",
+    "How's the celebrations expo?",
+    "Tell me about the Tharushi Abisheka gold?",
+    "What's the latest on girls 800 metres?",
+    "How do you celebrate the Full Moon Poya?",
+    "Tell me about the medley relay silver?",
+    "What's the weather in Wattala?",
+    "How's the Lyceum International sprinter?",
+    "Tell me about the Dananjaya Fernando silver?",
+    "What's the impact of girls 100 metres?",
+    "How do you try bibikkan?",
+    "Tell me about the global franchise forum?",
+    "What's the role of GFF Sri Lanka edition?",
+    "How's the April 27 2025 Sheraton?",
+    "Tell me about the Colombo hotel?",
+    "What's the latest on industry business anxiety?",
+    "How do you make dodol?",
+    "Tell me about the SVAT scrapped Tuesday?",
+    "What's the weather in Colombo?",
+    "How's the September 30 losses concern?",
+    "Tell me about the cardholders paying more?",
+    "What's the impact of swipe tap withdraw?",
+    "How do you visit the junior netballers robbed?",
+    "Tell me about the world opportunity compete?",
+    "What's the role of once-in-a-lifetime?",
+    "How's the Asia Cup hope heartbreak?",
+    "Tell me about the national cricket teams?",
+    "What's the latest on on-field fiasco?",
+    "How do you try karawala?",
+    "Tell me about the recent drug busts arrests?",
+    "What's the weather in Colombo?",
+    "How's the dealers uncovered also?",
+    "Tell me about the worldwide STDs common?",
+    "What's the impact of community read comments?",
+    "How do you make dry fish?",
+    "Tell me about the Channa Jayasumana urges?",
+    "What's the role of president suspend LGBTIQ?",
+    "How's the tourism project proposal?",
+    "Tell me about the cultural backlash generate?",
+    "What's the latest on erode faith government?",
+    "How do you celebrate the Christmas?",
+    "Tell me about the respect members society?",
+    "What's the weather in Colombo?",
+    "How's the jeopardize smear cultural values?",
+    "Tell me about the tender import coal?",
+    "What's the impact of power generation corruption?",
+    "How do you try string hoppers?",
+    "Tell me about the F serious paved way?",
+    "What's the role of Sri Lanka T20 Asia Cup?",
+    "How's the defence premature ending?",
+    "Tell me about the island nation failed?",
+    "What's the latest on even make finals?",
+    "How do you make egg hoppers?",
+    "Tell me about the what's happening Sri Lanka?",
+    "What's the weather in Colombo?",
+    "How's the top 4 questions economic crisis?",
+    "Tell me about the protests hunger WFPUSA?",
+    "What's the impact of worst since 1948?",
+    "How do you try plain hoppers?",
+    "Tell me about the bankrupt officially?",
+    "What's the role of independence 1948?",
+    "How's the economic collapse years making?",
+    "Tell me about the 2019 terrorist attacks?",
+    "What's the latest on slowed tourism?",
+    "How do you make appa?",
+    "Tell me about the COVID-19 hit travel?",
+    "What's the weather in various places?",
+    "How's the standstill booming destination?",
+    "Tell me about the lockdowns unemployment?",
+    "What's the impact of worldwide rampant?",
+    "How do you try milk hoppers?",
+    "Tell me about the nutritious foods out reach?",
+    "What's the role of households headed women?",
+    "How's the 6 million people hungry?",
+    "Tell me about the nearly 30 percent population?",
+    "What's the latest on food inflation 90 percent?",
+    "How do you make sweet hoppers?",
+    "Tell me about the staples rice unaffordable?",
+    "What's the weather forecast today?",
+    "How's the millions families?",
+    "Tell me about the conflict disaster zones?",
+    "What's the impact of women children devastating?",
+    "How do you try savory hoppers?",
+    "Tell me about the pre-COVID malnutrition high?",
+    "What's the role of national funding shortages?",
+    "How's the lost access assistance?",
+    "Tell me about the school meals nutritional?",
+    "What's the latest on programs women children?",
+    "How do you celebrate New Year?",
+    "Tell me about the Sri Lanka multicultural?",
+    "What's the weather in tropical island?",
+    "How's the multi-linguistic nation Indian Ocean?",
+    "Tell me about the languages spoken transport?",
+    "What's the impact of food climate prepare?",
+    "How do you visit the adventure handy place?",
+    "Tell me about the English widely spoken?",
+    "What's the role of language outside world?",
+    "How's the former colonial power?",
+    "Tell me about the politically neutral nowadays?",
+    "What's the latest on shops hotels restaurants?",
+    "How do you make roti?",
+    "Tell me about the public transport English?",
+    "What's the weather in various cities?",
+    "How's the get by enough?",
+    "Tell me about the leading tour Dinesh Perera?",
+    "What's the impact of local leader English?",
+    "How do you try kottu roti?",
+    "Tell me about the Sinhalese born raised?",
+    "What's the role of exceptional knowledge culture?",
+    "How's the peoples island?",
+    "Tell me about the vast majority approach?",
+    "What's the latest on honest keen chat?",
+    "How do you make godamba roti?",
+    "Tell me about the tourist scams avoid?",
+    "What's the weather today?",
+    "How's the basic Sinhala phrases learn?",
+    "Tell me about the cost living Colombo?",
+    "What's the impact of bargaining markets?",
+    "How do you try paratha?",
+    "Tell me about the respect local customs?",
+    "What's the role of proximity Indian subcontinent?",
+    "How's the close cultural interaction?",
+    "Tell me about the ancient times India?",
+    "What's the latest on crossroads maritime routes?",
+    "How do you make chapati?",
+    "Tell me about the Indian Ocean traversing?",
+    "What's the weather in coastal areas?",
+    "How's the exposed influences Asian civilizations?",
+    "Tell me about the majority people poor?",
+    "What's the impact of rural areas depend?",
+    "How do you try naan?",
+    "Tell me about the agriculture livelihood?",
+    "What's the role of physical environment diversity?",
+    "How's the scenic countries world?",
+    "Tell me about the home ethnic groups?",
+    "What's the latest on cultural heritage varied?",
+    "How do you make pita?",
+    "Tell me about the landscape highly?",
+    "What's the weather in hill country?",
+    "How's the main economic activities agriculture?",
+    "Tell me about the rice tea rubber coconut?",
+    "What's the impact of manufacturing mineral extraction?",
+    "How do you try flatbread?",
+    "Tell me about the when Sri Lanka independent?",
+    "What's the role of quiz questions answers?",
+    "How's the island surrounded Indian Ocean?",
+    "Tell me about the Gulf Mannar Palk Strait?",
+    "What's the latest on Colombo official capital?",
+    "How do you make Sri Lankan bread?",
+    "Tell me about the parliament Jayawardenepura Kotte?",
+    "What's the weather in capital?",
+    "How's since 1982 based?",
+    "Tell me about the president house Colombo?",
+    "What's the impact of supreme court Colombo?",
+    "How do you try pittu?",
+    "Tell me about the president powers more?",
+    "What's the role of Sri Lanka quiz?",
+    "How's the fun trivia template?",
+    "Tell me about the knowledge test history?",
+    "What's the latest on culture geography?",
+    "How do you make string hoppers?",
+    "Tell me about the casual traveler dedicated?",
+    "What's the weather in tourist spots?",
+    "How's the student Sri Lanka?",
+    "Tell me about the small tropical island?",
+    "What's the impact of off coast India?",
+    "How do you try idiyappa?",
+    "Tell me about the proud home fascinating?",
+    "What's the role of culture stunning landscapes?",
+    "How's the history fascinating?",
+    "Tell me about the UNESCO heritage sites?",
+    "What's the latest on wildlife rainforest reserves?",
+    "How do you make upma?",
+    "Tell me about the luscious gardens destination?",
+    "What's the weather in reserves?",
+    "How's something everyone?",
+    "Tell me about the diverse flora fauna?",
+    "What's the impact of friendly locals?",
+    "How do you try semolina?",
+    "Tell me about the wide cuisine beautiful countries?",
+    "What's the role of trivia facts history?",
+    "How's the geography religion culture?",
+    "Tell me about the scientific name cinnamon?",
+    "What's the latest on Cinnamomum zeylanicum?",
+    "How do you make sujee?",
+    "Tell me about the Ceylon former name?",
+    "What's the weather in southwest India?",
+    "How's Myanmar grows?",
+    "Tell me about the Egyptians embalming used?",
+    "What's the impact of medieval coughs throat?",
+    "How do you try wheat?",
+    "Tell me about the time monopoly production spice?",
+    "What's the role of declined cultivation spread?",
+    "How's areas coffee introduced Arab?",
+    "Tell me about the traders pilgrims plant?",
+    "What's the latest on drinking leaves flavour?",
+    "How do you make roshi?",
+    "Tell me about the tooth originally brought India?",
+    "What's the weather in fourth century?",
+    "How's modern ceremony reign King?",
+    "Tell me about the Kirthi Sri Rajasinghe 1747-1781?",
+    "What's the impact of population Kandy honour?",
+    "How do you try flat rice?",
+    "Tell me about the relic previously monarchy?",
+    "What's the role of personal property?",
+    "How's other cities influence capitals?",
+    "Tell me about the 1870s British moved Galle?",
+    "What's the latest on official became?",
+    "How do you make akki roti?",
+    "Tell me about the parliament Sri Jayewardenepura?",
+    "What's the weather in Kotte area?",
+    "How's Colombo since 1982?",
+    "Tell me about the 1876 700000 rubber seeds?",
+    "What's the impact of stolen Brazil London?",
+    "How do you try rice flour?",
+    "Tell me about the two thousand seedlings grown?",
+    "What's the role of Sri Lanka spread Malaysia?",
+    "How's seventy percent?",
+    "Tell me about the tea worlds largest exporter?",
+    "What's the latest on gems capital?",
+    "How do you make ragi roti?",
+    "Tell me about the gem capital Sri Lanka?",
+    "What's the weather in Ratnapura?",
+    "How's it?",
+    "Tell me about the allocate less two percent?",
+    "What's the impact of work education?",
+    "How do you try millet?",
+    "Tell me about the key economic progress?",
+    "What's the role of individual social terms?",
+    "How's learning pays earning?",
+    "Tell me about the environmental factors WLB?",
+    "What's the latest on job performance academic?",
+    "How do you make bajra?",
+    "Tell me about the administrative heads universities?",
+    "What's the weather in universities?",
+    "How's did not significantly impact?",
+    "Tell me about the reason what may?",
+    "What's the impact of health worker productivity?",
+    "How do you try pearl millet?",
+    "Tell me about the decrease poorly planned?",
+    "What's the role of workplace environment?",
+    "How's adversely affects morale?",
+    "Tell me about the poor motivation satisfaction?",
+    "What's the latest on management safe work?",
+    "How do you make jowar?",
+    "Tell me about the workers environment?",
+    "What's the weather in rural?",
+    "How's recent economic crisis problems?",
+    "Tell me about the social clashes world?",
+    "What's the impact of according World Bank?",
+    "How do you try sorghum?",
+    "Tell me about the recent study finance equitable?",
+    "What's the role of recovery published February?",
+    "How's unstable financial systems emerging?",
+    "Tell me about the susceptible problems rising?",
+    "What's the latest on inflation interest rates?",
+    "How do you make corn?",
+    "Tell me about the private investment competed?",
+    "What's the weather in emerging nations?",
+    "How's weak local loan markets slowing?",
+    "Tell me about the recovery tighter global?",
+    "What's the impact of financial conditions?",
+    "How do you try maize?",
+    "Tell me about the Sri Lankan economy bad shape?",
+    "What's the role of investigate relationship government?",
+    "How's revenue economic political stability?",
+    "Tell me about the corruption Sri Lanka 1990-2014?",
+    "What's the latest on covering period?",
+    "How do you make oats?",
+    "Tell me about the world report 2024 Sri Lanka?",
+    "What's the weather in north east?",
+    "How's affected civil war 1983-2009?",
+    "Tell me about the victims past violations?",
+    "What's the impact of families activists campaigning?",
+    "How do you try porridge?",
+    "Tell me about the truth accountability surveillance?",
+    "What's the role of intimidation police intelligence?",
+    "How's agencies north east?",
+    "Tell me about the report UN Human Rights?",
+    "What's the latest on Committee described severe?",
+    "How do you make muesli?",
+    "Tell me about the restrictions freedom opinion?",
+    "What's the weather in Galle Face?",
+    "How's expression including excessive force?",
+    "Tell me about the police dispersing peaceful?",
+    "What's the impact of assemblies application counterterrorism?",
+    "How do you try granola?",
+    "Tell me about the legislation protesters blocking?",
+    "What's the role of public access social media?",
+    "How's platforms mass demonstrations government?",
+    "Tell me about the policies pressure European Union?",
+    "What's the latest on grants tariff-free market?",
+    "How do you make cereal?",
+    "Tell me about the access exchange human rights?",
+    "What's the weather in Colombo?",
+    "How's obligations GSP+ led government?",
+    "Tell me about the renewing pledges act commitment?",
+    "What's the impact of repeal PTA first 2017?",
+    "How do you try flakes?",
+    "Tell me about the EU rivalry China powers?",
+    "What's the role of assert strategic influence?",
+    "How's region partly context international relations?",
+    "Tell me about the key actors India United States?",
+    "What's the latest on Japan Australia members?",
+    "How do you make bran?",
+    "Tell me about the Quadrilateral Security Dialogue?",
+    "What's the weather in strategic?",
+    "How's known Quad countering China?",
+    "Tell me about the world report 2025 Sri Lanka?",
+    "What's the impact of protests broke economic?",
+    "How do you try wheat germ?",
+    "Tell me about the emergency some macroeconomic?",
+    "What's the role of indicators stabilized millions?",
+    "How's continued suffer acute harms?",
+    "Tell me about the economic social cultural rights?",
+    "What's the latest on crisis triggered mismanagement?",
+    "How do you make quinoa?",
+    "Tell me about the political leaders Supreme Court?",
+    "What's the weather in various regions?",
+    "How's ruling Lankan politics changed course?",
+    "Tell me about the September Anura Kumara?",
+    "What's the impact of Dissanayake left-wing NPP?",
+    "How do you try buckwheat?",
+    "Tell me about the alliance elected president?",
+    "What's the role of replacing Ranil Wickremesinghe?",
+    "How's Dissanayake promised equitable economic?",
+    "Tell me about the policies pledged address longstanding?",
+    "What's the latest on human rights concerns fighting?",
+    "How do you make amaranth?",
+    "Tell me about the corruption abolishing abusive?",
+    "What's the weather in Colombo?",
+    "How's Prevention Terrorism Act economic crisis?",
+    "Tell me about the acute 2022 government defaulted?",
+    "What's the impact of foreign debt causing number?",
+    "How do you try millet porridge?",
+    "Tell me about the people below World Bank extreme?",
+    "What's the role of poverty line US$2.15 day?",
+    "How's doubled nearly 26 percent population?",
+    "Tell me about the United Nations proportion children?",
+    "What's the latest on suffering stunting increased?",
+    "How do you make rice pudding?",
+    "Tell me about the October UN Human Rights?",
+    "What's the weather in north?",
+    "How's Council extended one year mandate?",
+    "Tell me about the Office UN High Commissioner?",
+    "What's the impact of monitor report violations?",
+    "How do you try kheer?",
+    "Tell me about the collect evidence alleged crimes?",
+    "What's the role of committed civil war support?",
+    "How's future national international prosecutions?",
+    "Tell me about the many struggled obtain livelihoods?",
+    "What's the latest on rights amid high inflation?",
+    "How do you make payasam?",
+    "Tell me about the declining incomes difficult access?",
+    "What's the weather in rural areas?",
+    "How's afford health education services?",
+    "Tell me about the historically strong Sri Lanka?",
+    "What's the impact of cuts public spending low?",
+    "How do you try halwa?",
+    "Tell me about the government revenues October UNHRC?",
+    "What's the role of said Online Safety Act?",
+    "How's could potentially criminalize legitimate expression?",
+    "Tell me about the creating environment chilling effect?",
+    "What's the latest on freedom expression Google?",
+    "How do you make sweet potato?",
+    "Tell me about the Apple Meta called bill draconian?",
+    "What's the weather in digital?",
+    "How's system stifle dissent warned undermine?",
+    "Tell me about the potential growth Sri Lanka digital?",
+    "What's the impact of economy president pledged amend?",
+    "How do you try cassava?",
+    "Tell me about the law two years protests?",
+    "What's the role of broke over economic emergency?",
+    "How's some macroeconomic indicators stabilized?",
+    "Tell me about the millions continued suffer acute?",
+    "What's the latest on harms economic social cultural?",
+    "How do you make taro?",
+    "Tell me about the rights crisis triggered mismanagement?",
+    "What's the weather in Colombo?",
+    "How's political leaders according Supreme Court?",
+    "Tell me about the ruling Lankan politics changed?",
+    "What is a logarithm?",
+    "How do you find patterns in numbers?",
+    "What is the golden ratio?"
+      ],
+      "responses": [
+        "I'm here to help with questions about Leo Club UWU, our members, projects, and activities."
+      ]
+    }
+  ]
 }

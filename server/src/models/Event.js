@@ -20,6 +20,16 @@ const eventSchema = new mongoose.Schema({
     required: [true, 'Event location is required'],
     trim: true,
     maxlength: [200, 'Location cannot exceed 200 characters']
+  },
+  description: {
+    type: String,
+    required: [true, 'Event description is required'],
+    trim: true,
+    maxlength: [1000, 'Description cannot exceed 1000 characters']
+  },
+  coverImage: {
+    type: String,
+    required: [true, 'Cover image is required']
   }
 }, { 
   timestamps: true 

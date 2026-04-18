@@ -1,7 +1,8 @@
+
 import React from 'react';
 import Event from './Event';
 
-const DayCell = ({ dayObj, events, isToday, monthName }) => {
+const DayCell = ({ dayObj, events, isToday, monthName, onEventClick }) => {
   return (
     <div
       className={`min-h-24 p-2 border-r border-gray-200 last:border-r-0 ${
@@ -27,7 +28,11 @@ const DayCell = ({ dayObj, events, isToday, monthName }) => {
       
       <div className="space-y-1">
         {events.map(event => (
-          <Event key={event.id} event={event} />
+          <Event 
+            key={event.id} 
+            event={event} 
+            onEventClick={onEventClick} // Pass onEventClick prop
+          />
         ))}
       </div>
     </div>

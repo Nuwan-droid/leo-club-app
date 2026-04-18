@@ -1,88 +1,64 @@
-import React, { useState } from 'react';
+// frontend/src/components/LearningHub.js
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import LessonList from './child_components/LessonList';
 import FileUploadModal from './child_components/FileUploadModal';
 
 const LearningHub = () => {
-  const [lessons, setLessons] = useState([
-    {
-      id: 1,
-      title: 'Design Conference',
-      date: 'Today 07:19 AM',
-      location: '56 Davion Mission Suite 157',
-      city: 'Meaghanberg',
-      attendees: [
-        { id: 1, avatar: 'https://randomuser.me/api/portraits/men/1.jpg' },
-        { id: 2, avatar: 'https://randomuser.me/api/portraits/women/2.jpg' },
-        { id: 3, avatar: 'https://randomuser.me/api/portraits/men/3.jpg' },
-      ],
-      additionalCount: 15,
-      image: 'https://randomuser.me/api/portraits/men/10.jpg'
-    },
-    {
-      id: 2,
-      title: 'Weekend Festival',
-      date: '16 October 2019 at 5:00 PM',
-      location: '853 Moore Flats Suite 158',
-      city: 'Sweden',
-      attendees: [
-        { id: 1, avatar: 'https://randomuser.me/api/portraits/men/4.jpg' },
-        { id: 2, avatar: 'https://randomuser.me/api/portraits/women/5.jpg' },
-        { id: 3, avatar: 'https://randomuser.me/api/portraits/men/6.jpg' },
-      ],
-      additionalCount: 20,
-      image: 'https://randomuser.me/api/portraits/women/15.jpg'
-    },
-    {
-      id: 3,
-      title: 'Glastonbury Festival',
-      date: '20-22 October 2019 at 8:00 PM',
-      location: '646 Walter Road Apt. 571',
-      city: 'Turks and Caicos Islands',
-      attendees: [
-        { id: 1, avatar: 'https://randomuser.me/api/portraits/men/7.jpg' },
-        { id: 2, avatar: 'https://randomuser.me/api/portraits/women/8.jpg' },
-        { id: 3, avatar: 'https://randomuser.me/api/portraits/men/9.jpg' },
-      ],
-      additionalCount: 14,
-      image: 'https://randomuser.me/api/portraits/women/20.jpg'
-    },
-    {
-      id: 4,
-      title: 'Ultra Europe 2019',
-      date: '25 October 2019 at 10:00 PM',
-      location: '506 Satterfield Tunnel Apt. 963',
-      city: 'San Marino',
-      attendees: [
-        { id: 1, avatar: 'https://randomuser.me/api/portraits/men/11.jpg' },
-        { id: 2, avatar: 'https://randomuser.me/api/portraits/women/12.jpg' },
-        { id: 3, avatar: 'https://randomuser.me/api/portraits/men/13.jpg' },
-      ],
-      additionalCount: 12,
-      image: 'https://randomuser.me/api/portraits/women/25.jpg'
-    }
-  ]);
-
+  const [lessons, setLessons] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [showAll, setShowAll] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchLessons = async () => {
+      try {
+        const token = sessionStorage.getItem('adminToken');
+        if (!token) throw new Error('No admin token found');
+        const response = await axios.get('http://localhost:5001/api/learninghub', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        console.log('Fetched Lessons:', response.data);
+        setLessons(response.data);
+      } catch (err) {
+        setError(err.response?.data?.message || 'Failed to fetch lessons');
+        console.error('Fetch Error:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchLessons();
+  }, []);
 
   const handleAddLesson = () => {
     setIsModalOpen(true);
   };
 
-  const handleSubmitLesson = (lessonData) => {
-    const newLesson = {
-      id: lessons.length + 1,
-      title: lessonData.title,
-      date: 'Today',
-      location: 'New Location',
-      city: 'New City',
-      attendees: [],
-      additionalCount: 0,
-      image: 'https://randomuser.me/api/portraits/men/1.jpg'
-    };
-    
-    setLessons([newLesson, ...lessons]);
-    setIsModalOpen(false);
+  const handleSubmitLesson = async (lessonData) => {
+    try {
+      const token = sessionStorage.getItem('adminToken');
+      if (!token) throw new Error('No admin token found');
+      const formData = new FormData();
+      formData.append('title', lessonData.title);
+      formData.append('description', lessonData.description);
+      formData.append('type', lessonData.type);
+      if (lessonData.image) formData.append('image', lessonData.image);
+      if (lessonData.source_file) formData.append('source_file', lessonData.source_file);
+
+      const response = await axios.post('http://localhost:5001/api/learninghub', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      setLessons([response.data, ...lessons]);
+      setIsModalOpen(false);
+    } catch (err) {
+      console.error('Upload Error:', err.response?.data || err.message);
+      alert(`Failed to upload lesson: ${err.response?.data?.message || err.message}`);
+    }
   };
 
   const handleCancel = () => {
@@ -90,6 +66,9 @@ const LearningHub = () => {
   };
 
   const displayedLessons = showAll ? lessons : lessons.slice(0, 4);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>{error}</div>;
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">

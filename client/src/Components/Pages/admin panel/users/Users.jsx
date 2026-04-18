@@ -26,7 +26,9 @@ const Users = () => {
             ...user,
             isActive: true,
             userType: 'active',
-            tableId: user._id
+            tableId: user._id,
+            // Ensure score is a number, default to 0 if not present
+            score: typeof user.score === 'number' ? user.score : 0
           }))
         : [];
 
@@ -43,7 +45,9 @@ const Users = () => {
               // CRITICAL: Make sure originalUserId is set correctly
               // The backend controller expects this field to find the inactive user
               originalUserId: user.originalUserId || user.userId || user.originalId,
-              tableId: user._id
+              tableId: user._id,
+              // Ensure score is a number, default to 0 if not present
+              score: typeof user.score === 'number' ? user.score : 0
             };
           })
         : [];
@@ -51,7 +55,42 @@ const Users = () => {
       console.log("✅ Active users loaded:", activeUsers.length);
       console.log("✅ Inactive users loaded:", inactiveUsers.length);
 
-      setUsers([...activeUsers, ...inactiveUsers]);
+      // Log score data for debugging
+      console.log("🔍 Sample active user scores:", activeUsers.slice(0, 3).map(u => ({
+        name: `${u.firstName} ${u.lastName}`,
+        score: u.score,
+        scoreType: typeof u.score,
+        role: u.role,
+        allFields: Object.keys(u)
+      })));
+
+      console.log("🔍 Sample inactive user scores:", inactiveUsers.slice(0, 3).map(u => ({
+        name: `${u.firstName} ${u.lastName}`,
+        score: u.score,
+        scoreType: typeof u.score,
+        role: u.role,
+        allFields: Object.keys(u)
+      })));
+
+      // Combine and sort by score in descending order
+      const allUsers = [...activeUsers, ...inactiveUsers];
+      const sortedUsers = allUsers.sort((a, b) => {
+        // Sort by score in descending order (highest first)
+        // Handle cases where score might be undefined or null
+        const scoreA = typeof a.score === 'number' ? a.score : 0;
+        const scoreB = typeof b.score === 'number' ? b.score : 0;
+        return scoreB - scoreA;
+      });
+
+      console.log("🔢 Users sorted by score (descending)");
+      console.log("Top 5 users by score:", sortedUsers.slice(0, 5).map(u => ({ 
+        name: `${u.firstName} ${u.lastName}`, 
+        score: u.score,
+        role: u.role,
+        scoreDisplay: `${u.score || 0} points`
+      })));
+
+      setUsers(sortedUsers);
       setErrorMsg("");
     } catch (err) {
       console.error("❌ Error fetching users:", err);
@@ -182,6 +221,16 @@ const Users = () => {
     <div className="p-6 bg-gray-50 min-h-screen">
       <div className="max-w-7xl mx-auto">
         <h1 className="text-3xl font-bold text-gray-900 mb-8">User Management</h1>
+        
+        {/* Score sorting info */}
+        <div className="mb-4 text-sm text-gray-600 bg-blue-50 border border-blue-200 rounded-lg p-3">
+          <div className="flex items-center">
+            <svg className="h-4 w-4 text-blue-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>Users are sorted by score in descending order (highest score first)</span>
+          </div>
+        </div>
 
         {loading ? (
           <div className="flex justify-center items-center py-8">

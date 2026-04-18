@@ -1,127 +1,91 @@
+// frontend/src/components/child_components/FileUploadModal.js
 import React, { useState } from 'react';
 
 const FileUploadModal = ({ isOpen, onSubmit, onCancel }) => {
-  const [formData, setFormData] = useState({
-    title: '',
-    description: '',
-    file: null
-  });
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
-  };
-
-  const handleFileUpload = (e) => {
-    const file = e.target.files[0];
-    setFormData(prev => ({
-      ...prev,
-      file: file
-    }));
-  };
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [image, setImage] = useState(null);
+  const [sourceFile, setSourceFile] = useState(null);
+  const [type, setType] = useState('');
+  const [error, setError] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (formData.title && formData.file) {
-      onSubmit(formData);
-      setFormData({ title: '', description: '', file: null });
+    if (!title || !description || !sourceFile) {
+      setError('Title, description, and source file are required');
+      return;
     }
-  };
-
-  const handleCancel = () => {
-    setFormData({ title: '', description: '', file: null });
-    onCancel();
+    onSubmit({ title, description, image, source_file: sourceFile, type });
+    setTitle('');
+    setDescription('');
+    setImage(null);
+    setSourceFile(null);
+    setType('');
+    setError('');
   };
 
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 bg-transparent bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-lg p-6 w-full max-w-md mx-4">
-        <h2 className="text-xl font-semibold mb-4">File Upload</h2>
-        
+      <div className="bg-white p-6 rounded-lg shadow-xl max-w-md w-full relative">
+        <button
+          onClick={onCancel}
+          className="absolute top-2 right-2 text-red-600 hover:text-gray-700 text-2xl font-bold"
+        >
+          ×
+        </button>
+        <h2 className="text-xl font-semibold text-gray-900 mb-6">Upload New Lesson</h2>
+        {error && <p className="text-red-600 text-sm mb-4">{error}</p>}
         <form onSubmit={handleSubmit}>
-       
-          <div className="mb-6">
-            <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
-              <div className="mb-4">
-                <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 48 48">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" />
-                </svg>
-              </div>
-              
-              <p className="text-gray-600 mb-2">Click or drag file to this area to upload</p>
-              <p className="text-sm text-gray-500">Formats accepted are pdf, mp4</p>
-              
-              <input
-                type="file"
-                accept=".pdf,.mp4"
-                onChange={handleFileUpload}
-                className="hidden"
-                id="fileUpload"
-              />
-              <label
-                htmlFor="fileUpload"
-                className="mt-4 inline-block bg-blue-500 text-white px-4 py-2 rounded cursor-pointer hover:bg-blue-600 transition-colors"
-              >
-                Choose File
-              </label>
-              
-              {formData.file && (
-                <p className="mt-2 text-sm text-green-600">
-                  Selected: {formData.file.name}
-                </p>
-              )}
-            </div>
-          </div>
-
-        
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Title of Lesson
-            </label>
-            <input
-              type="text"
-              name="title"
-              value={formData.title}
-              onChange={handleInputChange}
-              placeholder="Enter Title"
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
-          </div>
-
-         
-          <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Description
-            </label>
-            <textarea
-              name="description"
-              value={formData.description}
-              onChange={handleInputChange}
-              rows={4}
-              className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="Enter description..."
-            />
-          </div>
-
-          
+          <label className="block text-sm font-medium text-gray-700 mb-2">Title:</label>
+          <input
+            type="text"
+            placeholder="Enter title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            required
+          />
+          <label className="block text-sm font-medium text-gray-700 mb-2">Description:</label>
+          <textarea
+            placeholder="Enter description"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            rows="4"
+            required
+          />
+          <label className="block text-sm font-medium text-gray-700 mb-2">Type:</label>
+          <select
+            value={type}
+            onChange={(e) => setType(e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          >
+            <option value="" disabled>Select type</option>
+            <option value="pdf">PDF</option>
+            <option value="mp4">MP4</option>
+          </select>
+          <label className="block text-sm font-medium text-gray-700 mb-2">Image (optional):</label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => setImage(e.target.files[0])}
+            className="w-full p-2 border border-gray-300 rounded-md mb-4 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+          />
+          <label className="block text-sm font-medium text-gray-700 mb-2">Source File (PDF or MP4):</label>
+          <input
+            type="file"
+            accept=".pdf,.mp4"
+            onChange={(e) => setSourceFile(e.target.files[0])}
+            className="w-full p-2 border border-gray-300 rounded-md mb-6 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+            required
+          />
           <div className="flex justify-end space-x-3">
-            <button
-              type="button"
-              onClick={handleCancel}
-              className="px-4 py-2 text-gray-600 bg-gray-200 rounded-lg hover:bg-gray-300 transition-colors"
-            >
+            <button type="button" onClick={onCancel} className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 transition-colors">
               Cancel
             </button>
-            <button
-              type="submit"
-              className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
-            >
+            <button type="submit" className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors">
               Submit
             </button>
           </div>

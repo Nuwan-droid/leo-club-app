@@ -1,7 +1,8 @@
+
 import React from 'react';
 import DayCell from './DayCell';
 
-const WeekRow = ({ week, weekIndex, getEventsForDate, isToday, monthName }) => {
+const WeekRow = ({ week, weekIndex, getEventsForDate, isToday, monthName, onEventClick }) => {
   return (
     <div className="grid grid-cols-8 border-b border-gray-200 last:border-b-0">
       {/* Week number */}
@@ -14,7 +15,6 @@ const WeekRow = ({ week, weekIndex, getEventsForDate, isToday, monthName }) => {
         const dayEvents = dayObj.isCurrentMonth ? getEventsForDate(dayObj.day) : [];
         const todayCheck = dayObj.isCurrentMonth && isToday(dayObj.day);
         
-        
         return (
           <DayCell
             key={dayIndex}
@@ -22,6 +22,7 @@ const WeekRow = ({ week, weekIndex, getEventsForDate, isToday, monthName }) => {
             events={dayEvents}
             isToday={todayCheck}
             monthName={monthName}
+            onEventClick={onEventClick} // Pass onEventClick prop
           />
         );
       })}
