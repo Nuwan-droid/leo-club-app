@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Trash2, Edit, Plus } from "lucide-react";
 import AddEventCalendar from "./AddEventCalendar";
+import { BACKEND_URL } from "../../../../config/backend";
 
 const ListEventCalendar = () => {
   const [allEvents, setAllEvents] = useState([]);
@@ -23,7 +24,7 @@ const ListEventCalendar = () => {
 
   const fetchEvents = async () => {
     try {
-      const res = await fetch("http://localhost:5001/api/events");
+      const res = await fetch(`${BACKEND_URL}/api/events`);
       const data = await res.json();
       if (data.success) setAllEvents(data.events);
     } catch (err) {
@@ -64,7 +65,7 @@ const ListEventCalendar = () => {
       formData.append("description", editFormData.description);
 
       const res = await fetch(
-        `http://localhost:5001/api/events/${eventToEdit._id}`,
+        `${BACKEND_URL}/api/events/${eventToEdit._id}`,
         {
           method: "PUT",
           body: formData,
@@ -91,7 +92,7 @@ const ListEventCalendar = () => {
 
     try {
       const res = await fetch(
-        `http://localhost:5001/api/events/${eventToDelete._id}`,
+        `${BACKEND_URL}/api/events/${eventToDelete._id}`,
         {
           method: "DELETE",
         }
@@ -154,7 +155,7 @@ const ListEventCalendar = () => {
                   <td className="p-4">
                     {ev.coverImage && (
                       <img
-                        src={`http://localhost:5001/events/${ev.coverImage}`}
+                        src={`${BACKEND_URL}/events/${ev.coverImage}`}
                         alt={ev.name}
                         className="w-16 h-16 object-cover rounded"
                       />

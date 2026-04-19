@@ -6,6 +6,7 @@ import AddSubmissionModal from "./child_components/AddSubmissionModal";
 import AddNewsletterModal from "./child_components/AddNewsletterModal";
 import EditNewsletterModal from "./child_components/EditNewsletterModal";
 import NewsletterList from "./child_components/NewsletterList";
+import { BACKEND_URL } from "../../../../config/backend";
 
 const Newsletters = () => {
   // Newsletter states
@@ -40,7 +41,7 @@ const Newsletters = () => {
   const fetchNewsletters = async () => {
     try {
       setNewslettersLoading(true);
-      const response = await axios.get("http://localhost:5001/api/newsletters");
+      const response = await axios.get(`${BACKEND_URL}/api/newsletters`);
       setNewsletters(response.data.newsletters || []);
     } catch (error) {
       console.error("Error fetching newsletters:", error);
@@ -56,7 +57,7 @@ const Newsletters = () => {
       setSubscribersLoading(true);
       setErrorMsg("");
       const response = await axios.get(
-        "http://localhost:5001/api/user/getAllUsers"
+        `${BACKEND_URL}/api/user/getAllUsers`
       );
       const activeSubscribers = Array.isArray(response.data.users)
         ? response.data.users.map((user) => ({
@@ -113,7 +114,7 @@ const Newsletters = () => {
     const newScore = (selectedMemberForScore.score || 0) + scoreData.score;
     try {
       await axios.patch(
-        `http://localhost:5001/api/user/addScore/${selectedMemberForScore.id}`,
+        `${BACKEND_URL}/api/user/addScore/${selectedMemberForScore.id}`,
         {
           score: newScore,
         }
@@ -137,7 +138,7 @@ const Newsletters = () => {
 
     try {
       await axios.post(
-        `http://localhost:5001/api/newsletter/uploadnewslettersubmission/${selectedMemberForSubmission.id}`,
+        `${BACKEND_URL}/api/newsletter/uploadnewslettersubmission/${selectedMemberForSubmission.id}`,
         formData,
         {
           headers: {

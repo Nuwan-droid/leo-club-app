@@ -1,6 +1,7 @@
 // RequestEventPopup.jsx
 import React, { useState, useEffect } from 'react';
 import { X, Calendar, Clock, MapPin, FileText, Check } from 'lucide-react';
+import { BACKEND_URL } from '../../../config/backend';
 
 const RequestEventPopup = ({ onClose }) => {
   const [formData, setFormData] = useState({
@@ -91,7 +92,7 @@ const RequestEventPopup = ({ onClose }) => {
     setIsSubmitting(true);
     
     try {
-      const response = await fetch('/api/events', {
+      const response = await fetch(`${BACKEND_URL}/api/events`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

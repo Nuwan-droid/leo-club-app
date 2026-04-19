@@ -6,6 +6,7 @@ import Button from "./Button";
 import Input from "./Input";
 import logo from "../../assets/lion.svg";
 import { toast } from "react-toastify";
+import { BACKEND_URL } from "../../config/backend";
 
 export default function AdminSignUp({ onClose, onSwitchToMember }) {
   // Local state to manage modal visibility if parent doesn't provide onClose
@@ -118,7 +119,7 @@ export default function AdminSignUp({ onClose, onSwitchToMember }) {
     };
 
     try {
-      const res = await fetch("http://localhost:5001/api/auth/admin-signup", {
+      const res = await fetch(`${BACKEND_URL}/api/auth/admin-signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),

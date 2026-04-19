@@ -4,6 +4,7 @@ import EventDetailsPopup from "./EventDetailsPopup";
 import RequestEventPopup from "./RequestEventPopup";
 import Navbar from "../memberportal/memberportalnav";
 import BasicDateCalendar from "./BasicDateCalendar";
+import { BACKEND_URL } from "../../../config/backend";
 
 const EventVolunteerPage = () => {
   const [showEventDetails, setShowEventDetails] = useState(false);
@@ -17,7 +18,7 @@ const EventVolunteerPage = () => {
     const fetchEvents = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch('/api/events');
+        const response = await fetch(`${BACKEND_URL}/api/events`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }

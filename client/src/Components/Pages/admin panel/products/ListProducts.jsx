@@ -4,6 +4,7 @@ import DeleteConfirmationModal from './chid-components/products/DeleteConfirmati
 import EditProductModal from './chid-components/products/EditProductModal';
 import ProductStats from './chid-components/products/ProductStats';
 import ProductTable from './chid-components/products/ProductTable';
+import { BACKEND_URL } from '../../../../config/backend';
 
 const ListProducts = () => {
   const [showAddDialog, setShowAddDialog] = useState(false);
@@ -29,7 +30,7 @@ const ListProducts = () => {
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch('http://localhost:5001/api/products/allproducts');
+      const response = await fetch(`${BACKEND_URL}/api/products/allproducts`);
       const data = await response.json();
       console.log('Fetched products:', data); 
       
@@ -95,7 +96,7 @@ const ListProducts = () => {
       originalPrice: editFormData.originalPrice ? parseFloat(editFormData.originalPrice) : null
     };
     try {
-      const res = await fetch('http://localhost:5001/api/products/updateproduct', {
+      const res = await fetch(`${BACKEND_URL}/api/products/updateproduct`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updatedProduct)
@@ -119,7 +120,7 @@ const ListProducts = () => {
     if (!productToDelete) return;
 
     try {
-      const res = await fetch('http://localhost:5001/api/products/removeproduct', {
+      const res = await fetch(`${BACKEND_URL}/api/products/removeproduct`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id: productToDelete._id || productToDelete.id })

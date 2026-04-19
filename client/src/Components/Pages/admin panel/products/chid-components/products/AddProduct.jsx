@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Upload } from 'lucide-react';
+import { BACKEND_URL } from '../../../../../../config/backend';
 
 const AddProduct = () => {
   const [mainImage, setMainImage] = useState(null);
@@ -128,7 +129,7 @@ const AddProduct = () => {
     try {
      
       console.log('Starting image upload...');
-      const uploadRes = await fetch('http://localhost:5001/api/products/upload', {
+      const uploadRes = await fetch(`${BACKEND_URL}/api/products/upload`, {
         method: 'POST',
         body: formData,
       });
@@ -152,7 +153,7 @@ const AddProduct = () => {
 
      
       console.log('Final product data being sent:', JSON.stringify(product, null, 2));
-      const addRes = await fetch('http://localhost:5001/api/products/addproduct', {
+      const addRes = await fetch(`${BACKEND_URL}/api/products/addproduct`, {
         method: 'POST',
         headers: {
           Accept: 'application/json',

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import clubImage from '../../assets/AboutImages/2.png';
+import { BACKEND_URL } from '../../config/backend';
 
 
 const About = () => {
@@ -17,7 +18,7 @@ const About = () => {
       try {
         setLoading(true);
         console.log('Fetching executive members from API...');
-        const response = await axios.get('/api/executive-members');
+        const response = await axios.get(`${BACKEND_URL}/api/executive-members`);
         console.log('API Response:', response.data);
         
         if (response.data.success) {

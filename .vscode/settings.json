@@ -1,0 +1,8 @@
+{
+    "appService.zipIgnorePattern": [
+        "node_modules{,/**}",
+        ".vscode{,/**}"
+    ],
+    "appService.defaultWebAppToDeploy": "/subscriptions/df4fe445-c6d9-4c8f-bc8b-95f232ccfc6a/resourceGroups/Leo-club-uwu/providers/Microsoft.Web/sites/Leo-club-server",
+    "appService.deploySubpath": "server"
+}

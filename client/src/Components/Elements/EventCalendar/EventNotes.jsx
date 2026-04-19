@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useMemo } from 'react';
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
 const EventNotes = ({ events, selectedEvent, onEventClick }) => {
   const detailsRef = useRef(null);
 
@@ -83,7 +85,7 @@ const EventNotes = ({ events, selectedEvent, onEventClick }) => {
                 <div className="mt-2 p-4 bg-white border border-blue-200 rounded-xl shadow-inner animate-slideDown">
                   {event.coverImage && (
                     <img
-                      src={`http://localhost:5001/events/${event.coverImage}`}
+                      src={`${BACKEND_URL}/events/${event.coverImage}`}
                       alt={event.title}
                       className="w-full h-48 object-cover rounded-lg mb-4"
                     />

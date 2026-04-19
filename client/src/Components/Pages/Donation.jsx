@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import lionImage from '../../assets/DonateImages/Lion.png';
 import { useNavigate } from 'react-router-dom';
+import { BACKEND_URL } from '../../config/backend';
 
 const Donation = () => {
   const navigate = useNavigate();
@@ -17,7 +18,7 @@ const Donation = () => {
     const fetchDonationProjects = async () => {
       try {
         setLoading(true);
-        const response = await fetch('http://localhost:5001/api/donation-projects');
+        const response = await fetch(`${BACKEND_URL}/api/donation-projects`);
         if (!response.ok) {
           throw new Error('Failed to fetch donation projects');
         }
@@ -49,7 +50,7 @@ const Donation = () => {
     const fetchTotalDonations = async () => {
       try {
         setClubFundLoading(true);
-        const response = await fetch('http://localhost:5001/api/donation-projects/donations');
+        const response = await fetch(`${BACKEND_URL}/api/donation-projects/donations`);
         if (!response.ok) {
           throw new Error('Failed to fetch donations');
         }

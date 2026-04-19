@@ -4,6 +4,7 @@ import { toast } from 'react-toastify';
 import DonationTable from './child_components/DonationTable';
 import DonationStats from './child_components/DonationStats';
 import DonationFilters from './child_components/DonationFilters';
+import { BACKEND_URL } from '../../../../config/backend';
 
 const Donations = () => {
   const [donations, setDonations] = useState([]);
@@ -48,7 +49,7 @@ const Donations = () => {
     try {
       setLoading(true);
       console.log('📡 Making API call to fetch donations...');
-      const response = await axios.get('http://localhost:5001/api/donation-projects/donations');
+      const response = await axios.get(`${BACKEND_URL}/api/donation-projects/donations`);
       console.log('✅ API Response received:', response.data);
       setDonations(response.data || []);
       console.log('📝 Donations state updated with:', response.data?.length || 0, 'items');
@@ -66,7 +67,7 @@ const Donations = () => {
   const fetchProjects = async () => {
     try {
       console.log('📡 Fetching donation projects...');
-      const response = await axios.get('http://localhost:5001/api/donation-projects');
+      const response = await axios.get(`${BACKEND_URL}/api/donation-projects`);
       console.log('✅ Donation projects response:', response.data);
       
       // Handle the response format from donation projects API
@@ -82,7 +83,7 @@ const Donations = () => {
       // Fallback to regular projects if donation projects fail
       try {
         console.log('📡 Trying regular projects as fallback...');
-        const fallbackResponse = await axios.get('http://localhost:5001/api/projects/allprojects');
+        const fallbackResponse = await axios.get(`${BACKEND_URL}/api/projects/allprojects`);
         console.log('✅ Regular projects fallback response:', fallbackResponse.data);
         setProjects(fallbackResponse.data || []);
       } catch (fallbackError) {
@@ -156,7 +157,7 @@ const Donations = () => {
 
   const handleVerifyDonation = async (donationId) => {
     try {
-      await axios.patch(`http://localhost:5001/api/donation-projects/donations/${donationId}/verify`);
+      await axios.patch(`${BACKEND_URL}/api/donation-projects/donations/${donationId}/verify`);
       
       toast.success('Donation verified successfully');
       fetchDonations(); // Refresh the list
@@ -169,7 +170,7 @@ const Donations = () => {
   const handleDeleteDonation = async (donationId) => {
     if (window.confirm('Are you sure you want to delete this donation?')) {
       try {
-        await axios.delete(`http://localhost:5001/api/donation-projects/donations/${donationId}`);
+        await axios.delete(`${BACKEND_URL}/api/donation-projects/donations/${donationId}`);
         
         toast.success('Donation deleted successfully');
         fetchDonations(); // Refresh the list

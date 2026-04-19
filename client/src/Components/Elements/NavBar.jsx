@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import Button from "./Button";
 import Header from "./Header";
 import AuthPopup from "./AuthPop";
+import { BACKEND_URL } from "../../config/backend";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -64,7 +65,7 @@ export default function Navbar() {
   }
 
   try {
-    const res = await fetch("http://localhost:5001/api/user/profile", {
+    const res = await fetch(`${BACKEND_URL}/api/user/profile`, {
       headers: {
         Authorization: `Bearer ${token}`,
         "Content-Type": "application/json",

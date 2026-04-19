@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ShoppingCart, Plus, Minus, ArrowLeft } from 'lucide-react';
 import { toast } from 'react-toastify';
+import { BACKEND_URL } from '../../../config/backend';
 
 function VisitorForm({ visitorInfo, setVisitorInfo, onProceed, isProcessing }) {
   return (
@@ -189,7 +190,7 @@ const ProductDetail = ({
         console.log('Making payment request as visitor');
       }
 
-      const response = await fetch("http://localhost:5001/api/payment/payhere-init", {
+      const response = await fetch(`${BACKEND_URL}/api/payment/payhere-init`, {
         method: "POST",
         headers,
         body: JSON.stringify(paymentPayload),

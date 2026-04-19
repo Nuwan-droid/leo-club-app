@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { BACKEND_URL } from "../../../../../config/backend";
 
 const EditNewsletterModal = ({ isOpen, onClose, newsletter, onSave }) => {
   const [title, setTitle] = useState("");
@@ -121,7 +122,7 @@ const EditNewsletterModal = ({ isOpen, onClose, newsletter, onSave }) => {
       });
 
       const response = await axios.put(
-        `http://localhost:5001/api/newsletters/${newsletter._id}`,
+        `${BACKEND_URL}/api/newsletters/${newsletter._id}`,
         formData,
         {
           headers: {

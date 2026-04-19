@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import UserTable from "./child_components/UserTable";
 import UsersPagination from "./child_components/UsersPagination";
+import { BACKEND_URL } from "../../../../config/backend";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
@@ -17,8 +18,8 @@ const Users = () => {
       setLoading(true);
 
       const [activeRes, inactiveRes] = await Promise.all([
-        axios.get("http://localhost:5001/api/user/getAllUsers"),
-        axios.get("http://localhost:5001/api/user/getInactiveUsers")
+        axios.get(`${BACKEND_URL}/api/user/getAllUsers`),
+        axios.get(`${BACKEND_URL}/api/user/getInactiveUsers`)
       ]);
 
       const activeUsers = Array.isArray(activeRes.data.users)
@@ -142,11 +143,11 @@ const Users = () => {
       
       if (userType === 'active') {
         // Deactivate user
-        endpoint = `http://localhost:5001/api/user/inactivateUser/${userId}`;
+        endpoint = `${BACKEND_URL}/api/user/inactivateUser/${userId}`;
         console.log("🔴 Deactivating user with endpoint:", endpoint);
       } else if (userType === 'inactive') {
         // Reactivate user
-        endpoint = `http://localhost:5001/api/user/reactivateUser/${userId}`;
+        endpoint = `${BACKEND_URL}/api/user/reactivateUser/${userId}`;
         console.log("🟢 Reactivating user with endpoint:", endpoint);
       }
 

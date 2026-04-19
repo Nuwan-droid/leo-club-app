@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { BACKEND_URL } from '../../../../../config/backend';
 
 const DonationDetails = ({ projectId, projectTitle, onClose }) => {
   const [donationItems, setDonationItems] = useState([]);
@@ -22,7 +23,7 @@ const DonationDetails = ({ projectId, projectTitle, onClose }) => {
     try {
       setLoading(true);
       setError(null); 
-      const response = await fetch(`http://localhost:5001/api/donation-projects/items/${projectId}`);
+      const response = await fetch(`${BACKEND_URL}/api/donation-projects/items/${projectId}`);
       
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -78,7 +79,7 @@ const DonationDetails = ({ projectId, projectTitle, onClose }) => {
 
   const updateDonationStatus = async (donationId, newStatus) => {
     try {
-      const response = await fetch(`http://localhost:5001/api/donation-projects/items/${donationId}/status`, {
+      const response = await fetch(`${BACKEND_URL}/api/donation-projects/items/${donationId}/status`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

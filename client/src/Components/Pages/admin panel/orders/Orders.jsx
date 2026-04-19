@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import OrderTable from './child-component/OrderTable';
 import StatusBadgeBoxes from './child-component/StatusBadge'; 
+import { BACKEND_URL } from '../../../../config/backend';
 
 const Orders = () => {
   const [memberOrders, setMemberOrders] = useState([]);
@@ -51,7 +52,7 @@ const Orders = () => {
         console.log('Fetching all orders for admin (completed only)...');
 
         // Fetch member orders - Get all orders for frontend pagination
-        const memberRes = await fetch('http://localhost:5001/api/orders/all?customer_type=member&limit=999999', {
+        const memberRes = await fetch(`${BACKEND_URL}/api/orders/all?customer_type=member&limit=999999`, {
           method: 'GET',
           headers,
         });
@@ -68,7 +69,7 @@ const Orders = () => {
         console.log('Member data received:', memberData);
 
         // Fetch visitor orders - Get all orders for frontend pagination
-        const visitorRes = await fetch('http://localhost:5001/api/orders/all?customer_type=visitor&limit=999999', {
+        const visitorRes = await fetch(`${BACKEND_URL}/api/orders/all?customer_type=visitor&limit=999999`, {
           method: 'GET',
           headers,
         });

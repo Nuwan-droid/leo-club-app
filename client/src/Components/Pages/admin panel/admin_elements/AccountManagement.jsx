@@ -4,6 +4,7 @@ import Adminlogo from "../../../../../public/profile.png";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { BACKEND_URL } from "../../../../config/backend";
 
 const AccountManagement = () => {
   const navigate = useNavigate();
@@ -29,7 +30,7 @@ const AccountManagement = () => {
 
         if (!token) return;
 
-        const res = await axios.get("http://localhost:5001/api/users/profile", {
+        const res = await axios.get(`${BACKEND_URL}/api/users/profile`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 
@@ -87,7 +88,7 @@ const AccountManagement = () => {
       form.append("phone", formData.phone);
       if (imageFile) form.append("profilePic", imageFile);
 
-      await axios.put("http://localhost:5001/api/users/profile", form, {
+      await axios.put(`${BACKEND_URL}/api/users/profile`, form, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -114,7 +115,7 @@ const AccountManagement = () => {
       }
 
       await axios.put(
-        "http://localhost:5001/api/users/change-password",
+        `${BACKEND_URL}/api/users/change-password`,
         {
           currentPassword: formData.currentPassword,
           newPassword: formData.newPassword,

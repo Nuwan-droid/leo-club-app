@@ -4,6 +4,7 @@ import Button from "./Button";
 import Input from "./Input";
 import logo from "../../assets/lion.svg";
 import { toast } from "react-toastify";
+import { BACKEND_URL } from "../../config/backend";
 
 export default function SignUp({ onClose, onSwitchToAdmin }) {
   const [leoStatus, setLeoStatus] = useState("member");
@@ -106,7 +107,7 @@ export default function SignUp({ onClose, onSwitchToAdmin }) {
     if (!payload.leo_Id) delete payload.leo_Id;
 
     try {
-      const res = await fetch("http://localhost:5001/api/auth/signup", {
+      const res = await fetch(`${BACKEND_URL}/api/auth/signup`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
@@ -153,7 +154,7 @@ export default function SignUp({ onClose, onSwitchToAdmin }) {
     try {
       const orderId = `LEO-${Date.now()}`;
       const response = await fetch(
-        "http://localhost:5001/api/registration/initiate",
+        `${BACKEND_URL}/api/registration/initiate`,
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },

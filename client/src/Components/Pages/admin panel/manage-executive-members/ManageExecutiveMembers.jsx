@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import { FaEdit, FaTrash, FaPlus, FaEye, FaSearch, FaTimes } from 'react-icons/fa';
+import { BACKEND_URL } from '../../../../config/backend';
 
 const ManageExecutiveMembers = () => {
   const [members, setMembers] = useState([]);
@@ -26,7 +27,7 @@ const ManageExecutiveMembers = () => {
   const fetchMembers = async () => {
     try {
       setLoading(true);
-      const response = await axios.get('/api/executive-members');
+      const response = await axios.get(`${BACKEND_URL}/api/executive-members`);
       if (response.data.success) {
         setMembers(response.data.data);
         setFilteredMembers(response.data.data);
@@ -151,12 +152,12 @@ const ManageExecutiveMembers = () => {
 
       let response;
       if (modalMode === 'add') {
-        response = await axios.post('/api/executive-members', submitData, {
+        response = await axios.post(`${BACKEND_URL}/api/executive-members`, submitData, {
           headers: { 'Content-Type': 'multipart/form-data' }
         });
         toast.success('Executive member added successfully');
       } else if (modalMode === 'edit') {
-        response = await axios.put(`/api/executive-members/${selectedMember._id}`, submitData, {
+        response = await axios.put(`${BACKEND_URL}/api/executive-members/${selectedMember._id}`, submitData, {
           headers: { 'Content-Type': 'multipart/form-data' }
         });
         toast.success('Executive member updated successfully');
@@ -180,7 +181,7 @@ const ManageExecutiveMembers = () => {
     if (window.confirm(`Are you sure you want to delete ${memberName}?`)) {
       try {
         setLoading(true);
-        const response = await axios.delete(`/api/executive-members/${memberId}`);
+        const response = await axios.delete(`${BACKEND_URL}/api/executive-members/${memberId}`);
         if (response.data.success) {
           toast.success('Executive member deleted successfully');
           await fetchMembers();

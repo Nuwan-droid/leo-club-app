@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Stat from "./Stat";
 import { UserCircle, Briefcase, Newspaper, Trophy } from "lucide-react";
+import { BACKEND_URL } from "../../config/backend";
 
 const StatsSection = () => {
   const [memberCount, setMemberCount] = useState(0);
@@ -12,22 +13,22 @@ const StatsSection = () => {
     const fetchCounts = async () => {
       try {
        
-        const resMembers = await fetch("http://localhost:5001/api/users/members/count");
+        const resMembers = await fetch(`${BACKEND_URL}/api/users/members/count`);
         const dataMembers = await resMembers.json();
         setMemberCount(dataMembers.count);
 
        
-        const resProjects = await fetch("http://localhost:5001/api/projects/allprojects");
+        const resProjects = await fetch(`${BACKEND_URL}/api/projects/allprojects`);
         const dataProjects = await resProjects.json();
         setProjectCount(dataProjects.length);
 
        
-        const resNewsletters = await fetch("http://localhost:5001/api/newsletters");
+        const resNewsletters = await fetch(`${BACKEND_URL}/api/newsletters`);
         const dataNewsletters = await resNewsletters.json();
         setNewsletterCount(dataNewsletters.newsletters ? dataNewsletters.newsletters.length : 0);
 
        
-        const resAwards = await fetch("http://localhost:5001/api/awards");
+        const resAwards = await fetch(`${BACKEND_URL}/api/awards`);
         const dataAwards = await resAwards.json();
         setAwardCount(dataAwards.length);
       } catch (error) {

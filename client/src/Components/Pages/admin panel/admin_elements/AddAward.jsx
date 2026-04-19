@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { BACKEND_URL } from "../../../../config/backend";
 
 const AddAward = ({ closeModal }) => {
   const [awards, setAwards] = useState([]);
@@ -10,7 +11,7 @@ const AddAward = ({ closeModal }) => {
  
   const fetchAwards = async () => {
     try {
-      const res = await fetch("http://localhost:5001/api/awards");
+      const res = await fetch(`${BACKEND_URL}/api/awards`);
       const data = await res.json();
       setAwards(data);
     } catch (err) {
@@ -46,8 +47,8 @@ const AddAward = ({ closeModal }) => {
     try {
       const method = editAward ? "PUT" : "POST";
       const url = editAward
-        ? `http://localhost:5001/api/awards/${editAward._id}`
-        : "http://localhost:5001/api/awards";
+        ? `${BACKEND_URL}/api/awards/${editAward._id}`
+        : `${BACKEND_URL}/api/awards`;
 
       const res = await fetch(url, {
         method,
@@ -91,7 +92,7 @@ const AddAward = ({ closeModal }) => {
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this award?")) return;
     try {
-      const res = await fetch(`http://localhost:5001/api/awards/${id}`, { method: "DELETE" });
+      const res = await fetch(`${BACKEND_URL}/api/awards/${id}`, { method: "DELETE" });
       if (!res.ok) throw new Error("Failed to delete award");
       setAwards(prev => prev.filter(a => a._id !== id));
       setMessage({ type: "success", text: "Award deleted successfully! ✅" });

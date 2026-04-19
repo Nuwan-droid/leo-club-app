@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 import { toast } from "react-toastify";
 import Button from "./button";
+import { BACKEND_URL } from "../../../../config/backend";
 
 const InboxContent = () => {
   const [messages, setMessages] = useState([]);
@@ -15,7 +16,7 @@ const InboxContent = () => {
     setFetching(true);
     try {
       const res = await fetch(
-        "http://localhost:5001/api/admin-requests/pending-requests",
+        `${BACKEND_URL}/api/admin-requests/pending-requests`,
         {
           headers: {
             Authorization: `Bearer ${sessionStorage.getItem("adminToken")}`,
@@ -61,7 +62,7 @@ const InboxContent = () => {
     setIsLoading(true);
     try {
       const res = await fetch(
-        `http://localhost:5001/api/admin-requests/reject/${id}`,
+        `${BACKEND_URL}/api/admin-requests/reject/${id}`,
         {
           method: "PUT",
           headers: {
@@ -96,7 +97,7 @@ const InboxContent = () => {
     setIsLoading(true);
     try {
       const res = await fetch(
-        `http://localhost:5001/api/admin-requests/approve/${approvingId}`,
+        `${BACKEND_URL}/api/admin-requests/approve/${approvingId}`,
         {
           method: "PUT",
           headers: {

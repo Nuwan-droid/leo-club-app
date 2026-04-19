@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Trash2, Edit, Plus } from 'lucide-react';
 import AddProject from './AddProject';
+import { BACKEND_URL } from '../../../../config/backend';
 
 const ListProject = () => {
   const [allProjects, setAllProjects] = useState([]);
@@ -23,7 +24,7 @@ const ListProject = () => {
 
   const fetchProjects = async () => {
     try {
-      const res = await fetch('http://localhost:5001/api/projects/allprojects');
+      const res = await fetch(`${BACKEND_URL}/api/projects/allprojects`);
       const data = await res.json();
       setAllProjects(data);
     } catch (err) {
@@ -56,7 +57,7 @@ const ListProject = () => {
     if (!projectToEdit) return;
 
     try {
-      const res = await fetch('http://localhost:5001/api/projects/updateproject', {
+      const res = await fetch(`${BACKEND_URL}/api/projects/updateproject`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id: projectToEdit._id || projectToEdit.id, ...editFormData })
@@ -81,7 +82,7 @@ const ListProject = () => {
     if (!projectToDelete) return;
 
     try {
-      const res = await fetch('http://localhost:5001/api/projects/removeproject', {
+      const res = await fetch(`${BACKEND_URL}/api/projects/removeproject`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ id: projectToDelete._id || projectToDelete.id })

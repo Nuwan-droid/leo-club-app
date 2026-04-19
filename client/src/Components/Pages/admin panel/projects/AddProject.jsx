@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Upload, FileText, MapPin, Calendar, Image as ImageIcon, Images } from 'lucide-react';
+import { BACKEND_URL } from '../../../../config/backend';
 
 const AddProject = () => {
   const [image, setImage] = useState(null);
@@ -33,7 +34,7 @@ const AddProject = () => {
     sliderImages.forEach((img) => formData.append('sliderImages', img));
 
     try {
-      const res = await fetch('http://localhost:5001/api/projects/upload', {
+      const res = await fetch(`${BACKEND_URL}/api/projects/upload`, {
         method: 'POST',
         body: formData,
       });
@@ -76,7 +77,7 @@ const AddProject = () => {
       project.image = uploaded.imageUrl;
       project.sliderImages = uploaded.slider_image_urls;
 
-      const res = await fetch('http://localhost:5001/api/projects/addproject', {
+      const res = await fetch(`${BACKEND_URL}/api/projects/addproject`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(project),

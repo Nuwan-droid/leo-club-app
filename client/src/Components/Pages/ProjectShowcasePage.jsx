@@ -3,6 +3,7 @@ import ProjectHeader from "../Elements/ProjectShowcase/ProjectHeader";
 import ProjectFilter from "../Elements/ProjectShowcase/ProjectFilter";
 import ProjectGrid from "../Elements/ProjectShowcase/ProjectGrid";
 import ProjectDialog from "../Elements/ProjectShowcase/ProjectDialog";
+import { BACKEND_URL } from "../../config/backend";
 
 export default function ProjectShowcasePage() {
   const [allProjects, setAllProjects] = useState([]);
@@ -34,7 +35,7 @@ export default function ProjectShowcasePage() {
         console.log('Found token, verifying with API...');
 
         // Verify token by fetching user profile
-        const res = await fetch("http://localhost:5001/api/user/profile", {
+        const res = await fetch(`${BACKEND_URL}/api/user/profile`, {
           headers: {
             Authorization: `Bearer ${storedToken}`,
             "Content-Type": "application/json",
@@ -73,7 +74,7 @@ export default function ProjectShowcasePage() {
 
   // Fetch all projects
   useEffect(() => {
-    fetch("http://localhost:5001/api/projects/allprojects")
+    fetch(`${BACKEND_URL}/api/projects/allprojects`)
       .then((res) => res.json())
       .then((data) => {
         setAllProjects(data);
@@ -101,7 +102,7 @@ export default function ProjectShowcasePage() {
     console.log('Token being sent:', token);
 
     try {
-      const res = await fetch("http://localhost:5001/api/comments/addcomment", {
+      const res = await fetch(`${BACKEND_URL}/api/comments/addcomment`, {
         method: "POST",
         headers: { 
           "Content-Type": "application/json",
@@ -146,7 +147,7 @@ export default function ProjectShowcasePage() {
 
   const fetchProjectComments = async (projectId) => {
     try {
-      const res = await fetch(`http://localhost:5001/api/comments/comments/${projectId}`);
+      const res = await fetch(`${BACKEND_URL}/api/comments/comments/${projectId}`);
       const data = await res.json();
       if (data.success) {
         setReviews((prev) => ({ ...prev, [projectId]: data.comments }));

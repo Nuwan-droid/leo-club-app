@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { BACKEND_URL } from '../../config/backend';
 
 const DonateItems = () => {
   const { projectId } = useParams();
@@ -34,7 +35,7 @@ const DonateItems = () => {
     const fetchProject = async () => {
       try {
         setLoading(true);
-        const response = await fetch(`http://localhost:5001/api/donation-projects/${projectId}`);
+        const response = await fetch(`${BACKEND_URL}/api/donation-projects/${projectId}`);
         if (!response.ok) {
           throw new Error('Failed to fetch project details');
         }
@@ -70,7 +71,7 @@ const DonateItems = () => {
         
         if (token) {
           // Fetch user profile from API (same as member portal and DonateMoney)
-          const response = await fetch("http://localhost:5001/api/user/profile", {
+          const response = await fetch(`${BACKEND_URL}/api/user/profile`, {
             headers: {
               Authorization: `Bearer ${token}`,
               "Content-Type": "application/json",
@@ -189,7 +190,7 @@ const DonateItems = () => {
       };
 
       // Submit donation
-      const response = await fetch('http://localhost:5001/api/donation-projects/items', {
+      const response = await fetch(`${BACKEND_URL}/api/donation-projects/items`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

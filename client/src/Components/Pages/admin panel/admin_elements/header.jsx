@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Adminlogo from "../../../../../public/profile.png";
+import { BACKEND_URL } from "../../../../config/backend";
 
 const Header = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -35,7 +36,7 @@ const Header = () => {
           return;
         }
 
-        const res = await fetch("http://localhost:5001/api/user/profile", {
+        const res = await fetch(`${BACKEND_URL}/api/user/profile`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 

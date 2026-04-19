@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import StatCard from "./StatCard";
 import AddAward from "./AddAward";
+import { BACKEND_URL } from "../../../../config/backend";
 
 
 const DashboardContent = () => {
@@ -12,20 +13,20 @@ useEffect(() => {
   const fetchStats = async () => {
     try {
       // Fetch users
-      const resUsers = await fetch("http://localhost:5001/api/users/members/count");
+      const resUsers = await fetch(`${BACKEND_URL}/api/users/members/count`);
       const dataUsers = await resUsers.json();
       setUserCount(dataUsers.count);
 
       // Fetch projects
-      const resProjects = await fetch("http://localhost:5001/api/projects/allprojects");
+      const resProjects = await fetch(`${BACKEND_URL}/api/projects/allprojects`);
       const dataProjects = await resProjects.json();
       setProjectCount(dataProjects.length);
 
       // Fetch member & visitor orders
       const headers = { "Content-Type": "application/json" };
 
-      const memberRes = await fetch("http://localhost:5001/api/orders/all?customer_type=member&limit=999999", { headers });
-      const visitorRes = await fetch("http://localhost:5001/api/orders/all?customer_type=visitor&limit=999999", { headers });
+      const memberRes = await fetch(`${BACKEND_URL}/api/orders/all?customer_type=member&limit=999999`, { headers });
+      const visitorRes = await fetch(`${BACKEND_URL}/api/orders/all?customer_type=visitor&limit=999999`, { headers });
 
       const memberData = await memberRes.json();
       const visitorData = await visitorRes.json();

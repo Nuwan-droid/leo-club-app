@@ -75,10 +75,11 @@ app.get("/", (req, res) => {
 });
 
 // ✅ frontend deployment
-app.use(express.static(path.join(__dirname, "../client/build")));
-app.get("/{*splat}", (req, res) => {
-  res.sendFile(path.join(__dirname, "../client/build/index.html"));
+app.use(express.static(path.join(__dirname, "../client/dist")));
+app.get("/*splat", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "../client/dist/index.html"));
 });
+
 
 
 // ✅ Start server
