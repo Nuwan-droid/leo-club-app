@@ -3,6 +3,7 @@ import axios from "axios";
 import EventVolunteerTable from "./child-component/EventVolunteerTable";
 import AddScoreModal from "./child-component/AddScoreModal";
 import AddContributionModal from "./child-component/AddContributionModal";
+import { BACKEND_URL } from "../../../../config/backend";
 
 const EventVolunteer = () => {
   const [volunteers, setVolunteers] = useState([]);
@@ -29,7 +30,7 @@ const EventVolunteer = () => {
       setVolunteersLoading(true);
       setErrorMsg("");
       const response = await axios.get(
-        "http://localhost:5001/api/user/getAllUsers"
+        `${BACKEND_URL}/api/user/getAllUsers`
       );
 
       const activeVolunteers = Array.isArray(response.data.users)
@@ -88,7 +89,7 @@ const EventVolunteer = () => {
     const newScore = (selectedVolunteerForScore.score || 0) + scoreData.score;
     try {
       await axios.patch(
-        `http://localhost:5001/api/user/addScore/${selectedVolunteerForScore.id}`,
+        `${BACKEND_URL}/api/user/addScore/${selectedVolunteerForScore.id}`,
         { score: newScore }
       );
       fetchAllVolunteers(); // refresh list
@@ -103,7 +104,7 @@ const EventVolunteer = () => {
   const handleSaveContribution = async (contributionData) => {
     try {
       await axios.patch(
-        `http://localhost:5001/api/user/updateContribution/${selectedVolunteerForContribution.id}`,
+        `${BACKEND_URL}/api/user/updateContribution/${selectedVolunteerForContribution.id}`,
         {
           projectId: contributionData.projectId,
           projectType: contributionData.projectType,

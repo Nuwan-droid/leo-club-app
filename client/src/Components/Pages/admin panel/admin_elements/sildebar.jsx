@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import LogoImage from '../../../../assets/admin/leo.png';
+import { BACKEND_URL } from '../../../../config/backend';
 
 const permissionToTabMap = {
   dashboard: { name: 'Dashboard', path: '/admin' },
@@ -85,7 +86,7 @@ const Sidebar = () => {
           return;
         }
     
-          const response = await axios.get('http://localhost:5001/api/users/profile', {
+          const response = await axios.get(`${BACKEND_URL}/api/users/profile`, {
             headers: { Authorization: `Bearer ${token}` },
           });
         const adminRole = response.data.adminRole;

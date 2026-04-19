@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { BACKEND_URL } from '../../config/backend';
 
 const DonateMoney = () => {
   const [activeStep, setActiveStep] = useState(1);
@@ -37,7 +38,7 @@ const DonateMoney = () => {
       
       try {
         setLoading(true);
-        const response = await fetch(`http://localhost:5001/api/donation-projects/${projectId}`);
+        const response = await fetch(`${BACKEND_URL}/api/donation-projects/${projectId}`);
         if (!response.ok) {
           throw new Error('Failed to fetch project details');
         }
@@ -71,7 +72,7 @@ const DonateMoney = () => {
         
         if (token) {
           // Fetch user profile from API (same as member portal)
-          const response = await fetch("http://localhost:5001/api/user/profile", {
+          const response = await fetch(`${BACKEND_URL}/api/user/profile`, {
             headers: {
               Authorization: `Bearer ${token}`,
               "Content-Type": "application/json",
@@ -196,7 +197,7 @@ const DonateMoney = () => {
     setLoading(true);
     try {
       // Create donation record
-      const donationResponse = await fetch('http://localhost:5001/api/donation-projects/donate', {
+      const donationResponse = await fetch(`${BACKEND_URL}/api/donation-projects/donate`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -223,7 +224,7 @@ const DonateMoney = () => {
       }
 
       // Initiate payment
-      const paymentResponse = await fetch('http://localhost:5001/api/donation-projects/payment/initiate', {
+      const paymentResponse = await fetch(`${BACKEND_URL}/api/donation-projects/payment/initiate`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -288,7 +289,7 @@ const DonateMoney = () => {
     setLoading(true);
     try {
       // Create donation record
-      const donationResponse = await fetch('http://localhost:5001/api/donation-projects/donate', {
+      const donationResponse = await fetch(`${BACKEND_URL}/api/donation-projects/donate`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -328,7 +329,7 @@ const DonateMoney = () => {
         type: formData.file.type
       });
 
-      const receiptResponse = await fetch('http://localhost:5001/api/donation-projects/receipt/upload', {
+      const receiptResponse = await fetch(`${BACKEND_URL}/api/donation-projects/receipt/upload`, {
         method: 'POST',
         body: formDataToSend
       });

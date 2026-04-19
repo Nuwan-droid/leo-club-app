@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { ShoppingCart, Package, CheckCircle, Loader } from 'lucide-react';
+import { BACKEND_URL } from '../../../config/backend';
 
 const OrderSuccess = () => {
   const [countdown, setCountdown] = useState(10);
@@ -27,7 +28,7 @@ const OrderSuccess = () => {
     try {
       console.log(`Completing order: ${orderId}`);
       
-      const response = await fetch('http://localhost:5001/api/orders/complete', {
+      const response = await fetch(`${BACKEND_URL}/api/orders/complete`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

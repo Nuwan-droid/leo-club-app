@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { BACKEND_URL } from "../../../../../config/backend";
 
 const AddNewsletterModal = ({ isOpen, onClose, onSave }) => {
   const [url, setUrl] = useState("");
@@ -61,7 +62,7 @@ const AddNewsletterModal = ({ isOpen, onClose, onSave }) => {
       });
 
       const response = await axios.post(
-        "http://localhost:5001/api/newsletters",
+        `${BACKEND_URL}/api/newsletters`,
         formData,
         {
           headers: { "Content-Type": "multipart/form-data" },

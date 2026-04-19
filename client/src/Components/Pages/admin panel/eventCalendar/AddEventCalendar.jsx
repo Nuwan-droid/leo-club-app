@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Calendar, Clock, MapPin, User, FileText, Image } from 'lucide-react';
+import { BACKEND_URL } from "../../../../config/backend";
 
 const AddEventCalendar = () => {
   const [eventDetails, setEventDetails] = useState({
@@ -41,7 +42,7 @@ const AddEventCalendar = () => {
       formData.append('description', eventDetails.description);
       formData.append('coverImage', coverImage);
 
-      const res = await fetch('http://localhost:5001/api/addevent', {
+      const res = await fetch(`${BACKEND_URL}/api/addevent`, {
         method: 'POST',
         body: formData,
       });

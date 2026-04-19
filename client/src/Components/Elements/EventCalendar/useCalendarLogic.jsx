@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { BACKEND_URL } from '../../../config/backend';
 
 const useCalendarLogic = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -21,7 +22,7 @@ const useCalendarLogic = () => {
   useEffect(() => {
     const fetchEvents = async () => {
       try {
-        const res = await fetch('http://localhost:5001/api/events');
+        const res = await fetch(`${BACKEND_URL}/api/events`);
         const data = await res.json();
         if (data.success) {
           setEvents(

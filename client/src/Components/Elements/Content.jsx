@@ -5,6 +5,7 @@ import vision from "../../assets/LandingImage/vision.png";
 import mission from "../../assets/LandingImage/mission.png";
 import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import React, { useState, useEffect, useRef } from "react";
+import { BACKEND_URL } from "../../config/backend";
 
 function Content() {
   const [hovered, setHovered] = useState(null);
@@ -39,7 +40,7 @@ function Content() {
   useEffect(() => {
     const fetchAwards = async () => {
       try {
-        const res = await fetch("http://localhost:5001/api/awards");
+        const res = await fetch(`${BACKEND_URL}/api/awards`);
         const data = await res.json();
         setAwards(data);
       } catch (error) {

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ShoppingCart } from 'lucide-react';
 import { toast } from 'react-toastify';
+import { BACKEND_URL } from '../../config/backend';
 
 import ProductGrid from '../Elements/Product Shop/ProductGrid';
 import ProductDetail from '../Elements/Product Shop/ProductDetail';
@@ -44,7 +45,7 @@ const Shop = () => {
           return;
         }
         
-        const response = await fetch('http://localhost:5001/api/user/profile', {
+        const response = await fetch(`${BACKEND_URL}/api/user/profile`, {
           headers: {
             'Authorization': `Bearer ${storedToken}`,
             'Content-Type': 'application/json'
@@ -94,7 +95,7 @@ const Shop = () => {
   const loadPersistentCart = async (authToken) => {
     try {
       setCartLoading(true);
-      const response = await fetch('http://localhost:5001/api/cart', {
+      const response = await fetch(`${BACKEND_URL}/api/cart`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${authToken}`,
@@ -122,7 +123,7 @@ const Shop = () => {
       if (!localCart) return;
       const localCartItems = JSON.parse(localCart);
       if (!Array.isArray(localCartItems) || localCartItems.length === 0) return;
-      const response = await fetch('http://localhost:5001/api/cart/sync', {
+      const response = await fetch(`${BACKEND_URL}/api/cart/sync`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${authToken}`,
@@ -144,7 +145,7 @@ const Shop = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await fetch('http://localhost:5001/api/products/allproducts');
+        const res = await fetch(`${BACKEND_URL}/api/products/allproducts`);
         const data = await res.json();
         const transformedProducts = data.map(product => ({
           ...product,
@@ -196,7 +197,7 @@ const Shop = () => {
         color: item.color || '',
         quantity: item.quantity
       };
-      const response = await fetch('http://localhost:5001/api/cart/add', {
+      const response = await fetch(`${BACKEND_URL}/api/cart/add`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -267,7 +268,7 @@ const Shop = () => {
     try {
       const item = cartItems.find(item => getCartItemId(item) === itemId);
       if (!item) return;
-      const response = await fetch('http://localhost:5001/api/cart/update', {
+      const response = await fetch(`${BACKEND_URL}/api/cart/update`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -322,7 +323,7 @@ const Shop = () => {
     try {
       const item = cartItems.find(item => getCartItemId(item) === itemId);
       if (!item) return;
-      const response = await fetch('http://localhost:5001/api/cart/remove', {
+      const response = await fetch(`${BACKEND_URL}/api/cart/remove`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`,

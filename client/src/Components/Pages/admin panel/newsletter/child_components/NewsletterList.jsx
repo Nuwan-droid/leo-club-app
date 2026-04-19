@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Trash2, Edit, ExternalLink, FileText, Calendar, Image } from 'lucide-react';
+import { BACKEND_URL } from "../../../../../config/backend";
 
 const NewsletterList = ({ newsletters, onEdit, onDelete, loading }) => {
   const [deleteConfirm, setDeleteConfirm] = useState(null);
@@ -72,7 +73,7 @@ const NewsletterList = ({ newsletters, onEdit, onDelete, loading }) => {
                     {newsletter.coverImagePath ? (
                       <div className="relative">
                         <img
-                          src={`http://localhost:5001${newsletter.coverImagePath}`}
+                          src={`${BACKEND_URL}${newsletter.coverImagePath}`}
                           alt={`Cover for ${newsletter.title}`}
                           className="w-16 h-20 object-cover rounded-md border border-gray-200 shadow-sm"
                           onError={(e) => {
@@ -132,7 +133,7 @@ const NewsletterList = ({ newsletters, onEdit, onDelete, loading }) => {
                         View Original
                       </a>
                       <a
-                        href={`http://localhost:5001${newsletter.filePath}`}
+                        href={`${BACKEND_URL}${newsletter.filePath}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         className="inline-flex items-center text-green-600 hover:text-green-800 text-sm font-medium"
@@ -142,7 +143,7 @@ const NewsletterList = ({ newsletters, onEdit, onDelete, loading }) => {
                       </a>
                       {newsletter.coverImagePath && (
                         <a
-                          href={`http://localhost:5001${newsletter.coverImagePath}`}
+                          href={`${BACKEND_URL}${newsletter.coverImagePath}`}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="inline-flex items-center text-purple-600 hover:text-purple-800 text-sm font-medium"

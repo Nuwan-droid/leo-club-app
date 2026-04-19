@@ -5,6 +5,7 @@ import logo from "../../assets/lion.svg";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { BACKEND_URL } from "../../config/backend";
 
 export default function Login({ onClose }) {
   const [email, setEmail] = useState("");
@@ -28,7 +29,7 @@ export default function Login({ onClose }) {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:5001/api/auth/signin", {
+      const res = await fetch(`${BACKEND_URL}/api/auth/signin`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),

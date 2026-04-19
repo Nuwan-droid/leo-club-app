@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import LessonList from './child_components/LessonList';
 import FileUploadModal from './child_components/FileUploadModal';
+import { BACKEND_URL } from '../../../../config/backend';
 
 const LearningHub = () => {
   const [lessons, setLessons] = useState([]);
@@ -16,7 +17,7 @@ const LearningHub = () => {
       try {
         const token = sessionStorage.getItem('adminToken');
         if (!token) throw new Error('No admin token found');
-        const response = await axios.get('http://localhost:5001/api/learninghub', {
+        const response = await axios.get(`${BACKEND_URL}/api/learninghub`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         console.log('Fetched Lessons:', response.data);
@@ -46,7 +47,7 @@ const LearningHub = () => {
       if (lessonData.image) formData.append('image', lessonData.image);
       if (lessonData.source_file) formData.append('source_file', lessonData.source_file);
 
-      const response = await axios.post('http://localhost:5001/api/learninghub', formData, {
+      const response = await axios.post(`${BACKEND_URL}/api/learninghub`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${token}`,

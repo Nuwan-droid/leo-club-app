@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { BACKEND_URL } from "../../../config/backend";
 
 const LeoChatbot = () => {
   const [messages, setMessages] = useState([]);
@@ -9,7 +10,7 @@ const LeoChatbot = () => {
   const [connectionStatus, setConnectionStatus] = useState("online");
 
   const messagesEndRef = useRef(null);
-  const API_BASE_URL = "http://localhost:5000/api/chatbot";
+  const API_BASE_URL = `${BACKEND_URL}/api/chatbot`;
   const healthCheckIntervalRef = useRef(null);
 
   useEffect(() => {

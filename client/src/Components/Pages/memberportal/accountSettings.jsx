@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Adminlogo from "../../../../public/profile.png"; // fallback image
+import { BACKEND_URL } from "../../../config/backend";
 
 const ProfileMenu = () => {
   const [state, setState] = useState({
@@ -34,7 +35,7 @@ const ProfileMenu = () => {
         const token = sessionStorage.getItem("memberToken");
         if (!token) return console.error("No token found, redirect to login");
 
-        const res = await fetch("http://localhost:5001/api/user/profile", {
+        const res = await fetch(`${BACKEND_URL}/api/user/profile`, {
           headers: { Authorization: `Bearer ${token}` },
         });
 

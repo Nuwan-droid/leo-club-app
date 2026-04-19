@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa"; 
 import EventCard from "./EventCard";
 import axios from "axios";
+import { BACKEND_URL } from "../../config/backend";
 
 function EventCardSlider() {
   const [events, setEvents] = useState([]);
@@ -17,18 +18,18 @@ useEffect(() => {
   const fetchNewsletters = async () => {
     try {
       setLoading(true);
-      const res = await axios.get("http://localhost:5001/api/newsletters");
+      const res = await axios.get(`${BACKEND_URL}/api/newsletters`);
       const data = res.data.newsletters;
 
       // Map backend data
       const mappedEvents = data.map((n) => {
-        const pdfUrl = `http://localhost:5001${n.filePath}`;
+        const pdfUrl = `${BACKEND_URL}${n.filePath}`;
         return {
           id: n._id,
           month: n.month,
           year: n.year,
           imageSrc: n.coverImagePath
-            ? `http://localhost:5001${n.coverImagePath}`
+            ? `${BACKEND_URL}${n.coverImagePath}`
             : "https://via.placeholder.com/256x256/cccccc/666666?text=Newsletter",
           pdfUrl: pdfUrl,
           externalUrl: n.url,

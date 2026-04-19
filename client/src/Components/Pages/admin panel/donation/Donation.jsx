@@ -3,8 +3,9 @@ import DonationProjectList from './child_component/DonationProjectList';
 import AddDonationProjectModal from './child_component/AddDonationProjectModal';
 import EditDonationProjectModal from './child_component/EditDonationProjectModal';
 import DonationDetails from './child_component/DonationDetails';
+import { BACKEND_URL } from '../../../../config/backend';
 
-const API_BASE_URL = 'http://localhost:5001/api/donation-projects';
+const API_BASE_URL = `${BACKEND_URL}/api/donation-projects`;
 
 const Donation = () => {
   const [projects, setProjects] = useState([]);
