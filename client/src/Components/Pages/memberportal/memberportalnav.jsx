@@ -11,11 +11,14 @@ const MemberPortalNav = () => {
 
   // Logout handler
   const handleLogout = () => {
-    const token = sessionStorage.getItem("memberToken");
-    if (token) {
-      sessionStorage.removeItem("memberToken");
-      console.log("Member token removed");
-    }
+    // Clear all known auth keys to prevent stale login state.
+    sessionStorage.removeItem("memberToken");
+    sessionStorage.removeItem("adminToken");
+    localStorage.removeItem("memberToken");
+    localStorage.removeItem("adminToken");
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    localStorage.removeItem("userId");
     navigate("/"); // redirect to home or login
   };
 

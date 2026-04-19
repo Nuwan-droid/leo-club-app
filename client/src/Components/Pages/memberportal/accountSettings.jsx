@@ -33,7 +33,10 @@ const ProfileMenu = () => {
     (async () => {
       try {
         const token = sessionStorage.getItem("memberToken");
-        if (!token) return console.error("No token found, redirect to login");
+        if (!token) {
+          setState((prev) => ({ ...prev, loading: false }));
+          return console.log("No token found, redirect to login");
+        }
 
         const res = await fetch(`${BACKEND_URL}/api/user/profile`, {
           headers: { Authorization: `Bearer ${token}` },
@@ -56,7 +59,7 @@ const ProfileMenu = () => {
   };
 
   const handleLogoutClick = () => {
-    localStorage.removeItem("memberToken");
+    sessionStorage.removeItem("memberToken");
     setState((prev) => ({ ...prev, isDropdownOpen: false }));
     navigate("/");
   };
