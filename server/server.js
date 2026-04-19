@@ -80,6 +80,8 @@ app.get("/*splat", (req, res) => {
   res.sendFile(path.resolve(__dirname, "../client/dist/index.html"));
 });
 
+
+
 // ✅ Start server
 app.listen(PORT, () => {
   console.log(`🚀 Server running at http://localhost:${PORT}`);

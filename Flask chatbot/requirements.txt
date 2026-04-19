@@ -1,0 +1,6 @@
+Flask>=3.0
+Flask-Cors>=4.0
+nltk>=3.8.2
+numpy>=1.26
+tensorflow>=2.18
+keras>=3.0
