@@ -11,7 +11,7 @@ import {
 import validateEvent from '../middleware/validateEvent.js';
 import { eventUpload } from '../middleware/upload.js';
 
-// Routes designed to work with server.js mounting at "/api"
+// Routes designed to work with API entry mounting at "/api"
 router.post('/addevent', eventUpload, validateEvent, addEvent);     // POST /api/addevent
 router.get('/events', getAllEvents);                                // GET /api/events
 router.put('/events/:id', eventUpload, validateEvent, updateEvent); // PUT /api/events/:id
